@@ -35,8 +35,8 @@
             <div class="col">
                 <p>Platform: <span class="badge bg-secondary">{{ status.platform }}</span>
                     Firmware: <span class="badge bg-secondary">{{ status.app_ver }} ({{ status.app_build }})</span>
-                    Hardware: <span class="badge bg-secondary">{{ status.hardware }}</span> User interface: <span
-                        class="badge bg-secondary">{{ global.uiVersion }} ({{ global.uiBuild }})</span>
+                    User interface: <span class="badge bg-secondary">{{ global.uiVersion }} ({{ global.uiBuild
+                        }})</span>
                 </p>
 
             </div>
@@ -63,7 +63,8 @@
                     &nbsp;Hardware scan</button>
             </div>
             <div class="col-md-3">
-                <button @click="showHelp = !showHelp" type="button" class="btn btn-secondary" :disabled="global.disabled">
+                <button @click="showHelp = !showHelp" type="button" class="btn btn-secondary"
+                    :disabled="global.disabled">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                         :hidden="!global.disabled"></span>
                     &nbsp;Toggle error help</button>
@@ -95,7 +96,8 @@
             <div class="col-md-12">
                 <p>
                     Common HTTP error codes:
-                    <li>400 - Bad request. Probably an issue with the post format. Do a preview of the format to identify the issue.
+                    <li>400 - Bad request. Probably an issue with the post format. Do a preview of the format to
+                        identify the issue.
                     </li>
                     <li>401 - Unauthorized. The service needs an token or other means to authenticate the device.</li>
                     <li>403 - Forbidden. Could be an issue with token or URL.</li>

@@ -17,11 +17,12 @@
         <div class="col-md-4">
           <BsCard header="Measurement" color="info" title="Temperature">
             <p class="text-center">
-              {{ status.temperature }} °{{ status.temp_unit }}
+              {{ status.temp }} °{{ status.temp_unit }}
             </p>
           </BsCard>
         </div>
 
+        <!--
         <div class="col-md-4">
           <BsCard header="Measurement" color="info" title="Battery">
             <p class="text-center">
@@ -29,6 +30,7 @@
             </p>
           </BsCard>
         </div>
+        -->
 
         <div class="col-md-4">
           <BsCard header="Device" title="WIFI">

@@ -9,21 +9,22 @@
                 <div style="col-md-12">
                     <p>Selet the firmware file that matches your device. Platform:
                         <span class="badge bg-secondary">{{ status.platform }}</span>
-                        , Version: <span class="badge bg-secondary">{{ status.app_ver }}</span> ({{ status.app_build }}) 
-                        , Hardware: <span class="badge bg-secondary">{{ status.hardware }}</span>
+                        , Version: <span class="badge bg-secondary">{{ status.app_ver }}</span> ({{ status.app_build }})
                     </p>
                 </div>
 
                 <div class="col-md-12">
                     <BsFileUpload name="upload" id="upload" label="Select firmware file" accept=".bin"
-                        help="Choose the firmware file that will be used to update the device" :disabled="global.disabled">
+                        help="Choose the firmware file that will be used to update the device"
+                        :disabled="global.disabled">
                     </BsFileUpload>
                 </div>
 
                 <div class="col-md-3">
                     <p></p>
-                    <button type="submit" class="btn btn-primary" id="upload-btn" value="upload" data-bs-toggle="tooltip"
-                        title="Update the device with the selected firmware" :disabled="global.disabled">
+                    <button type="submit" class="btn btn-primary" id="upload-btn" value="upload"
+                        data-bs-toggle="tooltip" title="Update the device with the selected firmware"
+                        :disabled="global.disabled">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                             :hidden="!global.disabled"></span>
                         &nbsp;Flash firmware
@@ -57,7 +58,7 @@ function upload() {
         logDebug("FirmwareView.upload()", "Selected file: " + fileElement.files[0].name)
 
         const xhr = new XMLHttpRequest();
-        xhr.timeout = 1000 *180; // 180 s
+        xhr.timeout = 1000 * 180; // 180 s
         progress.value = 0
 
         function errorAction(e) {

@@ -8,7 +8,7 @@ export const useStatusStore = defineStore('status', {
             id: "",
             pressure_unit: "",
             pressure: 0,
-            temperature: 0,
+            temp: 0,
             temp_unit: "",
             sleep_interval: 0,
             battery: 0,
@@ -40,7 +40,7 @@ export const useStatusStore = defineStore('status', {
                     this.pressure = json.pressure
                     this.pressure_unit = json.pressure_unit
                     this.temp_unit = json.temp_unit
-                    this.temperature = json.temperature
+                    this.temp = json.temp
                     this.battery = json.battery
                     this.rssi = json.rssi
                     this.app_ver = json.app_ver
