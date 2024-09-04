@@ -1,12 +1,21 @@
 <template>
   <BsInputBase :width="width" :label="label" :help="help" :badge="badge">
-    <textarea @click.right.prevent="openContextMenu" id="textArea" v-model="model" class="form-control" type="text"
-      v-bind="$attrs" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" :data-bs-title="help"></textarea>
+    <textarea
+      @click.right.prevent="openContextMenu"
+      id="textArea"
+      v-model="model"
+      class="form-control"
+      type="text"
+      v-bind="$attrs"
+      data-bs-toggle="tooltip"
+      data-bs-custom-class="custom-tooltip"
+      :data-bs-title="help"
+    ></textarea>
   </BsInputBase>
 
   <div @click="closeContextMenu" id="contextMenu" class="dropdown-menu">
-    <template v-for="o in contextMenuOptions">
-      <a class="dropdown-item" @click="insertText(o.value)" v-bind="o.value">{{ o.label }}</a>
+    <template v-for="o in contextMenuOptions" :key="o.value">
+      <a class="dropdown-item" @click="insertText(o.value)">{{ o.label }}</a>
     </template>
   </div>
 </template>
@@ -30,12 +39,11 @@ const contextMenuOptions = ref([
   { label: 'Network name, ${mdns}', value: '${mdns}' },
   { label: 'Chip ID, ${id}', value: '${id}' },
   { label: 'Sleep interval, ${sleep-interval}', value: '${sleep-interval}' },
+  { label: 'Token, ${token}', value: '${token}' },
+  { label: 'Token 2, ${token2}', value: '${token2}' },
 
-  { label: 'Pressure, ${pressure}', value: '${pressure}' },
-  { label: 'Pressure Unit, ${pressure-unit}', value: '${pressure-unit}' },
-  { label: 'Pressure psi, ${pressure-psi}', value: '${pressure-psi}' },
-  { label: 'Pressure hpa, ${pressure-hpa}', value: '${pressure-hpa}' },
-  { label: 'Pressure bar, ${pressure-bar}', value: '${pressure-bar}' },
+  { label: 'Current angle/tilt, ${angle}', value: '${angle}' },
+  { label: 'Current angle/tilt, ${tilt}', value: '${tilt}' },
 
   { label: 'Temperature (C), ${temp-c}', value: '${temp-c}' },
   { label: 'Temperature (F), ${temp-f}', value: '${temp-f}' },
@@ -43,23 +51,44 @@ const contextMenuOptions = ref([
 
   { label: 'Application version, ${app-ver}', value: '${app-ver}' },
   { label: 'Application build, ${app-build}', value: '${app-build}' },
+
   { label: 'Battery (V), ${battery}', value: '${battery}' },
   { label: 'Battery (%), ${battery-percent}', value: '${battery-percent}' },
+
   { label: 'Wifi signal strength, ${rssi}', value: '${rssi}' },
+  { label: 'Time for measurement, ${run-time}', value: '${run-time}' },
+
+  { label: 'Gravity, ${gravity}', value: '${gravity}' },
+  { label: 'Gravity (SG), ${gravity-sg}', value: '${gravity-sg}' },
+  { label: 'Gravity (Plato), ${gravity-plato}', value: '${gravity-plato}' },
+  { label: 'Gravity unit, ${gravity-unit}', value: '${gravity-unit}' },
+
+  { label: 'Corrected gravity, ${corr-gravity}', value: '${corr-gravity}' },
+  {
+    label: 'Corrected Gravity (SG), ${corr-gravity-sg}',
+    value: '${corr-gravity-sg}'
+  },
+  {
+    label: 'Corrected Gravity (Plato), ${corr-gravity-plato}',
+    value: '${corr-gravity-plato}'
+  }
 ])
 
 function insertText(value) {
-  if( value.length > 0) {
-    var obj = document.getElementById("textArea")
-    model.value = obj.value.substring(0, obj.selectionStart) + value + obj.value.substring(obj.selectionEnd, obj.value.length)
+  if (value.length > 0) {
+    var obj = document.getElementById('textArea')
+    model.value =
+      obj.value.substring(0, obj.selectionStart) +
+      value +
+      obj.value.substring(obj.selectionEnd, obj.value.length)
   }
 
-  var menu = document.getElementById("contextMenu")
+  var menu = document.getElementById('contextMenu')
   menu.style.display = 'none'
 }
 
 const openContextMenu = (event) => {
-  var menu = document.getElementById("contextMenu")
+  var menu = document.getElementById('contextMenu')
   menu.style.display = 'block'
   menu.style.left = event.pageX + 'px'
   menu.style.top = event.pageY + 'px'
@@ -86,5 +115,3 @@ const width = defineModel('width')
  */
 const badge = defineModel('badge')
 </script>
-
-

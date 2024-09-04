@@ -2,7 +2,7 @@
   <div class="container">
     <p></p>
     <p class="h3">Backup & Restore</p>
-    <hr>
+    <hr />
 
     <div class="row">
       <div class="col-md-12">
@@ -10,13 +10,19 @@
       </div>
 
       <div class="col-md-12">
-        <button @click="backup" type="button" class="btn btn-primary w-2" data-bs-toggle="tooltip"
-          :disabled="global.disabled">Create
-          backup</button>
+        <button
+          @click="backup"
+          type="button"
+          class="btn btn-primary w-2"
+          data-bs-toggle="tooltip"
+          :disabled="global.disabled"
+        >
+          Create backup
+        </button>
       </div>
 
       <div class="col-md-12">
-        <hr>
+        <hr />
       </div>
 
       <div class="col-md-12">
@@ -27,41 +33,59 @@
     <div class="row">
       <form @submit.prevent="restore">
         <div class="col-md-12">
-          <BsFileUpload name="upload" id="upload" label="Select backup file" accept=".txt" :disabled="global.disabled">
+          <BsFileUpload
+            name="upload"
+            id="upload"
+            label="Select backup file"
+            accept=".txt"
+            :disabled="global.disabled"
+          >
           </BsFileUpload>
         </div>
 
         <div class="col-md-3">
           <p></p>
-          <button type="submit" class="btn btn-primary" value="upload" data-bs-toggle="tooltip"
-            title="Upload the configuration to the device" :disabled="global.disabled">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-              :hidden="!global.disabled"></span>
-            &nbsp;Restore</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            value="upload"
+            data-bs-toggle="tooltip"
+            title="Upload the configuration to the device"
+            :disabled="global.disabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Restore
+          </button>
         </div>
 
-        <div v-if="progress>0" class="col-md-12">
+        <div v-if="progress > 0" class="col-md-12">
           <p></p>
           <BsProgress :progress="progress"></BsProgress>
         </div>
-
       </form>
-
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { global, config, getConfigChanges } from "@/modules/pinia"
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { global, config, getConfigChanges } from '@/modules/pinia'
+import { logDebug } from '@/modules/logger'
 
 const progress = ref(0)
 
 function backup() {
-  var backup = { meta: { version: "0.5.0", software: "PressureMon" }, config: JSON.parse(config.toJson()) }
+  var backup = {
+    meta: { version: '0.5.0', software: 'PressureMon' },
+    config: JSON.parse(config.toJson())
+  }
 
-  logDebug("BackupView.backup()", backup)
+  logDebug('BackupView.backup()', backup)
 
   backup.config.http_post_format = encodeURIComponent(backup.config.http_post_format)
   backup.config.http_post2_format = encodeURIComponent(backup.config.http_post2_format)
@@ -70,32 +94,32 @@ function backup() {
   backup.config.mqtt_format = encodeURIComponent(backup.config.mqtt_format)
 
   var s = JSON.stringify(backup, null, 2)
-  var name = config.mdns + ".txt"
-  download(s, "text/plain", name)
-  global.messageSuccess = "Backup file created and downloaded as: " + name
+  var name = config.mdns + '.txt'
+  download(s, 'text/plain', name)
+  global.messageSuccess = 'Backup file created and downloaded as: ' + name
 }
 
 function restore() {
-  const fileElement = document.getElementById('upload');
+  const fileElement = document.getElementById('upload')
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = "You need to select one file to restore configuration from"
+    global.messageFailed = 'You need to select one file to restore configuration from'
   } else {
     global.disabled = true
-    logDebug("BackupView.restore()", "Selected file: " + fileElement.files[0].name)
+    logDebug('BackupView.restore()', 'Selected file: ' + fileElement.files[0].name)
     const reader = new FileReader()
     reader.addEventListener('load', function (e) {
       let text = e.target.result
       try {
-        const data = JSON.parse(text);
-        if (data.meta.software === "PressureMon" && data.meta.version === "0.5.0") {
-          doRestore(data.config);
+        const data = JSON.parse(text)
+        if (data.meta.software === 'PressureMon' && data.meta.version === '0.5.0') {
+          doRestore(data.config)
         } else {
-          global.messageFailed = "Unknown format, unable to process"
+          global.messageFailed = 'Unknown format, unable to process'
         }
       } catch (error) {
-        console.error(error);
-        global.messageFailed = "Unable to parse configuration file for GravityMon."
+        console.error(error)
+        global.messageFailed = 'Unable to parse configuration file for GravityMon.'
       }
     })
     reader.readAsText(fileElement.files[0])
@@ -112,9 +136,8 @@ function download(content, mimeType, filename) {
 }
 
 function doRestore(json) {
-  for( var k in json) {
-
-    if( k.endsWith("_format") ) {
+  for (var k in json) {
+    if (k.endsWith('_format')) {
       config[k] = decodeURIComponent(json[k])
     } else {
       config[k] = json[k]
