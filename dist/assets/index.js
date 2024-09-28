@@ -1842,7 +1842,7 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
   const instance = currentRenderingInstance || currentInstance;
   if (instance) {
     const Component = instance.type;
-    if (type === COMPONENTS) {
+    {
       const selfName = getComponentName(
         Component,
         false
