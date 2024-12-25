@@ -50,7 +50,7 @@
     <hr />
 
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-12">
         <button @click="viewLogs" type="button" class="btn btn-primary" :disabled="global.disabled">
           <span
             class="spinner-border spinner-border-sm"
@@ -59,9 +59,8 @@
             :hidden="!global.disabled"
           ></span>
           &nbsp;View device logs
-        </button>
-      </div>
-      <div class="col-md-3">
+        </button>&nbsp;
+
         <button
           @click="removeLogs"
           type="button"
@@ -75,9 +74,8 @@
             :hidden="!global.disabled"
           ></span>
           &nbsp;Erase device logs
-        </button>
-      </div>
-      <div class="col-md-3">
+        </button>&nbsp;
+
         <button
           @click="hardwareScan"
           type="button"
@@ -91,9 +89,8 @@
             :hidden="!global.disabled"
           ></span>
           &nbsp;Hardware scan
-        </button>
-      </div>
-      <div class="col-md-3">
+        </button>&nbsp;
+
         <button
           @click="showHelp = !showHelp"
           type="button"
@@ -107,9 +104,8 @@
             :hidden="!global.disabled"
           ></span>
           &nbsp;Toggle error help
-        </button>
-      </div>
-      <div v-if="status.ispindel_config" class="col-md-3">
+        </button>&nbsp;
+
         <button
           @click="removeLegacy"
           type="button"

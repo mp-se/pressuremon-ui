@@ -43,7 +43,7 @@
         <div class="col-md-12">
           <hr />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -56,9 +56,8 @@
               :hidden="!global.disabled"
             ></span>
             &nbsp;Save
-          </button>
-        </div>
-        <div class="col-md-3">
+          </button>&nbsp;
+
           <button
             @click="restart()"
             type="button"
@@ -72,9 +71,8 @@
               :hidden="!global.disabled"
             ></span>
             &nbsp;Restart device
-          </button>
-        </div>
-        <div class="col-md-3">
+          </button>&nbsp;
+
           <button
             @click="calibrate"
             type="button"
@@ -110,7 +108,10 @@ const sensorOptions = ref([
   { label: 'Honeywell ABP Gauge SPI 0-30 psi', value: 0 },
   { label: 'Honeywell ABP Gauge SPI 0-60 psi', value: 1 },
   { label: 'Honeywell ABP Gauge SPI 0-100 psi', value: 2 },
-  { label: 'Honeywell ABP Gauge SPI 0-150 psi', value: 3 }
+  { label: 'Honeywell ABP Gauge SPI 0-150 psi', value: 3 },
+
+  { label: 'CFSensor XGZP6847D Gauge I2C 0-700 kPa', value: 10 },
+  { label: 'CFSensor XGZP6847D Gauge I2C -100-1000 kPa', value: 11 },
 ])
 
 const calibrate = () => {
