@@ -4,6 +4,13 @@
     <p class="h3">Tools</p>
     <hr />
 
+    <VoltageFragment></VoltageFragment>
+
+    <div class="row gy-4">
+      <p></p>
+      <hr />
+    </div>
+
     <ListFilesFragment></ListFilesFragment>
 
     <div class="row gy-4">
@@ -44,6 +51,7 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
+import VoltageFragment from '@/fragments/VoltageFragment.vue'
 import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
 import AdvancedFilesFragment from '@/fragments/AdvancedFilesFragment.vue'
 import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'

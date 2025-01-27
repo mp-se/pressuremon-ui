@@ -1,6 +1,6 @@
-# Gravitymon User Interface
+# Pressuremon User Interface
 
-This repository contains the user interface for gravitymon, see: https://github.com/mp-se/gravitymon or https://www.gravitymon.com for more details.
+This repository contains the user interface for pressuremon, see: https://github.com/mp-se/pressuremon for more details.
 
 ## Recommended IDE Setup
 
@@ -44,4 +44,22 @@ npm run lint
 
 ```sh
 npm run mock
+```
+
+## Development
+
+Run these in separate terminal windows.
+
+```
+npm run mock
+npm run serve
+```
+
+## Git commands
+
+
+Add a new tag
+```
+git tag -a [tag_name] HEAD -m "Tag message"
+git push origin tag [tag_name]
 ```

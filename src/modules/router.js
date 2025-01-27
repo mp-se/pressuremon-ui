@@ -14,6 +14,7 @@ import PushHttpPost2View from '@/views/PushHttpPost2View.vue'
 import PushHttpGetView from '@/views/PushHttpGetView.vue'
 import PushInfluxdbView from '@/views/PushInfluxdbView.vue'
 import PushMqttView from '@/views/PushMqttView.vue'
+import PushBluetoothView from '@/views/PushBluetoothView.vue'
 import AboutView from '@/views/AboutView.vue'
 import BackupView from '@/views/BackupView.vue'
 import FirmwareView from '@/views/FirmwareView.vue'
@@ -63,7 +64,7 @@ const routes = [
     name: 'push-http-post1',
     component: PushHttpPost1View
   },
-  /*{
+  {
     path: '/push/http-post2',
     name: 'push-http-post2',
     component: PushHttpPost2View
@@ -87,7 +88,7 @@ const routes = [
     path: '/push/bluetooth',
     name: 'push-bluetooth',
     component: PushBluetoothView
-  },*/
+  },
   {
     path: '/other/support',
     name: 'support',
@@ -176,32 +177,32 @@ const items = ref([
         label: 'HTTP Post 1',
         badge: badge.pushHttpPost1Badge,
         path: '/push/http-post1'
-      } /*
+      },
       {
         label: 'HTTP Post 2',
         badge: badge.pushHttpPost2Badge,
-        path: '/push/http-post2',
+        path: '/push/http-post2'
       },
       {
         label: 'HTTP Get',
         badge: badge.pushHttpGetBadge,
-        path: '/push/http-get',
+        path: '/push/http-get'
       },
       {
         label: 'Influxdb v2',
-        badge: badge.pushHttpInfluxdb2Badge,
-        path: '/push/influxdb',
+        badge: badge.pushInfluxdb2Badge,
+        path: '/push/influxdb'
       },
       {
         label: 'MQTT',
-        badge: badge.pushHttpMqttBadge,
-        path: '/push/mqtt',
+        badge: badge.pushMqttBadge,
+        path: '/push/mqtt'
       },
       {
         label: 'Bluetooth',
-        badge: badge.pushHttpBluetoothBadge,
-        path: '/push/bluetooth',
-      },*/
+        badge: badge.pushBluetoothBadge,
+        path: '/push/bluetooth'
+      }
     ]
   },
   {

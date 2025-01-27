@@ -13,7 +13,7 @@
       <div class="col-md-4">
         <a
           class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-          href="https://github.com/mp-se/gravitymon"
+          href="https://github.com/mp-se/pressuremon"
           target="_blank"
           >Report issues on github.com</a
         >
@@ -26,6 +26,7 @@
           >Discuss on homebrewtalk.com</a
         >
       </div>
+      <!-- 
       <div class="col-md-4">
         <a
           class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
@@ -33,16 +34,21 @@
           target="_blank"
           >Read docs on gravitymon.com</a
         >
-      </div>
+      </div>-->
     </div>
 
     <hr />
     <div class="row">
       <div class="col">
         <p>
-          Platform: <span class="badge bg-secondary">{{ status.platform }}</span> Firmware:
-          <span class="badge bg-secondary">{{ status.app_ver }} ({{ status.app_build }})</span> User
-          interface:
+          Platform:
+          <span class="badge bg-secondary">{{ status.platform }}</span>
+          Firmware:
+          <span class="badge bg-secondary">{{ status.app_ver }} ({{ status.app_build }})</span>
+          <!-- 
+          Hardware:
+          <span class="badge bg-secondary">{{ status.hardware }}</span>-->
+          User interface:
           <span class="badge bg-secondary">{{ global.uiVersion }} ({{ global.uiBuild }})</span>
         </p>
       </div>
@@ -58,8 +64,8 @@
             aria-hidden="true"
             :hidden="!global.disabled"
           ></span>
-          &nbsp;View device logs
-        </button>&nbsp;
+          &nbsp;View device logs</button
+        >&nbsp;
 
         <button
           @click="removeLogs"
@@ -73,8 +79,8 @@
             aria-hidden="true"
             :hidden="!global.disabled"
           ></span>
-          &nbsp;Erase device logs
-        </button>&nbsp;
+          &nbsp;Erase device logs</button
+        >&nbsp;
 
         <button
           @click="hardwareScan"
@@ -88,8 +94,8 @@
             aria-hidden="true"
             :hidden="!global.disabled"
           ></span>
-          &nbsp;Hardware scan
-        </button>&nbsp;
+          &nbsp;Hardware scan</button
+        >&nbsp;
 
         <button
           @click="showHelp = !showHelp"
@@ -103,23 +109,25 @@
             aria-hidden="true"
             :hidden="!global.disabled"
           ></span>
-          &nbsp;Toggle error help
-        </button>&nbsp;
+          &nbsp;Toggle error help</button
+        >&nbsp;
 
-        <button
-          @click="removeLegacy"
-          type="button"
-          class="btn btn-secondary"
-          :disabled="global.disabled"
-        >
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-            :hidden="!global.disabled"
-          ></span>
-          &nbsp;Erase iSpindel config
-        </button>
+        <template v-if="status.ispindel_config">
+          <button
+            @click="removeLegacy"
+            type="button"
+            class="btn btn-secondary"
+            :disabled="global.disabled"
+          >
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Erase iSpindel config
+          </button>
+        </template>
       </div>
     </div>
 

@@ -13,14 +13,14 @@
 
   <div v-if="!global.initialized" class="container text-center">
     <BsMessage
-      message="Initalizing PressureMon Web interface"
+      message="Initalizing GravityMon Web interface"
       class="h2"
       :dismissable="false"
       alert="info"
     ></BsMessage>
   </div>
 
-  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="PressureMon" />
+  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="GravityMon" />
 
   <div class="container">
     <div>
@@ -65,20 +65,27 @@
 
     <BsMessage v-if="status.wifi_setup" :dismissable="false" alert="info">
       Running in WIFI setup mode. Go to the
-      <router-link class="alert-link" to="/device/wifi">wifi settings</router-link> meny and select
-      wifi. Restart device after settings are selected.
+      <router-link class="alert-link" to="/device/wifi">wifi settings</router-link>
+      meny and select wifi. Restart device after settings are selected.
+    </BsMessage>
+
+    <BsMessage v-if="status.ispindel_config" :dismissable="true" alert="info">
+      iSpindel configuration found,
+      <router-link class="alert-link" to="/device/hardware">import</router-link>
+      formula/gyro or
+      <router-link class="alert-link" to="/other/support">delete</router-link> the configuration.
     </BsMessage>
   </div>
 
   <router-view v-if="global.initialized" />
-  <BsFooter v-if="global.initialized" text="(c) 2024 Magnus Persson" />
+  <BsFooter v-if="global.initialized" text="(c) 2021-2024 Magnus Persson" />
 </template>
 
 <script setup>
-import BsMenuBar from '@/components/BsMenuBar.vue'
-import BsFooter from '@/components/BsFooter.vue'
+import BsMenuBar from './components/BsMenuBar.vue'
+import BsFooter from './components/BsFooter.vue'
 import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
-import { global, status, config, saveConfigState } from '@/modules/pinia'
+import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
 
 const polling = ref(null)

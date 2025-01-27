@@ -4,40 +4,125 @@
     <p class="h3">Device - Hardware</p>
     <hr />
 
-    <BsMessage v-if="!isSensorCalibrated()" dismissable="true" message="" alert="warning">
-      You need to calibrate pressure sensor
-    </BsMessage>
-
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
         <div class="col-md-6">
-          <BsSelect
-            v-model="config.pressure_sensor_type"
-            :options="sensorOptions"
-            label="Pressure sensor"
-            width=""
+          <BsInputNumber
+            v-model="config.voltage_factor"
+            label="Voltage factor"
+            min="0"
+            max="6"
+            step=".01"
+            width="4"
+            :unit="voltage"
+            help="Factor used to calculate the battery voltage. Can vary depending on the R2 value (0 to 6)"
             :disabled="global.disabled"
-          ></BsSelect>
+          >
+          </BsInputNumber>
+        </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.voltage_config"
+            unit="V"
+            label="Voltage config"
+            min="3"
+            max="6"
+            step=".01"
+            width="4"
+            help="Over this level the device will always go into configuration mode, some batteries might have a higher voltage when fully charged (3 to 6)"
+            :disabled="global.disabled"
+          ></BsInputNumber>
         </div>
 
         <div class="col-md-6">
-          <BsInputReadonly
-            v-model="config.pressure_zero_correction"
-            label="Pressure Zero Correction"
-            help="The correction value for the pressure sensor"
+          <BsInputSwitch
+            v-model="config.battery_saving"
+            label="Battery saving"
+            help="When active, the sleep interval will be changed to 1 hour when battery drops below 20% (3.73V)"
             :disabled="global.disabled"
-          ></BsInputReadonly>
+          ></BsInputSwitch>
         </div>
 
-        <!--
-                <div class="col-md-6">
-                    <BsInputNumber v-model="config.voltage_factor" label="Voltage factor" min="0" max="6" step=".01"
-                        width="4" :unit="voltage"
-                        help="Factor used to calculate the battery voltage. Can vary depending on the R2 value (0 to 6)"
-                        :disabled="global.disabled">
-                    </BsInputNumber>
-                </div>
-                -->
+        <div class="col-md-12">
+          <hr />
+        </div>
+        <div class="col-md-6">
+          <BsSelect
+            v-model="config.sensor_type"
+            label="Pressure Sensor 1"
+            :options="pressureSensorOptions"
+            :disabled="global.disabled"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <BsSelect
+            v-model="config.sensor1_type"
+            label="Pressure Sensor 2"
+            :options="pressureSensorOptions"
+            :disabled="global.disabled"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.pressure_adjustment"
+            label="Pressure adjustment 1"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            :unit="config.pressure_unit"
+            help="Adjustment value for the pressure sensor"
+            :disabled="global.disabled || config.sensor_type < 1"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.pressure1_adjustment"
+            label="Pressure adjustment 2"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            :unit="config.pressure_unit"
+            help="Adjustment value for the pressure sensor"
+            :disabled="global.disabled || config.sensor1_type < 1"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.temp_adjustment"
+            label="Temperature adjustment 1"
+            min="0"
+            max="100"
+            step=".01"
+            width="6"
+            :unit="config.temp_format"
+            help="Adjustment value for the temperature sensor"
+            :disabled="global.disabled || config.sensor_type < 1 || config.sensor_type > 100"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.temp1_adjustment"
+            label="Temperature adjustment 2"
+            min="0"
+            max="100"
+            step=".01"
+            width="6"
+            :unit="config.temp_format"
+            help="Adjustment value for the temperature sensor"
+            :disabled="global.disabled || config.sensor1_type < 1 || config.sensor1_type > 100"
+          >
+          </BsInputNumber>
+        </div>
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
@@ -55,8 +140,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>&nbsp;
+            &nbsp;Save</button
+          >&nbsp;
 
           <button
             @click="restart()"
@@ -70,14 +155,14 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Restart device
-          </button>&nbsp;
+            &nbsp;Restart device</button
+          >&nbsp;
 
           <button
             @click="calibrate"
             type="button"
             class="btn btn-secondary"
-            :disabled="global.disabled"
+            :disabled="global.disabled || !status.self_check.sensor_connected"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -85,34 +170,65 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Calibrate sensor&nbsp;<span
-              v-if="badge.deviceCalibratedBadge()"
+            &nbsp;Calibrate pressure&nbsp;<span
+              v-if="badge.deviceSensorCalibratedBadge()"
               class="badge text-bg-danger rounded-circle"
               >1</span
-            >
-          </button>
-        </div>
+            ></button
+          >&nbsp;
+         </div>
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { isSensorCalibrated, validateCurrentForm, restart } from '@/modules/utils'
-import { global, config } from '@/modules/pinia'
+import { ref, computed } from 'vue'
+// REMOVE import { isGyroCalibrated, validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm, restart } from '@/modules/utils'
+import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
-const sensorOptions = ref([
-  { label: 'Honeywell ABP Gauge SPI 0-30 psi', value: 0 },
-  { label: 'Honeywell ABP Gauge SPI 0-60 psi', value: 1 },
-  { label: 'Honeywell ABP Gauge SPI 0-100 psi', value: 2 },
-  { label: 'Honeywell ABP Gauge SPI 0-150 psi', value: 3 },
+// TODO: Show badge if problems with battery level
 
-  { label: 'CFSensor XGZP6847D Gauge I2C 0-700 kPa', value: 10 },
-  { label: 'CFSensor XGZP6847D Gauge I2C -100-1000 kPa', value: 11 },
+const pressureSensorOptions = ref([
+  { label: '-- Unused --', value: 0 }, // None selected
+
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 0.2 MPa', value: 1 }, // 2 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 0.4 MPa', value: 2 }, // 4 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 0.5 MPa', value: 3 }, // 5 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 0.6 MPa', value: 4 }, // 6 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 0.8 MPa', value: 5 }, // 8 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 1 MPa', value: 6 }, // 10 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 1.2 MPa', value: 7 }, // 12 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 1.5 MPa', value: 8 }, // 15 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 1.6 MPa', value: 9 }, // 16 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 2 MPa', value: 10 }, // 20 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 2.5 MPa', value: 11 }, // 25 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 3 MPa', value: 12 }, // 30 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 3.5 MPa', value: 13 }, // 35 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 4 MPa', value: 14 }, // 40 bar
+
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 0.2 MPa', value: 101 }, // 2 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 0.4 MPa', value: 102 }, // 4 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 0.5 MPa', value: 103 }, // 5 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 0.6 MPa', value: 104 }, // 6 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 0.8 MPa', value: 105 }, // 8 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 1 MPa', value: 106 }, // 10 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 1.2 MPa', value: 107 }, // 12 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 1.5 MPa', value: 108 }, // 15 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 1.6 MPa', value: 109 }, // 16 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 2 MPa', value: 100 }, // 20 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 2.5 MPa', value: 101 }, // 25 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 3 MPa', value: 102 }, // 30 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 3.5 MPa', value: 103 }, // 35 bar
+  { label: 'XIDIBEI XDB401 Analog 0.0 - 4 MPa', value: 104 } // 40 bar
 ])
+
+const voltage = computed(() => {
+  return status.battery + ' V'
+})
 
 const calibrate = () => {
   global.disabled = true
@@ -133,7 +249,7 @@ const calibrate = () => {
             .then((res) => {
               logDebug('DeviceHardwareView.calibrate()', res)
               if (res.status != 200 || res.success == true) {
-                global.messageError = 'Failed to get calibration status'
+                global.messageError = 'Failed to get calibrate status'
               } else {
                 config.load((success) => {
                   if (success) {
@@ -146,7 +262,7 @@ const calibrate = () => {
               }
             })
             .catch((err) => {
-              global.messageError = 'Failed to get calibration status'
+              global.messageError = 'Failed to get calibrate status'
               logError('DeviceHardwareView.calibrate()', err)
             })
         }, 4000)

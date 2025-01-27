@@ -5,7 +5,9 @@
     <hr />
 
     <p class="fw-normal">
-      This is a decvice than can monitor pressure and report this to a remote service.
+      This project is used to measure pressure related to beer brewing and can messure pressure
+      using one or two digital or analog sensors. Data can be reported to external services using
+      standard communication methods.
     </p>
 
     <p class="h4">MIT License</p>

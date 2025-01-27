@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { logInfo } from '@/modules/logger'
+import { logInfo, logDebug } from '@/modules/logger'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -36,10 +36,9 @@ export const useGlobalStore = defineStore('global', {
       return 'Bearer ' + this.id
     },
     baseURL() {
-      if(this.url !== undefined)
-        return this.url
+      if (this.url !== undefined) return this.url
 
-      if (import.meta.env.VITE_APP_HOST === undefined) { 
+      if (import.meta.env.VITE_APP_HOST === undefined) {
         logInfo('configStore:baseURL()', 'Using base URL from env', window.location.href)
         this.url = window.location.href
       } else {
@@ -50,17 +49,12 @@ export const useGlobalStore = defineStore('global', {
       return this.url
     },
     uiVersion() {
+      logDebug('globalStore.uiVersion()', import.meta.env.VITE_APP_VERSION)
       return import.meta.env.VITE_APP_VERSION
     },
     uiBuild() {
+      logDebug('globalStore.uiBuild()', import.meta.env.VITE_APP_BUILD)
       return import.meta.env.VITE_APP_BUILD
-    },
-    disabled32() {
-      if (this.disabled) return true
-
-      if (this.platform !== 'esp8266') return false
-
-      return true
     }
   },
   actions: {

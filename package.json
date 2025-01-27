@@ -1,6 +1,6 @@
 {
-  "name": "PressureMon",
-  "version": "0.1.0",
+  "name": "Pressuremon",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -23,7 +23,6 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/test-utils": "^2.4.6",
-    "chartjs": "^0.3.24",
     "cors": "^2.8.5",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",

@@ -1,5 +1,4 @@
 import { config } from '@/modules/pinia'
-import { isSensorCalibrated } from '@/modules/utils'
 
 /**
  * Used in menybar to show the total amount of items that require user action.
@@ -19,11 +18,11 @@ export function deviceMdnsBadge() {
 }
 
 export function deviceHardwareBadge() {
-  return deviceCalibratedBadge()
+  return deviceSensorCalibratedBadge()
 }
 
-export function deviceCalibratedBadge() {
-  return isSensorCalibrated() ? 0 : 1
+export function deviceSensorCalibratedBadge() {
+  return 0
 }
 
 export function deviceWifiBadge() {
@@ -46,8 +45,15 @@ export function deviceWifi2Badge() {
  * @returns number of items that needs attention
  */
 export function pushBadge() {
-  //return pushSettingBadge() + pushHttpPost1Badge() + pushHttpPost2Badge() + pushHttpGetBadge() + pushInfluxdb2Badge() + pushMqttBadge() + pushBluetoothBadge()
-  return pushSettingBadge() + pushHttpPost1Badge()
+  return (
+    pushSettingBadge() +
+    pushHttpPost1Badge() +
+    pushHttpPost2Badge() +
+    pushHttpGetBadge() +
+    pushInfluxdb2Badge() +
+    pushMqttBadge() +
+    pushBluetoothBadge()
+  )
 }
 
 function pushTargetCount() {

@@ -60,6 +60,16 @@
             :disabled="pushDisabled"
           />
         </div>
+        <!-- 
+        <div class="col-md-6">
+          <BsInputSwitch
+            v-model="config.mqtt_retain"
+            label="Set MQTT retain flag"
+            width="4"
+            help="Set the retain flag for messages sent to MQTT."
+            :disabled="pushDisabled"
+          />
+        </div>-->
         <div class="col-md-9">
           <BsInputTextAreaFormat
             v-model="config.mqtt_format"
@@ -91,7 +101,7 @@
         <div class="col-md-12">
           <hr />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -103,10 +113,9 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>
-        </div>
-        <div class="col-md-3">
+            &nbsp;Save</button
+          >&nbsp;
+
           <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
             <span
               class="spinner-border spinner-border-sm"
@@ -123,11 +132,24 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { validateCurrentForm, applyTemplate, mqttFormatOptions } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
+import { storeToRefs } from 'pinia'
 
 const render = ref('')
+
+const { mqtt_format } = storeToRefs(config)
+
+watch(mqtt_format, () => {
+  if (status.platform == 'esp8266') {
+    var s = applyTemplate(status, config, config.mqtt_format)
+    if (s.length > 500)
+      global.messageWarning =
+        'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
+    else global.messageWarning = ''
+  }
+})
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct

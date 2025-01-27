@@ -27,26 +27,31 @@
           <hr />
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <BsInputRadio
-            v-model="config.temp_unit"
-            :options="temperatureOptions"
-            label="Temperature Format"
-            width=""
-            :disabled="global.disabled"
-          ></BsInputRadio>
-        </div>
-        <div class="col-md-4">
-          <BsInputRadio
-            v-model="config.pressure_unit"
-            :options="pressureOptions"
-            label="Pressure Format"
+            v-model="config.temp_format"
+            :options="tempOptions"
+            label="Temperature Units"
             width=""
             :disabled="global.disabled"
           ></BsInputRadio>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
+          <BsInputRadio
+            v-model="config.pressure_unit"
+            :options="pressureOptions"
+            label="Pressure Units"
+            width=""
+            :disabled="global.disabled"
+          ></BsInputRadio>
+        </div>
+
+        <div class="col-md-12">
+          <hr />
+        </div>
+
+        <div class="col-md-6">
           <BsInputRadio
             v-model="config.dark_mode"
             :options="uiOptions"
@@ -73,8 +78,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
-          </button>&nbsp;
+            &nbsp;Save</button
+          >&nbsp;
 
           <button
             @click="restart()"
@@ -88,8 +93,8 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Restart device
-          </button>&nbsp;
+            &nbsp;Restart device</button
+          >&nbsp;
 
           <button
             @click="factory"
@@ -118,15 +123,15 @@ import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@/modules/logger'
 
-const temperatureOptions = ref([
+const tempOptions = ref([
   { label: 'Celsius °C', value: 'C' },
   { label: 'Fahrenheit °F', value: 'F' }
 ])
 
 const pressureOptions = ref([
-  { label: 'PSI', value: 'psi' },
-  { label: 'hPA', value: 'hpa' },
-  { label: 'bar', value: 'bar' }
+  { label: 'PSI', value: 'PSI' },
+  { label: 'kPA', value: 'KPA' },
+  { label: 'Bar', value: 'BAR' }
 ])
 
 const uiOptions = ref([

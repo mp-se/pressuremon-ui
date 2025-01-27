@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
 import { logDebug, logError, logInfo } from '@/modules/logger'
+import { tempToC, tempToF, roundVal } from '@/modules/utils'
 
 export const useConfigStore = defineStore('config', {
   state: () => {
@@ -9,12 +10,23 @@ export const useConfigStore = defineStore('config', {
       // Device
       id: '',
       mdns: '',
-      temp_unit: '',
-      pressure_unit: '',
+      temp_format: '',
       // Hardware
-      pressure_zero_correction: 0,
-      pressure_sensor_type: 0,
+      ota_url: '',
       voltage_factor: 0,
+      voltage_config: 0,
+      gyro_temp: false,
+      battery_saving: false,
+      tempsensor_resolution: 0,
+      temp_adjustment_value: 0, // C or F
+      voltage_pin: 0,
+      sensor_type: 0,
+      sensor1_type: 0,
+      pressure_adjustment: 0.0,
+      pressure1_adjustment: 0.0,
+      temp_adjustment: 0.0,
+      temp1_adjustment: 0.0,
+      pressure_unit: 'psi',
       // Wifi
       wifi_portal_timeout: 0,
       wifi_connect_timeout: 0,
@@ -25,36 +37,43 @@ export const useConfigStore = defineStore('config', {
       wifi_direct_ssid: '',
       wifi_direct_pass: '',
       use_wifi_direct: false,
+      wifi_scan_ap: false,
       // Push - Generic
+      token: '',
+      token2: '',
       sleep_interval: 0,
       push_timeout: 0,
       // Push - Http Post 1
       http_post_target: '',
       http_post_header1: '',
       http_post_header2: '',
+      http_post_int: 0,
       http_post_format: '',
       // Push - Http Post 2
       http_post2_target: '',
       http_post2_header1: '',
       http_post2_header2: '',
+      http_post2_int: 0,
       http_post2_format: '',
       // Push - Http Get
       http_get_target: '',
       http_get_header1: '',
       http_get_header2: '',
+      http_get_int: 0,
       http_get_format: '',
       // Push - Influx
       influxdb2_target: '',
       influxdb2_org: '',
       influxdb2_bucket: '',
       influxdb2_token: '',
+      influxdb2_int: 0,
       influxdb2_format: '',
       // Push - MQTT
       mqtt_target: '',
-      //mqtt_push: "",
       mqtt_port: '',
       mqtt_user: '',
       mqtt_pass: '',
+      mqtt_int: 0,
       mqtt_format: '',
       // Push BLE
       ble_format: 0,
@@ -63,27 +82,32 @@ export const useConfigStore = defineStore('config', {
     }
   },
   actions: {
+    convertTemp() {
+      if (this.temp_format == this.internal_temp_format) return
+      if (this.temp_format == 'C') this.convertTempToC()
+      if (this.temp_format == 'F') this.convertTempToF()
+    },
+    convertTempToC() {
+      if (this.internal_temp_format == 'C') return
+
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value / 1.8, 2)
+      this.formula_calibration_temp = roundVal(tempToC(this.formula_calibration_temp), 2)
+      this.internal_temp_format = 'C'
+    },
+    convertTempToF() {
+      if (this.internal_temp_format == 'F') return
+
+      this.temp_adjustment_value = roundVal(this.temp_adjustment_value * 1.8, 2) // Delta value
+      this.formula_calibration_temp = roundVal(tempToF(this.formula_calibration_temp), 2)
+      this.internal_temp_format = 'F'
+    },
     toJson() {
       logInfo('configStore.toJSON()')
       var dest = {}
 
       for (var key in this.$state) {
         if (!key.startsWith('$')) {
-          if (key === 'gyro_calibration_data') {
-            dest[key] = []
-            for (var i in this.$state[key]) {
-              dest[key][i] = this.$state[key][i]
-            }
-          } else if (key === 'formula_calculation_data') {
-            dest[key] = []
-            for (i in this.$state[key]) {
-              dest[key][i] = {}
-              dest[key][i].a = this.$state[key][i].a
-              dest[key][i].g = this.$state[key][i].g
-            }
-          } else {
-            dest[key] = this[key]
-          }
+          dest[key] = this[key]
         }
       }
 
@@ -105,12 +129,19 @@ export const useConfigStore = defineStore('config', {
           this.id = json.id
           // Device
           this.mdns = json.mdns
-          this.temp_unit = json.temp_unit
-          this.pressure_unit = json.pressure_unit
+          this.temp_format = json.temp_format
           // Hardware
-          this.pressure_zero_correction = json.pressure_zero_correction
-          this.pressure_sensor_type = json.pressure_sensor_type
+          this.ota_url = json.ota_url
           this.voltage_factor = json.voltage_factor
+          this.voltage_config = json.voltage_config
+          this.battery_saving = json.battery_saving
+          this.sensor_type = json.sensor_type
+          this.sensor1_type = json.sensor1_type
+          this.pressure_adjustment = json.pressure_adjustment
+          this.pressure1_adjustment = json.pressure1_adjustment
+          this.temp_adjustment = json.temp_adjustment
+          this.temp1_adjustment = json.temp1_adjustment
+          this.pressure_unit = json.pressure_unit
           // Wifi
           this.wifi_portal_timeout = json.wifi_portal_timeout
           this.wifi_connect_timeout = json.wifi_connect_timeout
@@ -118,42 +149,53 @@ export const useConfigStore = defineStore('config', {
           this.wifi_ssid2 = json.wifi_ssid2
           this.wifi_pass = json.wifi_pass
           this.wifi_pass2 = json.wifi_pass2
-          //this.wifi_direct_ssid = json.wifi_direct_ssid
-          //this.wifi_direct_pass = json.wifi_direct_pass
-          //this.use_wifi_direct = json.use_wifi_direct
+          this.wifi_direct_ssid = json.wifi_direct_ssid
+          this.wifi_direct_pass = json.wifi_direct_pass
+          this.use_wifi_direct = json.use_wifi_direct
+          this.wifi_scan_ap = json.wifi_scan_ap
           // Push - Generic
+          this.token = json.token
+          this.token2 = json.token2
           this.sleep_interval = json.sleep_interval
           this.push_timeout = json.push_timeout
           // Push - Http Post 1
           this.http_post_target = json.http_post_target
           this.http_post_header1 = json.http_post_header1
           this.http_post_header2 = json.http_post_header2
+          this.http_post_int = json.http_post_int
           this.http_post_format = json.http_post_format
           // Push - Http Post 2
           this.http_post2_target = json.http_post2_target
           this.http_post2_header1 = json.http_post2_header1
           this.http_post2_header2 = json.http_post2_header2
+          this.http_post2_int = json.http_post2_int
           this.http_post2_format = json.http_post2_format
           // Push - Http Get
           this.http_get_target = json.http_get_target
           this.http_get_header1 = json.http_get_header1
           this.http_get_header2 = json.http_get_header2
+          this.http_get_int = json.http_get_int
           this.http_get_format = json.http_get_format
           // Push - Influx
           this.influxdb2_target = json.influxdb2_target
           this.influxdb2_org = json.influxdb2_org
           this.influxdb2_bucket = json.influxdb2_bucket
           this.influxdb2_token = json.influxdb2_token
+          this.influxdb2_int = json.influxdb2_int
           this.influxdb2_format = json.influxdb2_format
           // Push - MQTT
           this.mqtt_target = json.mqtt_target
           this.mqtt_port = json.mqtt_port
           this.mqtt_user = json.mqtt_user
           this.mqtt_pass = json.mqtt_pass
+          this.mqtt_int = json.mqtt_int
           this.mqtt_format = json.mqtt_format
           // Push BLE
-          //this.ble_format = json.ble_format
+          this.ble_format = json.ble_format
           this.dark_mode = json.dark_mode
+
+          this.internal_temp_format = 'C'
+          this.convertTemp()
           callback(true)
         })
         .catch((err) => {
@@ -194,6 +236,8 @@ export const useConfigStore = defineStore('config', {
       global.disabled = true
       logInfo('configStore.sendConfig()', 'Sending /api/config')
 
+      this.convertTempToC() // Device use C internally
+
       var data = getConfigChanges()
       delete data.http_post_format
       delete data.http_post2_format
@@ -205,13 +249,17 @@ export const useConfigStore = defineStore('config', {
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendConfig()', 'No config data to store, skipping step')
         global.disabled = false
+        this.convertTemp()
         callback(true)
         return
       }
 
       fetch(global.baseURL + 'api/config', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: global.token },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: global.token
+        },
         body: JSON.stringify(data),
         signal: AbortSignal.timeout(global.fetchTimout)
       })
@@ -219,14 +267,17 @@ export const useConfigStore = defineStore('config', {
           global.disabled = false
           if (res.status != 200) {
             logError('configStore.sendConfig()', 'Sending /api/config failed', res.status)
+            this.convertTemp()
             callback(false)
           } else {
             logInfo('configStore.sendConfig()', 'Sending /api/config completed')
+            this.convertTemp()
             callback(true)
           }
         })
         .catch((err) => {
           logError('configStore.sendConfig()', err)
+          this.convertTemp()
           callback(false)
           global.disabled = false
         })
@@ -261,7 +312,9 @@ export const useConfigStore = defineStore('config', {
             if (success) cnt += 1
             data =
               data2.influxdb2_format !== undefined
-                ? { influxdb2_format: encodeURIComponent(data2.influxdb2_format) }
+                ? {
+                    influxdb2_format: encodeURIComponent(data2.influxdb2_format)
+                  }
                 : {}
             this.sendOneFormat(data, (success) => {
               if (success) cnt += 1
@@ -297,7 +350,10 @@ export const useConfigStore = defineStore('config', {
 
       fetch(global.baseURL + 'api/format', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: global.token },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: global.token
+        },
         body: JSON.stringify(data),
         signal: AbortSignal.timeout(global.fetchTimout)
       })
@@ -321,7 +377,10 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.sendPushTest()', 'Sending /api/push')
       fetch(global.baseURL + 'api/push', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: global.token },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: global.token
+        },
         body: JSON.stringify(data),
         signal: AbortSignal.timeout(global.fetchTimout)
       })
@@ -458,7 +517,10 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.sendFilesystemRequest()', 'Sending /api/filesystem')
       fetch(global.baseURL + 'api/filesystem', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: global.token },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: global.token
+        },
         body: JSON.stringify(data),
         signal: AbortSignal.timeout(global.fetchTimout)
       })
@@ -486,9 +548,12 @@ export const useConfigStore = defineStore('config', {
                   if (!data.push_enabled) {
                     global.messageWarning =
                       'No endpoint is defined for this target. Cannot run test.'
-                  } else if (!data.success) {
+                  } else if (!data.success && data.push_return_code > 0) {
                     global.messageError =
-                      'Test failed with error code ' + getErrorString(data.last_error)
+                      'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
+                  } else if (!data.success && data.push_return_code == 0) {
+                    global.messageError =
+                      'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
                   } else {
                     global.messageSuccess = 'Test was successful'
                   }

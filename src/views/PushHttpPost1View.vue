@@ -21,11 +21,15 @@
             :disabled="pushDisabled"
           />
         </div>
-        <!-- 
-                <div class="col-md-3">
-                    <BsDropdown label="Predefined URLs" button="URL" :options="httpPostUrlOptions"
-                        :callback="httpUrlCallback" :disabled="pushDisabled" />
-                </div>-->
+        <div class="col-md-3">
+          <BsDropdown
+            label="Predefined URLs"
+            button="URL"
+            :options="httpPostUrlOptions"
+            :callback="httpUrlCallback"
+            :disabled="pushDisabled"
+          />
+        </div>
         <div class="col-md-9">
           <BsInputText
             v-model="config.http_post_header1"
@@ -64,24 +68,49 @@
             :disabled="pushDisabled"
           />
         </div>
-        <!-- 
-                <div class="col-md-9">
-                    <BsInputTextAreaFormat v-model="config.http_post_format" rows="6" label="Data format"
-                        help="Format template used to create the data sent to the remote service"
-                        :disabled="pushDisabled" />
-                </div>
-                <div class="col-md-3">
-                    <BsDropdown label="Predefined formats" button="Formats" :options="httpPostFormatOptions"
-                        :callback="httpFormatCallback" :disabled="pushDisabled" />
-                    <BsModal @click="renderFormat" v-model="render" :code="true" title="Format preview"
-                        button="Preview format" :disabled="pushDisabled" />
-                </div> -->
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.http_post_int"
+            label="Skip interval"
+            min="0"
+            max="5"
+            width="4"
+            help="Defines how many sleep cycles to skip between pushing data to this target, 1 = every second cycle. Default is 0."
+            :disabled="pushDisabled"
+          />
+        </div>
+        <div class="col-md-9">
+          <BsInputTextAreaFormat
+            v-model="config.http_post_format"
+            rows="6"
+            label="Data format"
+            help="Format template used to create the data sent to the remote service"
+            :disabled="pushDisabled"
+          />
+        </div>
+        <div class="col-md-3">
+          <BsDropdown
+            label="Predefined formats"
+            button="Formats"
+            :options="httpPostFormatOptions"
+            :callback="httpFormatCallback"
+            :disabled="pushDisabled"
+          />
+          <BsModal
+            @click="renderFormat"
+            v-model="render"
+            :code="true"
+            title="Format preview"
+            button="Preview format"
+            :disabled="pushDisabled"
+          />
+        </div>
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
           <hr />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
           <button
             type="submit"
             class="btn btn-primary w-2"
@@ -93,17 +122,19 @@
               aria-hidden="true"
               :hidden="!global.disabled"
             ></span>
-            &nbsp;Save
+            &nbsp;Save</button
+          >&nbsp;
+
+          <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+              :hidden="!global.disabled"
+            ></span>
+            &nbsp;Run push test
           </button>
         </div>
-        <!-- 
-                <div class="col-md-3">
-                    <button @click="runTest" type="button" class="btn btn-secondary" :disabled="pushDisabled">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                            :hidden="!global.disabled"></span>
-                        &nbsp;Run push test
-                    </button>
-                </div> -->
       </div>
     </form>
   </div>

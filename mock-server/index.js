@@ -30,11 +30,27 @@ app.get('/api/calibrate', (req, res) => {
    * Note:           Use /api/calibrate/status to check for completion
    * Return:         200 OK, 401 Access Denied
    */
-  setTimeout(() => { calibrateRunning = false }, 2000)
+  configData.gyro_calibration_data.gx = 1
+  setTimeout(() => { calibrateRunning = false }, 5000)
   calibrateRunning = true
   var data = {
     success: true,
-    message: "Sensor calibration started..."
+    message: "Gyro calibration started..."
+  }
+  res.type('application/json')
+  res.send(data)
+})
+
+app.get('/api/ping', (req, res) => {
+  console.log('GET: /api/ping')
+  /* 
+   * Description:    Check for response from device. 
+   * Authentication: Required
+   * Limitation:     - 
+   * Return:         200 OK
+   */
+  var data = {
+    status: true,
   }
   res.type('application/json')
   res.send(data)
@@ -54,13 +70,13 @@ app.get('/api/calibrate/status', (req, res) => {
     data = {
       status: calibrateRunning,
       success: false,
-      message: "Sensor calibration running..."
+      message: "Gyro calibration running..."
     }
   } else {
     data = {
       status: false,
       success: true,
-      message: "Sensor calibration completed..."
+      message: "Gyro calibration completed..."
     }
   }
   res.type('application/json')
@@ -125,6 +141,26 @@ app.get('/api/push/status', (req, res) => {
   res.send(data)
 })
 
+app.get('/api/formula', (req, res) => {
+  console.log('GET: /api/formula')
+  /* 
+   * Description:    Simualate creation of gravity formula. Assume data has been saved via config.
+   * Authentication: Required
+   * Limitation:     - 
+   * Note:           -
+   * Return:         200 OK, 401 Access Denied
+   */
+  setTimeout(() => {
+    var data = {
+      success: true,
+      message: "Hello world",
+      gravity_formula: "0.0*tilt^3+0.0*tilt^2+0.0017978*tilt+0.9436"
+    }
+    res.type('application/json')
+    res.send(data)
+  }, 2000)
+})
+
 app.get('/api/format', (req, res) => {
   console.log('GET: /api/format')
   /* 
@@ -154,6 +190,27 @@ app.post('/api/format', (req, res) => {
   var data = {
     success: true,
     message: "Format stored",
+  }
+  res.type('application/json')
+  res.send(data)
+})
+
+app.post('/api/sleepmode', (req, res) => {
+  console.log('POST: /api/sleepmode')
+  /* 
+   * Description:    Toggle the sleep mode (from index page)
+   * Authentication: Required
+   * Limitation:     - 
+   * Note:           Returns current sleep_mode
+   * Return:         200 OK, 401 Access Denied
+   * Request body:
+     {
+       sleep_mode: true|false
+     }
+   */
+  statusData.sleep_mode = req.body.sleep_mode
+  var data = { 
+    sleep_mode: req.body.sleep_mode 
   }
   res.type('application/json')
   res.send(data)
