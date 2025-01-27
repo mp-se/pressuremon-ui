@@ -152,14 +152,6 @@ export function roundVal(val, decimals) {
   return parseFloat(Number(val).toFixed(decimals))
 }
 
-export function gravityToPlato(sg) {
-  return 135.997 * sg * sg * sg - 630.272 * sg * sg + 1111.14 * sg - 616.868
-}
-
-export function gravityToSG(p) {
-  return 1 + p / (258.6 - 227.1 * (p / 258.2))
-}
-
 export function tempToF(c) {
   return c * 1.8 + 32.0
 }
@@ -170,6 +162,8 @@ export function tempToC(f) {
 
 export function applyTemplate(status, config, template) {
   var s = template
+
+  // TODO: Fix formatting of the template
 
   s = s.replaceAll('${temp}', status.temp)
 
@@ -269,6 +263,7 @@ export function getErrorString(code) {
   return ''
 }
 
+// TODO: REMOVE This function
 export function isGyroCalibrated() {
   var g = config.gyro_calibration_data
   if (g.ax + g.ay + g.az + g.gx + g.gy + g.gz == 0) return false
