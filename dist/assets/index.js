@@ -6660,7 +6660,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "";
     },
     uiBuild() {
-      return "..2b309a";
+      return "..c1d034";
     }
   },
   actions: {
@@ -6676,11 +6676,12 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
   state: () => {
     return {
       id: "",
-      angle: 0,
-      gravity: 0,
-      gravity_format: "",
-      temp: 0,
-      temp_format: "",
+      pressure: 10,
+      pressure1: 11,
+      pressure_unit: "PSI",
+      temp: 20.2,
+      temp1: 20.5,
+      temp_unit: "C",
       sleep_interval: 0,
       battery: 0,
       sleep_mode: false,
@@ -6689,19 +6690,15 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       app_build: "",
       mdns: "",
       platform: "",
-      hardware: "",
       wifi_ssid: "",
       ip: "",
       runtime_average: 0,
       total_heap: 0,
       free_heap: 0,
-      ispindel_config: false,
       self_check: {
-        gyro_connected: true,
-        gyro_moving: true,
-        gyro_calibration: true,
+        sensor_configured: true,
+        sensor_connected: true,
         temp_connected: true,
-        gravity_formula: true,
         battery_level: true,
         push_targets: true
       },
@@ -6717,11 +6714,12 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         signal: AbortSignal.timeout(global$1.fetchTimout)
       }).then((res) => res.json()).then((json) => {
         this.id = json.id;
-        this.angle = json.angle;
-        this.temp_format = json.temp_format;
-        this.gravity = json.gravity;
-        this.gravity_format = json.gravity_format;
+        this.pressure = json.pressure;
+        this.pressure1 = json.pressure1;
+        this.pressure_unit = json.pressure_unit;
         this.temp = json.temp;
+        this.temp1 = json.temp1;
+        this.temp_unit = json.temp_unit;
         this.sleep_mode = json.sleep_mode;
         this.battery = json.battery;
         this.rssi = json.rssi;
@@ -6729,16 +6727,12 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.app_build = json.app_build;
         this.mdns = json.mdns;
         this.platform = json.platform;
-        this.hardware = json.hardware;
         this.wifi_ssid = json.wifi_ssid;
         this.ip = json.ip;
         this.runtime_average = json.runtime_average;
-        this.ispindel_config = json.ispindel_config;
-        this.self_check.gyro_connected = json.self_check.gyro_connected;
-        this.self_check.gyro_moving = json.self_check.gyro_moving;
+        this.self_check.sensor_connected = json.self_check.sensor_connected;
+        this.self_check.sensor_configured = json.self_check.sensor_configured;
         this.self_check.gyro_calibration = json.self_check.gyro_calibration;
-        this.self_check.temp_connected = json.self_check.temp_connected;
-        this.self_check.gravity_formula = json.self_check.gravity_formula;
         this.self_check.battery_level = json.self_check.battery_level;
         this.self_check.push_targets = json.self_check.push_targets;
         this.total_heap = json.total_heap;
@@ -6746,13 +6740,16 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.wifi_setup = json.wifi_setup;
         this.total_heap = Math.round(this.total_heap / 1024).toFixed(0);
         this.free_heap = Math.round(this.free_heap / 1024).toFixed(0);
+        if (this.pressure !== void 0)
+          this.pressure = (Math.round(this.pressure * 100) / 100).toFixed(2);
+        if (this.pressure1 !== void 0)
+          this.pressure1 = (Math.round(this.pressure1 * 100) / 100).toFixed(2);
+        if (this.temp !== void 0)
+          this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
+        if (this.temp1 !== void 0)
+          this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2);
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2);
-        this.angle = (Math.round(this.angle * 100) / 100).toFixed(2);
-        this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
         this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2);
-        if (this.gravity_format === "G")
-          this.gravity = (Math.round(this.gravity * 1e4) / 1e4).toFixed(4);
-        else this.gravity = (Math.round(this.gravity * 100) / 100).toFixed(2);
         logInfo("statusStore.load()", "Fetching /api/status completed");
         callback(true);
       }).catch((err) => {
@@ -9553,39 +9550,67 @@ const _hoisted_7$l = {
   key: 1,
   class: "col-md-4"
 };
-const _hoisted_8$m = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
-const _hoisted_9$k = { class: "col-md-4" };
+const _hoisted_8$m = { class: "text-center" };
+const _hoisted_9$k = {
+  key: 2,
+  class: "col-md-4"
+};
 const _hoisted_10$j = { class: "text-center" };
-const _hoisted_11$h = { class: "col-md-4" };
+const _hoisted_11$h = {
+  key: 3,
+  class: "col-md-4"
+};
 const _hoisted_12$h = { class: "text-center" };
-const _hoisted_13$h = { class: "col-md-4" };
+const _hoisted_13$h = {
+  key: 4,
+  class: "col-md-4"
+};
 const _hoisted_14$g = { class: "text-center" };
-const _hoisted_15$f = { class: "col-md-4" };
-const _hoisted_16$e = { class: "text-center" };
+const _hoisted_15$f = {
+  key: 5,
+  class: "col-md-4"
+};
+const _hoisted_16$e = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
 const _hoisted_17$d = { class: "col-md-4" };
 const _hoisted_18$d = { class: "text-center" };
 const _hoisted_19$b = { class: "col-md-4" };
 const _hoisted_20$b = { class: "text-center" };
 const _hoisted_21$7 = { class: "col-md-4" };
-const _hoisted_22$5 = { class: "d-flex justify-content-center" };
-const _hoisted_23$4 = {
+const _hoisted_22$5 = { class: "text-center" };
+const _hoisted_23$4 = { class: "col-md-4" };
+const _hoisted_24$3 = { class: "text-center" };
+const _hoisted_25$2 = { class: "col-md-4" };
+const _hoisted_26$2 = { class: "text-center" };
+const _hoisted_27$1 = { class: "col-md-4" };
+const _hoisted_28$1 = { class: "text-center" };
+const _hoisted_29$1 = { class: "col-md-4" };
+const _hoisted_30$1 = { class: "d-flex justify-content-center" };
+const _hoisted_31$1 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
 const _sfc_main$R = {
   __name: "HomeView",
   setup(__props) {
+    const polling = ref(null);
     const flag = ref(false);
     watch(flag, async () => {
       status.setSleepMode(flag.value, () => {
       });
     });
+    function refresh() {
+      status.load(() => {
+      });
+    }
     onMounted(() => {
       flag.value = status.sleep_mode;
     });
     onBeforeMount(() => {
+      refresh();
+      polling.value = setInterval(refresh, 4e3);
     });
     onBeforeUnmount(() => {
+      clearInterval(polling.value);
     });
     return (_ctx, _cache) => {
       const _component_BsMessage = resolveComponent("BsMessage");
@@ -9603,23 +9628,93 @@ const _sfc_main$R = {
               createTextVNode(" No remote services are active. Check your push settings and enable at least one service. ")
             ]),
             _: 1
+          })) : createCommentVNode("", true),
+          !unref(status).self_check.sensor_configured ? (openBlock(), createBlock(_component_BsMessage, {
+            key: 1,
+            dismissable: "true",
+            message: "",
+            alert: "danger"
+          }, {
+            default: withCtx(() => [
+              createTextVNode(" No sensor has been configured, update the hardware configuration. ")
+            ]),
+            _: 1
+          })) : createCommentVNode("", true),
+          !unref(status).self_check.sensor_connected ? (openBlock(), createBlock(_component_BsMessage, {
+            key: 2,
+            dismissable: "true",
+            message: "",
+            alert: "danger"
+          }, {
+            default: withCtx(() => [
+              createTextVNode(" No sensor is detected. Try to reboot / power-off. If this persists, check for hardware issues. ")
+            ]),
+            _: 1
           })) : createCommentVNode("", true)
         ], 64)) : createCommentVNode("", true),
         unref(status) ? (openBlock(), createElementBlock("div", _hoisted_3$D, [
           createBaseVNode("div", _hoisted_4$r, [
-            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_5$m, [
+            unref(status).pressure ? (openBlock(), createElementBlock("div", _hoisted_5$m, [
+              createVNode(_component_BsCard, {
+                header: "Measurement",
+                color: "info",
+                title: "Pressure (1)"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_6$l, toDisplayString(unref(status).pressure) + " " + toDisplayString(unref(status).pressure_unit), 1)
+                ]),
+                _: 1
+              })
+            ])) : createCommentVNode("", true),
+            unref(status).pressure1 ? (openBlock(), createElementBlock("div", _hoisted_7$l, [
+              createVNode(_component_BsCard, {
+                header: "Measurement",
+                color: "info",
+                title: "Pressure (2)"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_8$m, toDisplayString(unref(status).pressure1) + " " + toDisplayString(unref(status).pressure_unit), 1)
+                ]),
+                _: 1
+              })
+            ])) : createCommentVNode("", true),
+            unref(status).temp ? (openBlock(), createElementBlock("div", _hoisted_9$k, [
+              createVNode(_component_BsCard, {
+                header: "Measurement",
+                color: "info",
+                title: "Temperature (1)"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_10$j, toDisplayString(unref(status).temp) + " " + toDisplayString(unref(status).temp_unit), 1)
+                ]),
+                _: 1
+              })
+            ])) : createCommentVNode("", true),
+            unref(status).temp1 ? (openBlock(), createElementBlock("div", _hoisted_11$h, [
+              createVNode(_component_BsCard, {
+                header: "Measurement",
+                color: "info",
+                title: "Temperature (2)"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_12$h, toDisplayString(unref(status).temp1) + " " + toDisplayString(unref(status).temp_unit), 1)
+                ]),
+                _: 1
+              })
+            ])) : createCommentVNode("", true),
+            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_13$h, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Battery"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_6$l, toDisplayString(unref(status).battery) + " V", 1)
+                  createBaseVNode("p", _hoisted_14$g, toDisplayString(unref(status).battery) + " V", 1)
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_7$l, [
+            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_15$f, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -9627,63 +9722,19 @@ const _sfc_main$R = {
                 icon: "bi-x-circle"
               }, {
                 default: withCtx(() => [
-                  _hoisted_8$m
+                  _hoisted_16$e
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_9$k, [
+            createBaseVNode("div", _hoisted_17$d, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Average runtime"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_10$j, toDisplayString(unref(status).runtime_average) + " s", 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_11$h, [
-              createVNode(_component_BsCard, {
-                header: "Device",
-                title: "WIFI"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_12$h, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_13$h, [
-              createVNode(_component_BsCard, {
-                header: "Device",
-                title: "IP Address"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_14$g, toDisplayString(unref(status).ip), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_15$f, [
-              createVNode(_component_BsCard, {
-                header: "Device",
-                title: "Memory"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_16$e, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_17$d, [
-              createVNode(_component_BsCard, {
-                header: "Device",
-                title: "Software version"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_18$d, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                  createBaseVNode("p", _hoisted_18$d, toDisplayString(unref(status).runtime_average) + " s", 1)
                 ]),
                 _: 1
               })
@@ -9691,10 +9742,10 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_19$b, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Platform"
+                title: "WIFI"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_20$b, toDisplayString(unref(status).platform) + ", id: " + toDisplayString(unref(status).id), 1)
+                  createBaseVNode("p", _hoisted_20$b, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
                 ]),
                 _: 1
               })
@@ -9702,11 +9753,55 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_21$7, [
               createVNode(_component_BsCard, {
                 header: "Device",
+                title: "IP Address"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_22$5, toDisplayString(unref(status).ip), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_23$4, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "Memory"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_24$3, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_25$2, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "Software version"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_26$2, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_27$1, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "Platform"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_28$1, toDisplayString(unref(status).platform) + ", id: " + toDisplayString(unref(status).id), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_29$1, [
+              createVNode(_component_BsCard, {
+                header: "Device",
                 title: "Force measurement mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_22$5, [
-                    createBaseVNode("div", _hoisted_23$4, [
+                  createBaseVNode("div", _hoisted_30$1, [
+                    createBaseVNode("div", _hoisted_31$1, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
