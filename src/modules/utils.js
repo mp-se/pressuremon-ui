@@ -160,10 +160,24 @@ export function tempToC(f) {
   return (f - 32.0) / 1.8
 }
 
+export function psiToBar(p) {
+  return p * 0.0689475729
+}
+
+export function psiToKPa(p) {
+  return p * 68.947572932 * 1000
+}
+
+export function barToPsi(p) {
+  return p 
+}
+
+export function kpaToPsi(p) {
+  return p 
+}
+
 export function applyTemplate(status, config, template) {
   var s = template
-
-  // TODO: Fix formatting of the template
 
   s = s.replaceAll('${temp}', status.temp)
 
@@ -178,8 +192,20 @@ export function applyTemplate(status, config, template) {
 
   s = s.replaceAll('${temp-c}', c)
   s = s.replaceAll('${temp-f}', f)
-  s = s.replaceAll('${angle}', status.angle)
-  s = s.replaceAll('${tilt}', status.angle)
+
+  var p = status.pressure
+
+  if(status.isKPa) {
+    p = kpaToPsi(p)
+  } else if(status.isBar) {
+    p = barToPsi(p)    
+  }
+
+  s = s.replaceAll('${pressure}', p)
+  s = s.replaceAll('${pressure-psi}', p)
+  s = s.replaceAll('${pressure-bar}', psiToBar(p))
+  s = s.replaceAll('${pressure-kpa}', psiToKPa(p))
+
   s = s.replaceAll('${app-ver}', status.app_ver)
   s = s.replaceAll('${app-build}', status.app_build)
   s = s.replaceAll('${battery-percent}', 100)
@@ -188,31 +214,13 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${corr-gravity}', status.gravity)
   s = s.replaceAll('${battery}', status.battery)
 
-  if (config.gravity_format === 'G') {
-    var sg = status.gravity
-    s = s.replaceAll('${gravity}', sg)
-    s = s.replaceAll('${gravity-sg}', sg)
-    s = s.replaceAll('${corr-gravity-sg}', sg)
-    var plato = 259 - (259 - sg)
-    s = s.replaceAll('${gravity-plato}', plato)
-    s = s.replaceAll('${corr-gravity-plato}', plato)
-  } else {
-    plato = status.gravity
-    s = s.replaceAll('${gravity}', plato)
-    s = s.replaceAll('${gravity-plato}', plato)
-    s = s.replaceAll('${corr-gravity-plato}', plato)
-    sg = 259 / (259 - plato)
-    s = s.replaceAll('${gravity-sg}', sg)
-    s = s.replaceAll('${corr-gravity-sg}', sg)
-  }
-
   s = s.replaceAll('${mdns}', config.mdns)
   s = s.replaceAll('${id}', config.id)
   s = s.replaceAll('${sleep-interval}', config.sleep_interval)
   s = s.replaceAll('${token}', config.token)
   s = s.replaceAll('${token2}', config.token2)
   s = s.replaceAll('${temp-unit}', config.temp_format)
-  s = s.replaceAll('${gravity-unit}', config.gravity_format)
+  s = s.replaceAll('${pressure-unit}', config.pressure_unit)
 
   try {
     return JSON.stringify(JSON.parse(s), null, 2)

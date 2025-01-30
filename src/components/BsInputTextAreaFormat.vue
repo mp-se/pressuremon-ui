@@ -42,12 +42,29 @@ const contextMenuOptions = ref([
   { label: 'Token, ${token}', value: '${token}' },
   { label: 'Token 2, ${token2}', value: '${token2}' },
 
-  { label: 'Current angle/tilt, ${angle}', value: '${angle}' },
-  { label: 'Current angle/tilt, ${tilt}', value: '${tilt}' },
-
+  { label: 'Temperature, ${temp}', value: '${temp}' },
   { label: 'Temperature (C), ${temp-c}', value: '${temp-c}' },
   { label: 'Temperature (F), ${temp-f}', value: '${temp-f}' },
   { label: 'Temperature Unit, ${temp-unit}', value: '${temp-unit}' },
+
+  /* TODO
+  { label: 'Temperature, ${temp1}', value: '${temp1}' },
+  { label: 'Temperature (C), ${temp1-c}', value: '${temp1-c}' },
+  { label: 'Temperature (F), ${temp1-f}', value: '${temp1-f}' },
+  */
+
+  { label: 'Pressure, ${pressure}', value: '${pressure}' },
+  { label: 'Pressure (PSI), ${pressure-cpsi}', value: '${pressure-psi}' },
+  { label: 'Pressure (kPa), ${pressure-kpa}', value: '${pressure-kpa}' },
+  { label: 'Pressure (Bar), ${pressure-bar}', value: '${pressure-bar}' },
+  { label: 'Pressure Unit, ${pressure-unit}', value: '${pressure-unit}' },
+
+  /*
+  { label: 'Pressure, ${pressure1}', value: '${pressure1}' },
+  { label: 'Pressure (PSI), ${pressure1-cpsi}', value: '${pressure1-psi}' },
+  { label: 'Pressure (kPa), ${pressure1-kpa}', value: '${pressure1-kpa}' },
+  { label: 'Pressure (Bar), ${pressure1-bar}', value: '${pressure1-bar}' },
+   */
 
   { label: 'Application version, ${app-ver}', value: '${app-ver}' },
   { label: 'Application build, ${app-build}', value: '${app-build}' },
@@ -57,21 +74,6 @@ const contextMenuOptions = ref([
 
   { label: 'Wifi signal strength, ${rssi}', value: '${rssi}' },
   { label: 'Time for measurement, ${run-time}', value: '${run-time}' },
-
-  { label: 'Gravity, ${gravity}', value: '${gravity}' },
-  { label: 'Gravity (SG), ${gravity-sg}', value: '${gravity-sg}' },
-  { label: 'Gravity (Plato), ${gravity-plato}', value: '${gravity-plato}' },
-  { label: 'Gravity unit, ${gravity-unit}', value: '${gravity-unit}' },
-
-  { label: 'Corrected gravity, ${corr-gravity}', value: '${corr-gravity}' },
-  {
-    label: 'Corrected Gravity (SG), ${corr-gravity-sg}',
-    value: '${corr-gravity-sg}'
-  },
-  {
-    label: 'Corrected Gravity (Plato), ${corr-gravity-plato}',
-    value: '${corr-gravity-plato}'
-  }
 ])
 
 function insertText(value) {

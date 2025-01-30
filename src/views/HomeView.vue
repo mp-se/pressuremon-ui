@@ -35,7 +35,7 @@
       <div class="row gy-4">
 
         <div class="col-md-4" v-if="status.pressure">
-          <BsCard header="Measurement" color="info" title="Pressure (1)">
+          <BsCard header="Measurement" color="info" title="Pressure">
             <p class="text-center">{{ status.pressure }} {{ status.pressure_unit }}</p>
           </BsCard>
         </div>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-md-4" v-if="status.temp">
-          <BsCard header="Measurement" color="info" title="Temperature (1)">
+          <BsCard header="Measurement" color="info" title="Temperature">
             <p class="text-center">{{ status.temp }} {{ status.temp_unit }}</p>
           </BsCard>
         </div>

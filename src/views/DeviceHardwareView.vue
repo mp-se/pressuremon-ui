@@ -55,6 +55,10 @@
           />
         </div>
 
+
+        <div class="col-md-6">
+        </div>
+          <!--
         <div class="col-md-6">
           <BsSelect
             v-model="config.sensor1_type"
@@ -62,15 +66,15 @@
             :options="pressureSensorOptions"
             :disabled="global.disabled"
           />
-        </div>
+        </div>-->
 
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.pressure_adjustment"
-            label="Pressure adjustment 1"
+            label="Pressure adjustment"
             min="0"
             max="1000"
-            step=".001"
+            step=".0000001"
             width="6"
             :unit="config.pressure_unit"
             help="Adjustment value for the pressure sensor"
@@ -80,24 +84,27 @@
         </div>
 
         <div class="col-md-6">
+        </div>
+        <!--
+        <div class="col-md-6">
           <BsInputNumber
             v-model="config.pressure1_adjustment"
             label="Pressure adjustment 2"
             min="0"
             max="1000"
-            step=".001"
+            step=".0000001"
             width="6"
             :unit="config.pressure_unit"
             help="Adjustment value for the pressure sensor"
             :disabled="global.disabled || config.sensor1_type < 1"
           >
           </BsInputNumber>
-        </div>
+        </div>-->
 
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp_adjustment"
-            label="Temperature adjustment 1"
+            label="Temperature adjustment"
             min="0"
             max="100"
             step=".01"
@@ -109,6 +116,9 @@
           </BsInputNumber>
         </div>
 
+        <div class="col-md-6">
+        </div>
+        <!--
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp1_adjustment"
@@ -122,7 +132,8 @@
             :disabled="global.disabled || config.sensor1_type < 1 || config.sensor1_type > 100"
           >
           </BsInputNumber>
-        </div>
+        </div> -->
+
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
@@ -210,6 +221,7 @@ const pressureSensorOptions = ref([
   { label: 'XIDIBEI XDB401 IIC 0.0 - 3.5 MPa', value: 13 }, // 35 bar
   { label: 'XIDIBEI XDB401 IIC 0.0 - 4 MPa', value: 14 }, // 40 bar
 
+/*
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.2 MPa', value: 101 }, // 2 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.4 MPa', value: 102 }, // 4 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.5 MPa', value: 103 }, // 5 bar
@@ -224,6 +236,7 @@ const pressureSensorOptions = ref([
   { label: 'XIDIBEI XDB401 Analog 0.0 - 3 MPa', value: 102 }, // 30 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 3.5 MPa', value: 103 }, // 35 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 4 MPa', value: 104 } // 40 bar
+*/
 ])
 
 const voltage = computed(() => {

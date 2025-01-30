@@ -130,8 +130,8 @@ const tempOptions = ref([
 
 const pressureOptions = ref([
   { label: 'PSI', value: 'PSI' },
-  { label: 'kPA', value: 'KPA' },
-  { label: 'Bar', value: 'BAR' }
+  { label: 'kPA', value: 'kPa' },
+  { label: 'Bar', value: 'Bar' }
 ])
 
 const uiOptions = ref([

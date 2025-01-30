@@ -38,7 +38,17 @@ export const useStatusStore = defineStore('status', {
       connected: true
     }
   },
-  getters: {},
+  getters: {
+    isPsi() {
+      return this.pressure_unit === 'PSI'
+    },
+    isBar() {
+      return this.pressure_unit === 'Bar'
+    },
+    isKPa() {
+      return this.pressure_unit === 'kPa'
+    },
+  },
   actions: {
     load(callback) {
       logInfo('statusStore.load()', 'Fetching /api/status')
