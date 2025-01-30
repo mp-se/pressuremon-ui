@@ -6660,7 +6660,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "";
     },
     uiBuild() {
-      return "..c1d034";
+      return "..5a95f0";
     }
   },
   actions: {
@@ -6706,7 +6706,17 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       connected: true
     };
   },
-  getters: {},
+  getters: {
+    isPsi() {
+      return this.pressure_unit === "PSI";
+    },
+    isBar() {
+      return this.pressure_unit === "Bar";
+    },
+    isKPa() {
+      return this.pressure_unit === "kPa";
+    }
+  },
   actions: {
     load(callback) {
       logInfo("statusStore.load()", "Fetching /api/status");
@@ -6947,6 +6957,18 @@ function tempToF(c) {
 function tempToC(f) {
   return (f - 32) / 1.8;
 }
+function psiToBar(p2) {
+  return p2 * 0.0689475729;
+}
+function psiToKPa(p2) {
+  return p2 * 68.947572932 * 1e3;
+}
+function barToPsi(p2) {
+  return p2;
+}
+function kpaToPsi(p2) {
+  return p2;
+}
 function applyTemplate(status2, config2, template) {
   var s = template;
   s = s.replaceAll("${temp}", status2.temp);
@@ -6959,8 +6981,16 @@ function applyTemplate(status2, config2, template) {
   }
   s = s.replaceAll("${temp-c}", c);
   s = s.replaceAll("${temp-f}", f);
-  s = s.replaceAll("${angle}", status2.angle);
-  s = s.replaceAll("${tilt}", status2.angle);
+  var p2 = status2.pressure;
+  if (status2.isKPa) {
+    p2 = kpaToPsi(p2);
+  } else if (status2.isBar) {
+    p2 = barToPsi(p2);
+  }
+  s = s.replaceAll("${pressure}", p2);
+  s = s.replaceAll("${pressure-psi}", p2);
+  s = s.replaceAll("${pressure-bar}", psiToBar(p2));
+  s = s.replaceAll("${pressure-kpa}", psiToKPa(p2));
   s = s.replaceAll("${app-ver}", status2.app_ver);
   s = s.replaceAll("${app-build}", status2.app_build);
   s = s.replaceAll("${battery-percent}", 100);
@@ -6968,30 +6998,13 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${run-time}", status2.runtime_average);
   s = s.replaceAll("${corr-gravity}", status2.gravity);
   s = s.replaceAll("${battery}", status2.battery);
-  if (config2.gravity_format === "G") {
-    var sg = status2.gravity;
-    s = s.replaceAll("${gravity}", sg);
-    s = s.replaceAll("${gravity-sg}", sg);
-    s = s.replaceAll("${corr-gravity-sg}", sg);
-    var plato = 259 - (259 - sg);
-    s = s.replaceAll("${gravity-plato}", plato);
-    s = s.replaceAll("${corr-gravity-plato}", plato);
-  } else {
-    plato = status2.gravity;
-    s = s.replaceAll("${gravity}", plato);
-    s = s.replaceAll("${gravity-plato}", plato);
-    s = s.replaceAll("${corr-gravity-plato}", plato);
-    sg = 259 / (259 - plato);
-    s = s.replaceAll("${gravity-sg}", sg);
-    s = s.replaceAll("${corr-gravity-sg}", sg);
-  }
   s = s.replaceAll("${mdns}", config2.mdns);
   s = s.replaceAll("${id}", config2.id);
   s = s.replaceAll("${sleep-interval}", config2.sleep_interval);
   s = s.replaceAll("${token}", config2.token);
   s = s.replaceAll("${token2}", config2.token2);
   s = s.replaceAll("${temp-unit}", config2.temp_format);
-  s = s.replaceAll("${gravity-unit}", config2.gravity_format);
+  s = s.replaceAll("${pressure-unit}", config2.pressure_unit);
   try {
     return JSON.stringify(JSON.parse(s), null, 2);
   } catch (e) {
@@ -9658,7 +9671,7 @@ const _sfc_main$R = {
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
-                title: "Pressure (1)"
+                title: "Pressure"
               }, {
                 default: withCtx(() => [
                   createBaseVNode("p", _hoisted_6$l, toDisplayString(unref(status).pressure) + " " + toDisplayString(unref(status).pressure_unit), 1)
@@ -9682,7 +9695,7 @@ const _sfc_main$R = {
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
-                title: "Temperature (1)"
+                title: "Temperature"
               }, {
                 default: withCtx(() => [
                   createBaseVNode("p", _hoisted_10$j, toDisplayString(unref(status).temp) + " " + toDisplayString(unref(status).temp_unit), 1)
@@ -9857,8 +9870,8 @@ const _sfc_main$Q = {
     ]);
     const pressureOptions = ref([
       { label: "PSI", value: "PSI" },
-      { label: "kPA", value: "KPA" },
-      { label: "Bar", value: "BAR" }
+      { label: "kPA", value: "kPa" },
+      { label: "Bar", value: "Bar" }
     ]);
     const uiOptions = ref([
       { label: "Day mode", value: false },
@@ -10026,11 +10039,11 @@ const _hoisted_9$i = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12"
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_10$h = { class: "col-md-6" };
-const _hoisted_11$f = { class: "col-md-6" };
+const _hoisted_11$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
 const _hoisted_12$f = { class: "col-md-6" };
-const _hoisted_13$f = { class: "col-md-6" };
+const _hoisted_13$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
 const _hoisted_14$e = { class: "col-md-6" };
-const _hoisted_15$d = { class: "col-md-6" };
+const _hoisted_15$d = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
 const _hoisted_16$c = { class: "row gy-2" };
 const _hoisted_17$b = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10074,36 +10087,24 @@ const _sfc_main$P = {
       // 30 bar
       { label: "XIDIBEI XDB401 IIC 0.0 - 3.5 MPa", value: 13 },
       // 35 bar
-      { label: "XIDIBEI XDB401 IIC 0.0 - 4 MPa", value: 14 },
+      { label: "XIDIBEI XDB401 IIC 0.0 - 4 MPa", value: 14 }
       // 40 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 0.2 MPa", value: 101 },
-      // 2 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 0.4 MPa", value: 102 },
-      // 4 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 0.5 MPa", value: 103 },
-      // 5 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 0.6 MPa", value: 104 },
-      // 6 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 0.8 MPa", value: 105 },
-      // 8 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 1 MPa", value: 106 },
-      // 10 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 1.2 MPa", value: 107 },
-      // 12 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 1.5 MPa", value: 108 },
-      // 15 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 1.6 MPa", value: 109 },
-      // 16 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 2 MPa", value: 100 },
-      // 20 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 2.5 MPa", value: 101 },
-      // 25 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 3 MPa", value: 102 },
-      // 30 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 3.5 MPa", value: 103 },
-      // 35 bar
-      { label: "XIDIBEI XDB401 Analog 0.0 - 4 MPa", value: 104 }
-      // 40 bar
+      /*
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 0.2 MPa', value: 101 }, // 2 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 0.4 MPa', value: 102 }, // 4 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 0.5 MPa', value: 103 }, // 5 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 0.6 MPa', value: 104 }, // 6 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 0.8 MPa', value: 105 }, // 8 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 1 MPa', value: 106 }, // 10 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 1.2 MPa', value: 107 }, // 12 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 1.5 MPa', value: 108 }, // 15 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 1.6 MPa', value: 109 }, // 16 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 2 MPa', value: 100 }, // 20 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 2.5 MPa', value: 101 }, // 25 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 3 MPa', value: 102 }, // 30 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 3.5 MPa', value: 103 }, // 35 bar
+        { label: 'XIDIBEI XDB401 Analog 0.0 - 4 MPa', value: 104 } // 40 bar
+      */
     ]);
     const voltage = computed(() => {
       return status.battery + " V";
@@ -10212,48 +10213,27 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_11$f, [
-              createVNode(_component_BsSelect, {
-                modelValue: unref(config).sensor1_type,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).sensor1_type = $event),
-                label: "Pressure Sensor 2",
-                options: pressureSensorOptions.value,
-                disabled: unref(global$1).disabled
-              }, null, 8, ["modelValue", "options", "disabled"])
-            ]),
+            _hoisted_11$f,
             createBaseVNode("div", _hoisted_12$f, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).pressure_adjustment,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).pressure_adjustment = $event),
-                label: "Pressure adjustment 1",
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).pressure_adjustment = $event),
+                label: "Pressure adjustment",
                 min: "0",
                 max: "1000",
-                step: ".001",
+                step: ".0000001",
                 width: "6",
                 unit: unref(config).pressure_unit,
                 help: "Adjustment value for the pressure sensor",
                 disabled: unref(global$1).disabled || unref(config).sensor_type < 1
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_13$f, [
-              createVNode(_component_BsInputNumber, {
-                modelValue: unref(config).pressure1_adjustment,
-                "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(config).pressure1_adjustment = $event),
-                label: "Pressure adjustment 2",
-                min: "0",
-                max: "1000",
-                step: ".001",
-                width: "6",
-                unit: unref(config).pressure_unit,
-                help: "Adjustment value for the pressure sensor",
-                disabled: unref(global$1).disabled || unref(config).sensor1_type < 1
-              }, null, 8, ["modelValue", "unit", "disabled"])
-            ]),
+            _hoisted_13$f,
             createBaseVNode("div", _hoisted_14$e, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).temp_adjustment,
-                "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => unref(config).temp_adjustment = $event),
-                label: "Temperature adjustment 1",
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).temp_adjustment = $event),
+                label: "Temperature adjustment",
                 min: "0",
                 max: "100",
                 step: ".01",
@@ -10263,20 +10243,7 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled || unref(config).sensor_type < 1 || unref(config).sensor_type > 100
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_15$d, [
-              createVNode(_component_BsInputNumber, {
-                modelValue: unref(config).temp1_adjustment,
-                "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => unref(config).temp1_adjustment = $event),
-                label: "Temperature adjustment 2",
-                min: "0",
-                max: "100",
-                step: ".01",
-                width: "6",
-                unit: unref(config).temp_format,
-                help: "Adjustment value for the temperature sensor",
-                disabled: unref(global$1).disabled || unref(config).sensor1_type < 1 || unref(config).sensor1_type > 100
-              }, null, 8, ["modelValue", "unit", "disabled"])
-            ])
+            _hoisted_15$d
           ]),
           createBaseVNode("div", _hoisted_16$c, [
             _hoisted_17$b,
@@ -10296,7 +10263,7 @@ const _sfc_main$P = {
               ], 8, _hoisted_19$9),
               createTextVNode("  "),
               createBaseVNode("button", {
-                onClick: _cache[9] || (_cache[9] = ($event) => unref(restart)()),
+                onClick: _cache[6] || (_cache[6] = ($event) => unref(restart)()),
                 type: "button",
                 class: "btn btn-secondary",
                 disabled: unref(global$1).disabled
@@ -14987,30 +14954,32 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       { label: "Sleep interval, ${sleep-interval}", value: "${sleep-interval}" },
       { label: "Token, ${token}", value: "${token}" },
       { label: "Token 2, ${token2}", value: "${token2}" },
-      { label: "Current angle/tilt, ${angle}", value: "${angle}" },
-      { label: "Current angle/tilt, ${tilt}", value: "${tilt}" },
+      { label: "Temperature, ${temp}", value: "${temp}" },
       { label: "Temperature (C), ${temp-c}", value: "${temp-c}" },
       { label: "Temperature (F), ${temp-f}", value: "${temp-f}" },
       { label: "Temperature Unit, ${temp-unit}", value: "${temp-unit}" },
+      /* TODO
+      { label: 'Temperature, ${temp1}', value: '${temp1}' },
+      { label: 'Temperature (C), ${temp1-c}', value: '${temp1-c}' },
+      { label: 'Temperature (F), ${temp1-f}', value: '${temp1-f}' },
+      */
+      { label: "Pressure, ${pressure}", value: "${pressure}" },
+      { label: "Pressure (PSI), ${pressure-cpsi}", value: "${pressure-psi}" },
+      { label: "Pressure (kPa), ${pressure-kpa}", value: "${pressure-kpa}" },
+      { label: "Pressure (Bar), ${pressure-bar}", value: "${pressure-bar}" },
+      { label: "Pressure Unit, ${pressure-unit}", value: "${pressure-unit}" },
+      /*
+      { label: 'Pressure, ${pressure1}', value: '${pressure1}' },
+      { label: 'Pressure (PSI), ${pressure1-cpsi}', value: '${pressure1-psi}' },
+      { label: 'Pressure (kPa), ${pressure1-kpa}', value: '${pressure1-kpa}' },
+      { label: 'Pressure (Bar), ${pressure1-bar}', value: '${pressure1-bar}' },
+       */
       { label: "Application version, ${app-ver}", value: "${app-ver}" },
       { label: "Application build, ${app-build}", value: "${app-build}" },
       { label: "Battery (V), ${battery}", value: "${battery}" },
       { label: "Battery (%), ${battery-percent}", value: "${battery-percent}" },
       { label: "Wifi signal strength, ${rssi}", value: "${rssi}" },
-      { label: "Time for measurement, ${run-time}", value: "${run-time}" },
-      { label: "Gravity, ${gravity}", value: "${gravity}" },
-      { label: "Gravity (SG), ${gravity-sg}", value: "${gravity-sg}" },
-      { label: "Gravity (Plato), ${gravity-plato}", value: "${gravity-plato}" },
-      { label: "Gravity unit, ${gravity-unit}", value: "${gravity-unit}" },
-      { label: "Corrected gravity, ${corr-gravity}", value: "${corr-gravity}" },
-      {
-        label: "Corrected Gravity (SG), ${corr-gravity-sg}",
-        value: "${corr-gravity-sg}"
-      },
-      {
-        label: "Corrected Gravity (Plato), ${corr-gravity-plato}",
-        value: "${corr-gravity-plato}"
-      }
+      { label: "Time for measurement, ${run-time}", value: "${run-time}" }
     ]);
     function insertText(value) {
       if (value.length > 0) {
