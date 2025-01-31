@@ -6660,7 +6660,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..b038b5";
+      return "..4e2276";
     }
   },
   actions: {
@@ -10179,7 +10179,7 @@ const _sfc_main$P = {
                 options: tempsensorResolutionOptions.value,
                 label: "DS18B20 resolution",
                 help: "Resolution when reading the DS18B20 temperature sensor, higher resolution give better accuracy but takes longer to process and reduces battery life",
-                disabled: _ctx.disableDs18b20
+                disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
             createBaseVNode("div", _hoisted_11$f, [
@@ -10681,7 +10681,7 @@ const _sfc_main$N = {
                 max: "3600",
                 step: "1",
                 width: "5",
-                help: "The number of seconds that the device will sleep between gravity readings. Recommended value is 300s",
+                help: "The number of seconds that the device will sleep between sensor readings. Recommended value is 300s",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "label", "disabled"])
             ]),
@@ -10743,8 +10743,8 @@ const _sfc_main$N = {
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).use_wifi_direct,
                 "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => unref(config).use_wifi_direct = $event),
-                label: "Use wifi direct in gravity mode",
-                help: "In gravity mode the wifi direct SSID/Password will be used for connection",
+                label: "Use wifi direct in measurement mode",
+                help: "In measurement mode the wifi direct SSID/Password will be used for connection",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ])
@@ -13620,7 +13620,7 @@ const _sfc_main$t = {
         _hoisted_1$t,
         !unref(global$1).initialized ? (openBlock(), createElementBlock("div", _hoisted_2$q, [
           createVNode(_component_BsMessage, {
-            message: "Initalizing GravityMon Web interface",
+            message: "Initalizing PressureMon Web interface",
             class: "h2",
             dismissable: false,
             alert: "info"
@@ -13629,7 +13629,7 @@ const _sfc_main$t = {
         unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$v, {
           key: 1,
           disabled: unref(global$1).disabled,
-          brand: "GravityMon"
+          brand: "PressureMon"
         }, null, 8, ["disabled"])) : createCommentVNode("", true),
         createBaseVNode("div", _hoisted_3$h, [
           _hoisted_4$6,
@@ -13687,42 +13687,12 @@ const _sfc_main$t = {
               createTextVNode(" meny and select wifi. Restart device after settings are selected. ")
             ]),
             _: 1
-          })) : createCommentVNode("", true),
-          unref(status).ispindel_config ? (openBlock(), createBlock(_component_BsMessage, {
-            key: 6,
-            dismissable: true,
-            alert: "info"
-          }, {
-            default: withCtx(() => [
-              createTextVNode(" iSpindel configuration found, "),
-              createVNode(_component_router_link, {
-                class: "alert-link",
-                to: "/device/hardware"
-              }, {
-                default: withCtx(() => [
-                  createTextVNode("import")
-                ]),
-                _: 1
-              }),
-              createTextVNode(" formula/gyro or "),
-              createVNode(_component_router_link, {
-                class: "alert-link",
-                to: "/other/support"
-              }, {
-                default: withCtx(() => [
-                  createTextVNode("delete")
-                ]),
-                _: 1
-              }),
-              createTextVNode(" the configuration. ")
-            ]),
-            _: 1
           })) : createCommentVNode("", true)
         ]),
         unref(global$1).initialized ? (openBlock(), createBlock(_component_router_view, { key: 2 })) : createCommentVNode("", true),
         unref(global$1).initialized ? (openBlock(), createBlock(_sfc_main$u, {
           key: 3,
-          text: "(c) 2021-2024 Magnus Persson"
+          text: "(c) 2024-2025 Magnus Persson"
         })) : createCommentVNode("", true)
       ], 64);
     };
