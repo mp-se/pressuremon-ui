@@ -54,7 +54,7 @@ const contextMenuOptions = ref([
   */
 
   { label: 'Pressure, ${pressure}', value: '${pressure}' },
-  { label: 'Pressure (PSI), ${pressure-cpsi}', value: '${pressure-psi}' },
+  { label: 'Pressure (PSI), ${pressure-psi}', value: '${pressure-psi}' },
   { label: 'Pressure (kPa), ${pressure-kpa}', value: '${pressure-kpa}' },
   { label: 'Pressure (Bar), ${pressure-bar}', value: '${pressure-bar}' },
   { label: 'Pressure Unit, ${pressure-unit}', value: '${pressure-unit}' },
