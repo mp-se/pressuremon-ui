@@ -6657,10 +6657,10 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return this.url;
     },
     uiVersion() {
-      return "";
+      return "0.5.0";
     },
     uiBuild() {
-      return "..5a95f0";
+      return "..f62b13";
     }
   },
   actions: {
@@ -7087,8 +7087,8 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       sensor1_type: 0,
       pressure_adjustment: 0,
       pressure1_adjustment: 0,
-      temp_adjustment: 0,
-      temp1_adjustment: 0,
+      // temp_adjustment: 0.0,
+      // temp1_adjustment: 0.0,
       pressure_unit: "psi",
       // Wifi
       wifi_portal_timeout: 0,
@@ -7193,9 +7193,9 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.sensor1_type = json.sensor1_type;
         this.pressure_adjustment = json.pressure_adjustment;
         this.pressure1_adjustment = json.pressure1_adjustment;
-        this.temp_adjustment = json.temp_adjustment;
-        this.temp1_adjustment = json.temp1_adjustment;
         this.pressure_unit = json.pressure_unit;
+        this.temp_adjustment_value = json.temp_adjustment_value;
+        this.tempsensor_resolution = json.tempsensor_resolution;
         this.wifi_portal_timeout = json.wifi_portal_timeout;
         this.wifi_connect_timeout = json.wifi_connect_timeout;
         this.wifi_ssid = json.wifi_ssid;
@@ -9592,7 +9592,7 @@ const _hoisted_21$7 = { class: "col-md-4" };
 const _hoisted_22$5 = { class: "text-center" };
 const _hoisted_23$4 = { class: "col-md-4" };
 const _hoisted_24$3 = { class: "text-center" };
-const _hoisted_25$2 = { class: "col-md-4" };
+const _hoisted_25$3 = { class: "col-md-4" };
 const _hoisted_26$2 = { class: "text-center" };
 const _hoisted_27$1 = { class: "col-md-4" };
 const _hoisted_28$1 = { class: "text-center" };
@@ -9785,7 +9785,7 @@ const _sfc_main$R = {
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_25$2, [
+            createBaseVNode("div", _hoisted_25$3, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Software version"
@@ -10038,23 +10038,26 @@ const _hoisted_8$k = { class: "col-md-6" };
 const _hoisted_9$i = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_10$h = { class: "col-md-6" };
-const _hoisted_11$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
-const _hoisted_12$f = { class: "col-md-6" };
-const _hoisted_13$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
-const _hoisted_14$e = { class: "col-md-6" };
-const _hoisted_15$d = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
-const _hoisted_16$c = { class: "row gy-2" };
-const _hoisted_17$b = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_10$h = { class: "col-md-12" };
+const _hoisted_11$f = { class: "col-md-6" };
+const _hoisted_12$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_18$b = { class: "col-md-12" };
-const _hoisted_19$9 = ["disabled"];
-const _hoisted_20$9 = ["hidden"];
-const _hoisted_21$6 = ["disabled"];
-const _hoisted_22$4 = ["hidden"];
-const _hoisted_23$3 = ["disabled"];
-const _hoisted_24$2 = ["hidden"];
+const _hoisted_13$f = { class: "col-md-6" };
+const _hoisted_14$e = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
+const _hoisted_15$d = { class: "col-md-6" };
+const _hoisted_16$c = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
+const _hoisted_17$b = { class: "row gy-2" };
+const _hoisted_18$b = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+  /* @__PURE__ */ createBaseVNode("hr")
+], -1);
+const _hoisted_19$9 = { class: "col-md-12" };
+const _hoisted_20$9 = ["disabled"];
+const _hoisted_21$6 = ["hidden"];
+const _hoisted_22$4 = ["disabled"];
+const _hoisted_23$3 = ["hidden"];
+const _hoisted_24$2 = ["disabled"];
+const _hoisted_25$2 = ["hidden"];
 const _sfc_main$P = {
   __name: "DeviceHardwareView",
   setup(__props) {
@@ -10106,6 +10109,12 @@ const _sfc_main$P = {
         { label: 'XIDIBEI XDB401 Analog 0.0 - 4 MPa', value: 104 } // 40 bar
       */
     ]);
+    const tempsensorResolutionOptions = ref([
+      { label: "0.5°C (93 ms)", value: 9 },
+      { label: "0.25°C (187 ms)", value: 10 },
+      { label: "0.125°C (375 ms)", value: 11 },
+      { label: "0.0625°C (850 ms)", value: 12 }
+    ]);
     const voltage = computed(() => {
       return status.battery + " V";
     });
@@ -10155,6 +10164,7 @@ const _sfc_main$P = {
     return (_ctx, _cache) => {
       const _component_BsInputNumber = resolveComponent("BsInputNumber");
       const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
+      const _component_BsInputRadio = resolveComponent("BsInputRadio");
       const _component_BsSelect = resolveComponent("BsSelect");
       return openBlock(), createElementBlock("div", _hoisted_1$P, [
         _hoisted_2$L,
@@ -10205,19 +10215,44 @@ const _sfc_main$P = {
             ]),
             _hoisted_9$i,
             createBaseVNode("div", _hoisted_10$h, [
+              createVNode(_component_BsInputRadio, {
+                modelValue: unref(config).tempsensor_resolution,
+                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).tempsensor_resolution = $event),
+                options: tempsensorResolutionOptions.value,
+                label: "DS18B20 resolution",
+                help: "Resolution when reading the DS18B20 temperature sensor, higher resolution give better accuracy but takes longer to process and reduces battery life",
+                disabled: _ctx.disableDs18b20
+              }, null, 8, ["modelValue", "options", "disabled"])
+            ]),
+            createBaseVNode("div", _hoisted_11$f, [
+              createVNode(_component_BsInputNumber, {
+                modelValue: unref(config).temp_adjustment_value,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).temp_adjustment_value = $event),
+                unit: "°" + unref(config).temp_format,
+                label: "Temperature sensor adjustment",
+                min: "-10",
+                max: "10",
+                step: ".01",
+                width: "6",
+                help: "This value will be added to the temperature sensor value to adjust the value (-10 to 10)",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "unit", "disabled"])
+            ]),
+            _hoisted_12$f,
+            createBaseVNode("div", _hoisted_13$f, [
               createVNode(_component_BsSelect, {
                 modelValue: unref(config).sensor_type,
-                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(config).sensor_type = $event),
-                label: "Pressure Sensor 1",
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).sensor_type = $event),
+                label: "Pressure Sensor",
                 options: pressureSensorOptions.value,
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _hoisted_11$f,
-            createBaseVNode("div", _hoisted_12$f, [
+            _hoisted_14$e,
+            createBaseVNode("div", _hoisted_15$d, [
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).pressure_adjustment,
-                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).pressure_adjustment = $event),
+                "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(config).pressure_adjustment = $event),
                 label: "Pressure adjustment",
                 min: "0",
                 max: "1000",
@@ -10228,26 +10263,11 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled || unref(config).sensor_type < 1
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            _hoisted_13$f,
-            createBaseVNode("div", _hoisted_14$e, [
-              createVNode(_component_BsInputNumber, {
-                modelValue: unref(config).temp_adjustment,
-                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(config).temp_adjustment = $event),
-                label: "Temperature adjustment",
-                min: "0",
-                max: "100",
-                step: ".01",
-                width: "6",
-                unit: unref(config).temp_format,
-                help: "Adjustment value for the temperature sensor",
-                disabled: unref(global$1).disabled || unref(config).sensor_type < 1 || unref(config).sensor_type > 100
-              }, null, 8, ["modelValue", "unit", "disabled"])
-            ]),
-            _hoisted_15$d
+            _hoisted_16$c
           ]),
-          createBaseVNode("div", _hoisted_16$c, [
-            _hoisted_17$b,
-            createBaseVNode("div", _hoisted_18$b, [
+          createBaseVNode("div", _hoisted_17$b, [
+            _hoisted_18$b,
+            createBaseVNode("div", _hoisted_19$9, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10258,12 +10278,12 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_20$9),
+                }, null, 8, _hoisted_21$6),
                 createTextVNode("  Save")
-              ], 8, _hoisted_19$9),
+              ], 8, _hoisted_20$9),
               createTextVNode("  "),
               createBaseVNode("button", {
-                onClick: _cache[6] || (_cache[6] = ($event) => unref(restart)()),
+                onClick: _cache[7] || (_cache[7] = ($event) => unref(restart)()),
                 type: "button",
                 class: "btn btn-secondary",
                 disabled: unref(global$1).disabled
@@ -10273,9 +10293,9 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_22$4),
+                }, null, 8, _hoisted_23$3),
                 createTextVNode("  Restart device")
-              ], 8, _hoisted_21$6),
+              ], 8, _hoisted_22$4),
               createTextVNode("  "),
               createBaseVNode("button", {
                 onClick: calibrate,
@@ -10288,10 +10308,10 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_24$2),
+                }, null, 8, _hoisted_25$2),
                 createTextVNode("  Calibrate pressure "),
                 createCommentVNode("", true)
-              ], 8, _hoisted_23$3),
+              ], 8, _hoisted_24$2),
               createTextVNode("  ")
             ])
           ])
