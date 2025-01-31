@@ -46,10 +46,39 @@
         <div class="col-md-12">
           <hr />
         </div>
+
+        <div class="col-md-12">
+          <BsInputRadio
+            v-model="config.tempsensor_resolution"
+            :options="tempsensorResolutionOptions"
+            label="DS18B20 resolution"
+            help="Resolution when reading the DS18B20 temperature sensor, higher resolution give better accuracy but takes longer to process and reduces battery life"
+            :disabled="disableDs18b20"
+          ></BsInputRadio>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.temp_adjustment_value"
+            :unit="'°' + config.temp_format"
+            label="Temperature sensor adjustment"
+            min="-10"
+            max="10"
+            step=".01"
+            width="6"
+            help="This value will be added to the temperature sensor value to adjust the value (-10 to 10)"
+            :disabled="global.disabled"
+          ></BsInputNumber>
+        </div>
+
+        <div class="col-md-12">
+          <hr />
+        </div>
+
         <div class="col-md-6">
           <BsSelect
             v-model="config.sensor_type"
-            label="Pressure Sensor 1"
+            label="Pressure Sensor"
             :options="pressureSensorOptions"
             :disabled="global.disabled"
           />
@@ -101,6 +130,7 @@
           </BsInputNumber>
         </div>-->
 
+        <!--
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp_adjustment"
@@ -118,7 +148,7 @@
 
         <div class="col-md-6">
         </div>
-        <!--
+
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp1_adjustment"
@@ -237,6 +267,13 @@ const pressureSensorOptions = ref([
   { label: 'XIDIBEI XDB401 Analog 0.0 - 3.5 MPa', value: 103 }, // 35 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 4 MPa', value: 104 } // 40 bar
 */
+])
+
+const tempsensorResolutionOptions = ref([
+  { label: '0.5°C (93 ms)', value: 9 },
+  { label: '0.25°C (187 ms)', value: 10 },
+  { label: '0.125°C (375 ms)', value: 11 },
+  { label: '0.0625°C (850 ms)', value: 12 }
 ])
 
 const voltage = computed(() => {

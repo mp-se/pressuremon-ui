@@ -24,8 +24,8 @@ export const useConfigStore = defineStore('config', {
       sensor1_type: 0,
       pressure_adjustment: 0.0,
       pressure1_adjustment: 0.0,
-      temp_adjustment: 0.0,
-      temp1_adjustment: 0.0,
+      // temp_adjustment: 0.0,
+      // temp1_adjustment: 0.0,
       pressure_unit: 'psi',
       // Wifi
       wifi_portal_timeout: 0,
@@ -139,10 +139,11 @@ export const useConfigStore = defineStore('config', {
           this.sensor1_type = json.sensor1_type
           this.pressure_adjustment = json.pressure_adjustment
           this.pressure1_adjustment = json.pressure1_adjustment
-          this.temp_adjustment = json.temp_adjustment
-          this.temp1_adjustment = json.temp1_adjustment
+          // this.temp_adjustment = json.temp_adjustment
+          // this.temp1_adjustment = json.temp1_adjustment
           this.pressure_unit = json.pressure_unit
-          // Wifi
+          this.temp_adjustment_value = json.temp_adjustment_value
+          this.tempsensor_resolution = json.tempsensor_resolution
           this.wifi_portal_timeout = json.wifi_portal_timeout
           this.wifi_connect_timeout = json.wifi_connect_timeout
           this.wifi_ssid = json.wifi_ssid
