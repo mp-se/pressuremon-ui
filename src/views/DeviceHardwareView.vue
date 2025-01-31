@@ -53,7 +53,7 @@
             :options="tempsensorResolutionOptions"
             label="DS18B20 resolution"
             help="Resolution when reading the DS18B20 temperature sensor, higher resolution give better accuracy but takes longer to process and reduces battery life"
-            :disabled="disableDs18b20"
+            :disabled="global.disabled"
           ></BsInputRadio>
         </div>
 

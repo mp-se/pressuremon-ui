@@ -47,7 +47,7 @@
             max="3600"
             step="1"
             width="5"
-            help="The number of seconds that the device will sleep between gravity readings. Recommended value is 300s"
+            help="The number of seconds that the device will sleep between sensor readings. Recommended value is 300s"
             :disabled="global.disabled"
           />
         </div>
@@ -116,8 +116,8 @@
         <div class="col-md-6">
           <BsInputSwitch
             v-model="config.use_wifi_direct"
-            label="Use wifi direct in gravity mode"
-            help="In gravity mode the wifi direct SSID/Password will be used for connection"
+            label="Use wifi direct in measurement mode"
+            help="In measurement mode the wifi direct SSID/Password will be used for connection"
             :disabled="global.disabled"
           ></BsInputSwitch>
         </div>

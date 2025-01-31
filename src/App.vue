@@ -13,14 +13,14 @@
 
   <div v-if="!global.initialized" class="container text-center">
     <BsMessage
-      message="Initalizing GravityMon Web interface"
+      message="Initalizing PressureMon Web interface"
       class="h2"
       :dismissable="false"
       alert="info"
     ></BsMessage>
   </div>
 
-  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="GravityMon" />
+  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="PressureMon" />
 
   <div class="container">
     <div>
@@ -68,17 +68,10 @@
       <router-link class="alert-link" to="/device/wifi">wifi settings</router-link>
       meny and select wifi. Restart device after settings are selected.
     </BsMessage>
-
-    <BsMessage v-if="status.ispindel_config" :dismissable="true" alert="info">
-      iSpindel configuration found,
-      <router-link class="alert-link" to="/device/hardware">import</router-link>
-      formula/gyro or
-      <router-link class="alert-link" to="/other/support">delete</router-link> the configuration.
-    </BsMessage>
   </div>
 
   <router-view v-if="global.initialized" />
-  <BsFooter v-if="global.initialized" text="(c) 2021-2024 Magnus Persson" />
+  <BsFooter v-if="global.initialized" text="(c) 2024-2025 Magnus Persson" />
 </template>
 
 <script setup>
