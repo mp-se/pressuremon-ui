@@ -61,7 +61,7 @@ import { global, config, status } from '@/modules/pinia'
 const bleFormatOptions = ref([
   { label: 'Disabled', value: 0 },
   { label: 'Pressuremon iBeacon', value: 1 },
-  { label: 'Pressuremon Eddystone', value: 2 }
+  // { label: 'Pressuremon Eddystone', value: 2 }
 ])
 
 const save = () => {
