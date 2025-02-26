@@ -6660,7 +6660,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..4e2276";
+      return "..1cbc4c";
     }
   },
   actions: {
@@ -9541,7 +9541,7 @@ const _hoisted_15$f = {
   key: 5,
   class: "col-md-4"
 };
-const _hoisted_16$e = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
+const _hoisted_16$d = /* @__PURE__ */ createBaseVNode("p", { class: "text-center" }, "Battery level not valid", -1);
 const _hoisted_17$d = { class: "col-md-4" };
 const _hoisted_18$d = { class: "text-center" };
 const _hoisted_19$b = { class: "col-md-4" };
@@ -9693,7 +9693,7 @@ const _sfc_main$R = {
                 icon: "bi-x-circle"
               }, {
                 default: withCtx(() => [
-                  _hoisted_16$e
+                  _hoisted_16$d
                 ]),
                 _: 1
               })
@@ -9814,7 +9814,7 @@ const _hoisted_13$g = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 ], -1);
 const _hoisted_14$f = { class: "col-md-12" };
 const _hoisted_15$e = ["disabled"];
-const _hoisted_16$d = ["hidden"];
+const _hoisted_16$c = ["hidden"];
 const _hoisted_17$c = ["disabled"];
 const _hoisted_18$c = ["hidden"];
 const _hoisted_19$a = ["disabled"];
@@ -9945,7 +9945,7 @@ const _sfc_main$Q = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_16$d),
+                }, null, 8, _hoisted_16$c),
                 createTextVNode("  Save")
               ], 8, _hoisted_15$e),
               createTextVNode("  "),
@@ -10004,7 +10004,7 @@ const _hoisted_12$f = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 const _hoisted_13$f = { class: "col-md-6" };
 const _hoisted_14$e = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
 const _hoisted_15$d = { class: "col-md-6" };
-const _hoisted_16$c = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
+const _hoisted_16$b = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-6" }, null, -1);
 const _hoisted_17$b = { class: "row gy-2" };
 const _hoisted_18$b = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10221,7 +10221,7 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled || unref(config).sensor_type < 1
               }, null, 8, ["modelValue", "unit", "disabled"])
             ]),
-            _hoisted_16$c
+            _hoisted_16$b
           ]),
           createBaseVNode("div", _hoisted_17$b, [
             _hoisted_18$b,
@@ -10297,7 +10297,7 @@ const _hoisted_14$d = { class: "row gy-2" };
 const _hoisted_15$c = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$b = { class: "col-md-12" };
+const _hoisted_16$a = { class: "col-md-12" };
 const _hoisted_17$a = ["disabled"];
 const _hoisted_18$a = ["hidden"];
 const _hoisted_19$8 = ["disabled"];
@@ -10461,7 +10461,7 @@ const _sfc_main$O = {
           ]),
           createBaseVNode("div", _hoisted_14$d, [
             _hoisted_15$c,
-            createBaseVNode("div", _hoisted_16$b, [
+            createBaseVNode("div", _hoisted_16$a, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10519,7 +10519,7 @@ const _hoisted_13$d = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12
 ], -1);
 const _hoisted_14$c = { class: "col-md-6" };
 const _hoisted_15$b = { class: "col-md-6" };
-const _hoisted_16$a = { class: "col-md-6" };
+const _hoisted_16$9 = { class: "col-md-6" };
 const _hoisted_17$9 = { class: "row gy-2" };
 const _hoisted_18$9 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -10739,7 +10739,7 @@ const _sfc_main$N = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_16$a, [
+            createBaseVNode("div", _hoisted_16$9, [
               createVNode(_component_BsInputSwitch, {
                 modelValue: unref(config).use_wifi_direct,
                 "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => unref(config).use_wifi_direct = $event),
@@ -10787,7 +10787,7 @@ const _hoisted_12$c = { class: "col-md-3" };
 const _hoisted_13$c = { class: "col-md-6" };
 const _hoisted_14$b = { class: "col-md-9" };
 const _hoisted_15$a = { class: "col-md-3" };
-const _hoisted_16$9 = { class: "row gy-2" };
+const _hoisted_16$8 = { class: "row gy-2" };
 const _hoisted_17$8 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
@@ -10948,7 +10948,7 @@ const _sfc_main$M = {
               }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_16$9, [
+          createBaseVNode("div", _hoisted_16$8, [
             _hoisted_17$8,
             createBaseVNode("div", _hoisted_18$8, [
               createBaseVNode("button", {
@@ -11001,7 +11001,7 @@ const _hoisted_12$b = { class: "col-md-3" };
 const _hoisted_13$b = { class: "col-md-6" };
 const _hoisted_14$a = { class: "row" };
 const _hoisted_15$9 = { class: "col-md-9" };
-const _hoisted_16$8 = { class: "col-md-3" };
+const _hoisted_16$7 = { class: "col-md-3" };
 const _hoisted_17$7 = { class: "row gy-2" };
 const _hoisted_18$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
@@ -11146,7 +11146,7 @@ const _sfc_main$L = {
                 disabled: pushDisabled.value
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            createBaseVNode("div", _hoisted_16$8, [
+            createBaseVNode("div", _hoisted_16$7, [
               createVNode(_component_BsDropdown, {
                 label: "Predefined formats",
                 button: "Formats",
@@ -11218,7 +11218,7 @@ const _hoisted_12$a = { class: "col-md-6" };
 const _hoisted_13$a = { class: "col-md-9" };
 const _hoisted_14$9 = { class: "col-md-3" };
 const _hoisted_15$8 = { class: "row gy-2" };
-const _hoisted_16$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
+const _hoisted_16$6 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
 const _hoisted_17$6 = { class: "col-md-12" };
@@ -11379,7 +11379,7 @@ const _sfc_main$K = {
             ])
           ]),
           createBaseVNode("div", _hoisted_15$8, [
-            _hoisted_16$7,
+            _hoisted_16$6,
             createBaseVNode("div", _hoisted_17$6, [
               createBaseVNode("button", {
                 type: "submit",
@@ -11433,7 +11433,7 @@ const _hoisted_14$8 = { class: "row gy-2" };
 const _hoisted_15$7 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$6 = { class: "col-sm-12" };
+const _hoisted_16$5 = { class: "col-sm-12" };
 const _hoisted_17$5 = ["disabled"];
 const _hoisted_18$5 = ["hidden"];
 const _hoisted_19$3 = ["disabled"];
@@ -11565,7 +11565,7 @@ const _sfc_main$J = {
           ]),
           createBaseVNode("div", _hoisted_14$8, [
             _hoisted_15$7,
-            createBaseVNode("div", _hoisted_16$6, [
+            createBaseVNode("div", _hoisted_16$5, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -11618,7 +11618,7 @@ const _hoisted_14$7 = { class: "row gy-2" };
 const _hoisted_15$6 = /* @__PURE__ */ createBaseVNode("div", { class: "col-md-12" }, [
   /* @__PURE__ */ createBaseVNode("hr")
 ], -1);
-const _hoisted_16$5 = { class: "col-md-12" };
+const _hoisted_16$4 = { class: "col-md-12" };
 const _hoisted_17$4 = ["disabled"];
 const _hoisted_18$4 = ["hidden"];
 const _hoisted_19$2 = ["disabled"];
@@ -11760,7 +11760,7 @@ const _sfc_main$I = {
           ]),
           createBaseVNode("div", _hoisted_14$7, [
             _hoisted_15$6,
-            createBaseVNode("div", _hoisted_16$5, [
+            createBaseVNode("div", _hoisted_16$4, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -11828,8 +11828,8 @@ const _sfc_main$H = {
   setup(__props) {
     const bleFormatOptions = ref([
       { label: "Disabled", value: 0 },
-      { label: "Pressuremon iBeacon", value: 1 },
-      { label: "Pressuremon Eddystone", value: 2 }
+      { label: "Pressuremon iBeacon", value: 1 }
+      // { label: 'Pressuremon Eddystone', value: 2 }
     ]);
     const save = () => {
       if (!validateCurrentForm()) return;
@@ -11932,7 +11932,7 @@ const _hoisted_12$6 = { class: "col-md-12" };
 const _hoisted_13$6 = { class: "col-md-3" };
 const _hoisted_14$5 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _hoisted_15$4 = ["disabled"];
-const _hoisted_16$4 = ["hidden"];
+const _hoisted_16$3 = ["hidden"];
 const _hoisted_17$3 = {
   key: 0,
   class: "col-md-12"
@@ -12051,7 +12051,7 @@ const _sfc_main$F = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_16$4),
+                }, null, 8, _hoisted_16$3),
                 createTextVNode("  Restore ")
               ], 8, _hoisted_15$4)
             ]),
@@ -12073,17 +12073,16 @@ const _hoisted_5$9 = { class: "row" };
 const _hoisted_6$8 = { style: {} };
 const _hoisted_7$8 = { class: "badge bg-secondary" };
 const _hoisted_8$9 = { class: "badge bg-secondary" };
-const _hoisted_9$8 = { class: "badge bg-secondary" };
-const _hoisted_10$7 = { class: "col-md-12" };
-const _hoisted_11$5 = { class: "col-md-3" };
-const _hoisted_12$5 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
-const _hoisted_13$5 = ["disabled"];
-const _hoisted_14$4 = ["hidden"];
-const _hoisted_15$3 = {
+const _hoisted_9$8 = { class: "col-md-12" };
+const _hoisted_10$7 = { class: "col-md-3" };
+const _hoisted_11$5 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_12$5 = ["disabled"];
+const _hoisted_13$5 = ["hidden"];
+const _hoisted_14$4 = {
   key: 0,
   class: "col-md-12"
 };
-const _hoisted_16$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
+const _hoisted_15$3 = /* @__PURE__ */ createBaseVNode("p", null, null, -1);
 const _sfc_main$E = {
   __name: "FirmwareView",
   setup(__props) {
@@ -12158,11 +12157,10 @@ const _sfc_main$E = {
                 createBaseVNode("span", _hoisted_7$8, toDisplayString(unref(status).platform), 1),
                 createTextVNode(" , Version: "),
                 createBaseVNode("span", _hoisted_8$9, toDisplayString(unref(status).app_ver), 1),
-                createTextVNode(" (" + toDisplayString(unref(status).app_build) + ") , Hardware: ", 1),
-                createBaseVNode("span", _hoisted_9$8, toDisplayString(unref(status).hardware), 1)
+                createTextVNode(" (" + toDisplayString(unref(status).app_build) + ") ", 1)
               ])
             ]),
-            createBaseVNode("div", _hoisted_10$7, [
+            createBaseVNode("div", _hoisted_9$8, [
               createVNode(_component_BsFileUpload, {
                 name: "upload",
                 id: "upload",
@@ -12172,8 +12170,8 @@ const _sfc_main$E = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["disabled"])
             ]),
-            createBaseVNode("div", _hoisted_11$5, [
-              _hoisted_12$5,
+            createBaseVNode("div", _hoisted_10$7, [
+              _hoisted_11$5,
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary",
@@ -12188,12 +12186,12 @@ const _sfc_main$E = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_14$4),
+                }, null, 8, _hoisted_13$5),
                 createTextVNode("  Flash firmware ")
-              ], 8, _hoisted_13$5)
+              ], 8, _hoisted_12$5)
             ]),
-            progress.value > 0 ? (openBlock(), createElementBlock("div", _hoisted_15$3, [
-              _hoisted_16$3,
+            progress.value > 0 ? (openBlock(), createElementBlock("div", _hoisted_14$4, [
+              _hoisted_15$3,
               createVNode(_component_BsProgress, { progress: progress.value }, null, 8, ["progress"])
             ])) : createCommentVNode("", true)
           ], 32)
