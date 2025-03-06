@@ -73,7 +73,7 @@ const contextMenuOptions = ref([
   { label: 'Battery (%), ${battery-percent}', value: '${battery-percent}' },
 
   { label: 'Wifi signal strength, ${rssi}', value: '${rssi}' },
-  { label: 'Time for measurement, ${run-time}', value: '${run-time}' },
+  { label: 'Time for measurement, ${run-time}', value: '${run-time}' }
 ])
 
 function insertText(value) {

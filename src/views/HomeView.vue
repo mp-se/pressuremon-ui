@@ -27,13 +27,13 @@
         message=""
         alert="danger"
       >
-        No sensor is detected. Try to reboot / power-off. If this persists, check for hardware issues.
+        No sensor is detected. Try to reboot / power-off. If this persists, check for hardware
+        issues.
       </BsMessage>
     </template>
 
     <div v-if="status" class="container overflow-hidden text-center">
       <div class="row gy-4">
-
         <div class="col-md-4" v-if="status.pressure">
           <BsCard header="Measurement" color="info" title="Pressure">
             <p class="text-center">{{ status.pressure }} {{ status.pressure_unit }}</p>
@@ -139,8 +139,7 @@ watch(flag, async () => {
 })
 
 function refresh() {
-  status.load(() => {
-  })
+  status.load(() => {})
 }
 
 onMounted(() => {

@@ -84,10 +84,8 @@
           />
         </div>
 
-
-        <div class="col-md-6">
-        </div>
-          <!--
+        <div class="col-md-6"></div>
+        <!--
         <div class="col-md-6">
           <BsSelect
             v-model="config.sensor1_type"
@@ -112,8 +110,7 @@
           </BsInputNumber>
         </div>
 
-        <div class="col-md-6">
-        </div>
+        <div class="col-md-6"></div>
         <!--
         <div class="col-md-6">
           <BsInputNumber
@@ -163,7 +160,6 @@
           >
           </BsInputNumber>
         </div> -->
-
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
@@ -217,7 +213,7 @@
               >1</span
             ></button
           >&nbsp;
-         </div>
+        </div>
       </div>
     </form>
   </div>
@@ -249,9 +245,9 @@ const pressureSensorOptions = ref([
   { label: 'XIDIBEI XDB401 IIC 0.0 - 2.5 MPa', value: 11 }, // 25 bar
   { label: 'XIDIBEI XDB401 IIC 0.0 - 3 MPa', value: 12 }, // 30 bar
   { label: 'XIDIBEI XDB401 IIC 0.0 - 3.5 MPa', value: 13 }, // 35 bar
-  { label: 'XIDIBEI XDB401 IIC 0.0 - 4 MPa', value: 14 }, // 40 bar
+  { label: 'XIDIBEI XDB401 IIC 0.0 - 4 MPa', value: 14 } // 40 bar
 
-/*
+  /*
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.2 MPa', value: 101 }, // 2 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.4 MPa', value: 102 }, // 4 bar
   { label: 'XIDIBEI XDB401 Analog 0.0 - 0.5 MPa', value: 103 }, // 5 bar

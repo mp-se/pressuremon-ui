@@ -207,8 +207,8 @@ export const useConfigStore = defineStore('config', {
     },
     loadFormat(callback) {
       global.disabled = true
-      logInfo('configStore.loadFormat()', 'Fetching /api/format')
-      fetch(global.baseURL + 'api/format', {
+      logInfo('configStore.loadFormat()', 'Fetching /api/format2')
+      fetch(global.baseURL + 'api/format2', {
         method: 'GET',
         headers: { Authorization: global.token },
         signal: AbortSignal.timeout(global.fetchTimout)
@@ -285,7 +285,7 @@ export const useConfigStore = defineStore('config', {
     },
     sendFormat(callback) {
       global.disabled = true
-      logInfo('configStore.sendFormat()', 'Sending /api/format')
+      logInfo('configStore.sendFormat()', 'Sending /api/format2')
 
       var data2 = getConfigChanges()
       var data = {}
@@ -341,7 +341,7 @@ export const useConfigStore = defineStore('config', {
       })
     },
     sendOneFormat(data, callback) {
-      logInfo('configStore.sendOneFormat()', 'Sending /api/format')
+      logInfo('configStore.sendOneFormat()', 'Sending /api/format2')
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendOneFormat()', 'No format data to store, skipping step')
@@ -349,7 +349,7 @@ export const useConfigStore = defineStore('config', {
         return
       }
 
-      fetch(global.baseURL + 'api/format', {
+      fetch(global.baseURL + 'api/format2', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -361,10 +361,10 @@ export const useConfigStore = defineStore('config', {
         .then((res) => {
           global.disabled = false
           if (res.status != 200) {
-            logError('configStore.sendOneFormat()', 'Sending /api/format failed')
+            logError('configStore.sendOneFormat()', 'Sending /api/format2 failed')
             callback(false)
           } else {
-            logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
+            logInfo('configStore.sendOneFormat()', 'Sending /api/format2 completed')
             callback(true)
           }
         })

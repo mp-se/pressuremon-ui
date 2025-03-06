@@ -6,14 +6,14 @@ export const useStatusStore = defineStore('status', {
   state: () => {
     return {
       id: '',
-    
+
       pressure: 10,
       pressure1: 11,
       pressure_unit: 'PSI',
       temp: 20.2,
       temp1: 20.5,
       temp_unit: 'C',
-    
+
       sleep_interval: 0,
       battery: 0,
       sleep_mode: false,
@@ -47,7 +47,7 @@ export const useStatusStore = defineStore('status', {
     },
     isKPa() {
       return this.pressure_unit === 'kPa'
-    },
+    }
   },
   actions: {
     load(callback) {
@@ -66,7 +66,7 @@ export const useStatusStore = defineStore('status', {
           this.temp = json.temp
           this.temp1 = json.temp1
           this.temp_unit = json.temp_unit
-    
+
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
           this.rssi = json.rssi
@@ -91,17 +91,15 @@ export const useStatusStore = defineStore('status', {
           this.total_heap = Math.round(this.total_heap / 1024).toFixed(0)
           this.free_heap = Math.round(this.free_heap / 1024).toFixed(0)
 
-          if(this.pressure !== undefined)
+          if (this.pressure !== undefined)
             this.pressure = (Math.round(this.pressure * 100) / 100).toFixed(2)
 
-          if(this.pressure1 !== undefined)
+          if (this.pressure1 !== undefined)
             this.pressure1 = (Math.round(this.pressure1 * 100) / 100).toFixed(2)
 
-          if(this.temp !== undefined)
-            this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
+          if (this.temp !== undefined) this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
 
-          if(this.temp1 !== undefined)
-            this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
+          if (this.temp1 !== undefined) this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
 
           this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
           this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2)
