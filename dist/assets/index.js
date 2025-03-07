@@ -6660,7 +6660,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..1cbc4c";
+      return "..fae4ef";
     }
   },
   actions: {
@@ -6754,10 +6754,8 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
           this.pressure = (Math.round(this.pressure * 100) / 100).toFixed(2);
         if (this.pressure1 !== void 0)
           this.pressure1 = (Math.round(this.pressure1 * 100) / 100).toFixed(2);
-        if (this.temp !== void 0)
-          this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
-        if (this.temp1 !== void 0)
-          this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2);
+        if (this.temp !== void 0) this.temp = (Math.round(this.temp * 100) / 100).toFixed(2);
+        if (this.temp1 !== void 0) this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2);
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2);
         this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2);
         logInfo("statusStore.load()", "Fetching /api/status completed");
@@ -6863,7 +6861,7 @@ const httpPostFormatOptions = ref([
   },
   {
     label: "PressureMon",
-    value: "%7B%22name%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22ID%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%3A%20%22%24%7Btoken%7D%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temperature%2Dunit%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure%2Dunit%22%3A%20%22%24%7Bpressure%2Dunit%7D%22%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22RSSI%22%3A%20%24%7Brssi%7D%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D"
+    value: "%7B%22name%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22id%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%3A%20%22%24%7Btoken%7D%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temperature%2Dunit%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure%2Dunit%22%3A%20%22%24%7Bpressure%2Dunit%7D%22%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D"
   }
 ]);
 const httpGetFormatOptions = ref([
@@ -6961,7 +6959,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${sleep-interval}", config2.sleep_interval);
   s = s.replaceAll("${token}", config2.token);
   s = s.replaceAll("${token2}", config2.token2);
-  s = s.replaceAll("${temperature-unit}", config2.temp_format);
+  s = s.replaceAll("${temp-unit}", config2.temp_format);
   s = s.replaceAll("${pressure-unit}", config2.pressure_unit);
   try {
     return JSON.stringify(JSON.parse(s), null, 2);
@@ -7208,8 +7206,8 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
     },
     loadFormat(callback) {
       global$1.disabled = true;
-      logInfo("configStore.loadFormat()", "Fetching /api/format");
-      fetch(global$1.baseURL + "api/format", {
+      logInfo("configStore.loadFormat()", "Fetching /api/format2");
+      fetch(global$1.baseURL + "api/format2", {
         method: "GET",
         headers: { Authorization: global$1.token },
         signal: AbortSignal.timeout(global$1.fetchTimout)
@@ -7273,7 +7271,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
     },
     sendFormat(callback) {
       global$1.disabled = true;
-      logInfo("configStore.sendFormat()", "Sending /api/format");
+      logInfo("configStore.sendFormat()", "Sending /api/format2");
       var data2 = getConfigChanges();
       var data = {};
       var cnt = 0;
@@ -7307,13 +7305,13 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       });
     },
     sendOneFormat(data, callback) {
-      logInfo("configStore.sendOneFormat()", "Sending /api/format");
+      logInfo("configStore.sendOneFormat()", "Sending /api/format2");
       if (JSON.stringify(data).length == 2) {
         logInfo("configStore.sendOneFormat()", "No format data to store, skipping step");
         callback(true);
         return;
       }
-      fetch(global$1.baseURL + "api/format", {
+      fetch(global$1.baseURL + "api/format2", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -7324,10 +7322,10 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       }).then((res) => {
         global$1.disabled = false;
         if (res.status != 200) {
-          logError("configStore.sendOneFormat()", "Sending /api/format failed");
+          logError("configStore.sendOneFormat()", "Sending /api/format2 failed");
           callback(false);
         } else {
-          logInfo("configStore.sendOneFormat()", "Sending /api/format completed");
+          logInfo("configStore.sendOneFormat()", "Sending /api/format2 completed");
           callback(true);
         }
       }).catch((err) => {
