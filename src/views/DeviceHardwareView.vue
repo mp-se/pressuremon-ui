@@ -99,9 +99,9 @@
           <BsInputNumber
             v-model="config.pressure_adjustment"
             label="Pressure adjustment"
-            min="0"
+            min="-1000"
             max="1000"
-            step=".0000001"
+            step=".0001"
             width="6"
             :unit="config.pressure_unit"
             help="Adjustment value for the pressure sensor"
