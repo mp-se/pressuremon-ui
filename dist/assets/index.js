@@ -7206,7 +7206,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..60be7a";
+      return "..0a1c60";
     }
   },
   actions: {
@@ -10621,9 +10621,9 @@ const _sfc_main$P = {
         modelValue: unref(config).pressure_adjustment,
         "onUpdate:modelValue": ($event) => unref(config).pressure_adjustment = $event,
         label: "Pressure adjustment",
-        min: "0",
+        min: "-1000",
         max: "1000",
-        step: ".0000001",
+        step: ".0001",
         width: "6",
         unit: unref(config).pressure_unit,
         help: "Adjustment value for the pressure sensor",
