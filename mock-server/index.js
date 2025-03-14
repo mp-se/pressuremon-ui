@@ -161,8 +161,8 @@ app.get('/api/formula', (req, res) => {
   }, 2000)
 })
 
-app.get('/api/format', (req, res) => {
-  console.log('GET: /api/format')
+app.get('/api/format2', (req, res) => {
+  console.log('GET: /api/format2')
   /* 
    * Description:    Return format data as json document. 
    * Authentication: Required
@@ -174,8 +174,8 @@ app.get('/api/format', (req, res) => {
   res.send(formatData)
 })
 
-app.post('/api/format', (req, res) => {
-  console.log('POST: /api/format')
+app.post('/api/format2', (req, res) => {
+  console.log('POST: /api/format2')
   /* 
    * Description:    Update the format data that is in body
    * Authentication: Required
