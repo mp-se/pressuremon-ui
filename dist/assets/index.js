@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..07a455";
+      return "..6e442b";
     }
   },
   actions: {
@@ -7909,7 +7909,12 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
             this.getPushTestStatus((success2, data2) => {
               if (success2) {
                 if (data2.status) ;
-                else {
+                else if (!data2.success) {
+                  global$1.disabled = false;
+                  global$1.messageError = "Test failed with error code (" + data2.push_return_code + ")";
+                  callback(true);
+                  clearInterval(check);
+                } else if (data2.success) {
                   global$1.disabled = false;
                   if (!data2.push_enabled) {
                     global$1.messageWarning = "No endpoint is defined for this target. Cannot run test.";
