@@ -142,7 +142,7 @@ const runTest = () => {
 }
 
 const influxdb2FormatCallback = (opt) => {
-  config.influxdb2_format = decodeURIComponent(opt)
+  config.influxdb2_format_pressure = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
