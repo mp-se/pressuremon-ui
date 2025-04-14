@@ -233,13 +233,6 @@ export function getErrorString(code) {
   return ''
 }
 
-// TODO: REMOVE This function
-export function isGyroCalibrated() {
-  var g = config.gyro_calibration_data
-  if (g.ax + g.ay + g.az + g.gx + g.gy + g.gz == 0) return false
-  return true
-}
-
 export function restart() {
   global.clearMessages()
   global.disabled = true

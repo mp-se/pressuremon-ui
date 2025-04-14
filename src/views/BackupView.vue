@@ -89,11 +89,19 @@ function backup() {
 
   logDebug('BackupView.backup()', backup)
 
-  backup.config.http_post_format = encodeURIComponent(backup.config.http_post_format)
-  backup.config.http_post2_format = encodeURIComponent(backup.config.http_post2_format)
-  backup.config.http_get_format = encodeURIComponent(backup.config.http_get_format)
-  backup.config.influxdb2_format = encodeURIComponent(backup.config.influxdb2_format)
-  backup.config.mqtt_format = encodeURIComponent(backup.config.mqtt_format)
+  backup.config.http_post_format_pressure = encodeURIComponent(
+    backup.config.http_post_format_pressure
+  )
+  backup.config.http_post2_format_pressure = encodeURIComponent(
+    backup.config.http_post2_format_pressure
+  )
+  backup.config.http_get_format_pressure = encodeURIComponent(
+    backup.config.http_get_format_pressure
+  )
+  backup.config.influxdb2_format_pressure = encodeURIComponent(
+    backup.config.influxdb2_format_pressure
+  )
+  backup.config.mqtt_format_pressure = encodeURIComponent(backup.config.mqtt_format_pressure)
 
   var s = JSON.stringify(backup, null, 2)
   var name = config.mdns + '.txt'
@@ -139,7 +147,7 @@ function download(content, mimeType, filename) {
 
 function doRestore(json) {
   for (var k in json) {
-    if (k.endsWith('_format')) {
+    if (k.endsWith('_format_pressure')) {
       config[k] = decodeURIComponent(json[k])
     } else {
       config[k] = json[k]

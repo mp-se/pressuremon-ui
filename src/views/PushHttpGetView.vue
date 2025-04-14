@@ -76,7 +76,7 @@
         </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
-            v-model="config.http_get_format"
+            v-model="config.http_get_format_pressure"
             rows="6"
             label="Data format"
             help="Format template used to create the data sent to the remote service"
@@ -154,7 +154,7 @@ const pushDisabled = computed(() => {
 
 const runTest = () => {
   const data = {
-    push_format: 'http_get_format'
+    push_format: 'http_get'
   }
 
   global.clearMessages()
@@ -174,11 +174,11 @@ const httpHeaderH2Callback = (opt) => {
 }
 
 const httpFormatCallback = (opt) => {
-  config.http_get_format = decodeURIComponent(opt)
+  config.http_get_format_pressure = decodeURIComponent(opt)
 }
 
 const renderFormat = () => {
-  var s = applyTemplate(status, config, config.http_get_format)
+  var s = applyTemplate(status, config, config.http_get_format_pressure)
   render.value = s.replaceAll('&', '&')
 }
 

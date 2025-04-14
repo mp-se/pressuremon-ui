@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-9">
           <BsInputTextAreaFormat
-            v-model="config.influxdb2_format"
+            v-model="config.influxdb2_format_pressure"
             rows="6"
             label="Data format"
             help="Format template used to create the data sent to the remote service"
@@ -134,7 +134,7 @@ const pushDisabled = computed(() => {
 
 const runTest = () => {
   const data = {
-    push_format: 'influxdb2_format'
+    push_format: 'influxdb2'
   }
 
   global.clearMessages()
@@ -146,7 +146,7 @@ const influxdb2FormatCallback = (opt) => {
 }
 
 const renderFormat = () => {
-  render.value = applyTemplate(status, config, config.influxdb2_format)
+  render.value = applyTemplate(status, config, config.influxdb2_format_pressure)
 }
 
 const save = () => {

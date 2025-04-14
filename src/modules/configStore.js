@@ -48,33 +48,33 @@ export const useConfigStore = defineStore('config', {
       http_post_header1: '',
       http_post_header2: '',
       http_post_int: 0,
-      http_post_format: '',
+      http_post_format_pressure: '',
       // Push - Http Post 2
       http_post2_target: '',
       http_post2_header1: '',
       http_post2_header2: '',
       http_post2_int: 0,
-      http_post2_format: '',
+      http_post2_format_pressure: '',
       // Push - Http Get
       http_get_target: '',
       http_get_header1: '',
       http_get_header2: '',
       http_get_int: 0,
-      http_get_format: '',
+      http_get_format_pressure: '',
       // Push - Influx
       influxdb2_target: '',
       influxdb2_org: '',
       influxdb2_bucket: '',
       influxdb2_token: '',
       influxdb2_int: 0,
-      influxdb2_format: '',
+      influxdb2_format_pressure: '',
       // Push - MQTT
       mqtt_target: '',
       mqtt_port: '',
       mqtt_user: '',
       mqtt_pass: '',
       mqtt_int: 0,
-      mqtt_format: '',
+      mqtt_format_pressure: '',
       // Push BLE
       ble_format: 0,
       // Gravity formula
@@ -164,33 +164,33 @@ export const useConfigStore = defineStore('config', {
           this.http_post_header1 = json.http_post_header1
           this.http_post_header2 = json.http_post_header2
           this.http_post_int = json.http_post_int
-          this.http_post_format = json.http_post_format
+          // this.http_post_format_pressure = json.http_post_format_pressure
           // Push - Http Post 2
           this.http_post2_target = json.http_post2_target
           this.http_post2_header1 = json.http_post2_header1
           this.http_post2_header2 = json.http_post2_header2
           this.http_post2_int = json.http_post2_int
-          this.http_post2_format = json.http_post2_format
+          // this.http_post2_format_pressure = json.http_post2_format_pressure
           // Push - Http Get
           this.http_get_target = json.http_get_target
           this.http_get_header1 = json.http_get_header1
           this.http_get_header2 = json.http_get_header2
           this.http_get_int = json.http_get_int
-          this.http_get_format = json.http_get_format
+          // this.http_get_format_pressure = json.http_get_format_pressure
           // Push - Influx
           this.influxdb2_target = json.influxdb2_target
           this.influxdb2_org = json.influxdb2_org
           this.influxdb2_bucket = json.influxdb2_bucket
           this.influxdb2_token = json.influxdb2_token
           this.influxdb2_int = json.influxdb2_int
-          this.influxdb2_format = json.influxdb2_format
+          // this.influxdb2_format_pressure = json.influxdb2_format_pressure
           // Push - MQTT
           this.mqtt_target = json.mqtt_target
           this.mqtt_port = json.mqtt_port
           this.mqtt_user = json.mqtt_user
           this.mqtt_pass = json.mqtt_pass
           this.mqtt_int = json.mqtt_int
-          this.mqtt_format = json.mqtt_format
+          // this.mqtt_format_pressure = json.mqtt_format_pressure
           // Push BLE
           this.ble_format = json.ble_format
           this.dark_mode = json.dark_mode
@@ -207,8 +207,8 @@ export const useConfigStore = defineStore('config', {
     },
     loadFormat(callback) {
       global.disabled = true
-      logInfo('configStore.loadFormat()', 'Fetching /api/format2')
-      fetch(global.baseURL + 'api/format2', {
+      logInfo('configStore.loadFormat()', 'Fetching /api/format')
+      fetch(global.baseURL + 'api/format', {
         method: 'GET',
         headers: { Authorization: global.token },
         signal: AbortSignal.timeout(global.fetchTimout)
@@ -217,14 +217,14 @@ export const useConfigStore = defineStore('config', {
         .then((json) => {
           logDebug('configStore.loadFormat()', json)
           global.disabled = false
-          this.http_post_format = decodeURIComponent(json.http_post_format)
-          this.http_post2_format = decodeURIComponent(json.http_post2_format)
-          this.http_get_format = decodeURIComponent(json.http_get_format)
-          this.influxdb2_format = decodeURIComponent(json.influxdb2_format)
-          this.mqtt_format = decodeURIComponent(json.mqtt_format)
+          this.http_post_format_pressure = decodeURIComponent(json.http_post_format_pressure)
+          this.http_post2_format_pressure = decodeURIComponent(json.http_post2_format_pressure)
+          this.http_get_format_pressure = decodeURIComponent(json.http_get_format_pressure)
+          this.influxdb2_format_pressure = decodeURIComponent(json.influxdb2_format_pressure)
+          this.mqtt_format_pressure = decodeURIComponent(json.mqtt_format_pressure)
 
           // Add linebreaks so the editor shows the data correctly
-          this.mqtt_format = this.mqtt_format.replaceAll('|', '|\n')
+          this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
           callback(true)
         })
         .catch((err) => {
@@ -240,11 +240,11 @@ export const useConfigStore = defineStore('config', {
       this.convertTempToC() // Device use C internally
 
       var data = getConfigChanges()
-      delete data.http_post_format
-      delete data.http_post2_format
-      delete data.http_get_format
-      delete data.influxdb2_format
-      delete data.mqtt_format
+      delete data.http_post_format_pressure
+      delete data.http_post2_format_pressure
+      delete data.http_get_format_pressure
+      delete data.influxdb2_format_pressure
+      delete data.mqtt_format_pressure
       logDebug('configStore.sendConfig()', data)
 
       if (JSON.stringify(data).length == 2) {
@@ -285,7 +285,7 @@ export const useConfigStore = defineStore('config', {
     },
     sendFormat(callback) {
       global.disabled = true
-      logInfo('configStore.sendFormat()', 'Sending /api/format2')
+      logInfo('configStore.sendFormat()', 'Sending /api/format')
 
       var data2 = getConfigChanges()
       var data = {}
@@ -294,40 +294,40 @@ export const useConfigStore = defineStore('config', {
       logDebug('configStore.sendFormat()', data)
 
       data =
-        data2.http_post_format !== undefined
-          ? { http_post_format: encodeURIComponent(data2.http_post_format) }
+        data2.http_post_format_pressure !== undefined
+          ? { http_post_format_pressure: encodeURIComponent(data2.http_post_format_pressure) }
           : {}
       this.sendOneFormat(data, (success) => {
         if (success) cnt += 1
         data =
-          data2.http_post2_format !== undefined
-            ? { http_post2_format: encodeURIComponent(data2.http_post2_format) }
+          data2.http_post2_format_pressure !== undefined
+            ? { http_post2_format_pressure: encodeURIComponent(data2.http_post2_format_pressure) }
             : {}
         this.sendOneFormat(data, (success) => {
           if (success) cnt += 1
           data =
-            data2.http_get_format !== undefined
-              ? { http_get_format: encodeURIComponent(data2.http_get_format) }
+            data2.http_get_format_pressure !== undefined
+              ? { http_get_format_pressure: encodeURIComponent(data2.http_get_format_pressure) }
               : {}
           this.sendOneFormat(data, (success) => {
             if (success) cnt += 1
             data =
-              data2.influxdb2_format !== undefined
+              data2.influxdb2_format_pressure !== undefined
                 ? {
-                    influxdb2_format: encodeURIComponent(data2.influxdb2_format)
+                    influxdb2_format_pressure: encodeURIComponent(data2.influxdb2_format_pressure)
                   }
                 : {}
             this.sendOneFormat(data, (success) => {
               if (success) cnt += 1
 
-              if (data2.mqtt_format !== undefined) {
-                data2.mqtt_format = data2.mqtt_format.replaceAll('\n', '')
-                data2.mqtt_format = data2.mqtt_format.replaceAll('\r', '')
+              if (data2.mqtt_format_pressure !== undefined) {
+                data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\n', '')
+                data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\r', '')
               }
 
               data =
-                data2.mqtt_format !== undefined
-                  ? { mqtt_format: encodeURIComponent(data2.mqtt_format) }
+                data2.mqtt_format_pressure !== undefined
+                  ? { mqtt_format_pressure: encodeURIComponent(data2.mqtt_format_pressure) }
                   : {}
               this.sendOneFormat(data, (success) => {
                 if (success) cnt += 1
@@ -341,7 +341,7 @@ export const useConfigStore = defineStore('config', {
       })
     },
     sendOneFormat(data, callback) {
-      logInfo('configStore.sendOneFormat()', 'Sending /api/format2')
+      logInfo('configStore.sendOneFormat()', 'Sending /api/format')
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendOneFormat()', 'No format data to store, skipping step')
@@ -349,7 +349,7 @@ export const useConfigStore = defineStore('config', {
         return
       }
 
-      fetch(global.baseURL + 'api/format2', {
+      fetch(global.baseURL + 'api/format', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
