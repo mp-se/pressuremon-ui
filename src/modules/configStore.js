@@ -10,7 +10,7 @@ export const useConfigStore = defineStore('config', {
       // Device
       id: '',
       mdns: '',
-      temp_format: '',
+      temp_unit: '',
       // Hardware
       ota_url: '',
       voltage_factor: 0,
@@ -83,23 +83,23 @@ export const useConfigStore = defineStore('config', {
   },
   actions: {
     convertTemp() {
-      if (this.temp_format == this.internal_temp_format) return
-      if (this.temp_format == 'C') this.convertTempToC()
-      if (this.temp_format == 'F') this.convertTempToF()
+      if (this.temp_unit == this.internal_temp_unit) return
+      if (this.temp_unit == 'C') this.convertTempToC()
+      if (this.temp_unit == 'F') this.convertTempToF()
     },
     convertTempToC() {
-      if (this.internal_temp_format == 'C') return
+      if (this.internal_temp_unit == 'C') return
 
       this.temp_adjustment_value = roundVal(this.temp_adjustment_value / 1.8, 2)
       this.formula_calibration_temp = roundVal(tempToC(this.formula_calibration_temp), 2)
-      this.internal_temp_format = 'C'
+      this.internal_temp_unit = 'C'
     },
     convertTempToF() {
-      if (this.internal_temp_format == 'F') return
+      if (this.internal_temp_unit == 'F') return
 
       this.temp_adjustment_value = roundVal(this.temp_adjustment_value * 1.8, 2) // Delta value
       this.formula_calibration_temp = roundVal(tempToF(this.formula_calibration_temp), 2)
-      this.internal_temp_format = 'F'
+      this.internal_temp_unit = 'F'
     },
     toJson() {
       logInfo('configStore.toJSON()')
@@ -129,7 +129,7 @@ export const useConfigStore = defineStore('config', {
           this.id = json.id
           // Device
           this.mdns = json.mdns
-          this.temp_format = json.temp_format
+          this.temp_unit = json.temp_unit
           // Hardware
           this.ota_url = json.ota_url
           this.voltage_factor = json.voltage_factor
@@ -195,7 +195,7 @@ export const useConfigStore = defineStore('config', {
           this.ble_format = json.ble_format
           this.dark_mode = json.dark_mode
 
-          this.internal_temp_format = 'C'
+          this.internal_temp_unit = 'C'
           this.convertTemp()
           callback(true)
         })

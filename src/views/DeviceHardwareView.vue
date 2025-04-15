@@ -60,7 +60,7 @@
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.temp_adjustment_value"
-            :unit="'°' + config.temp_format"
+            :unit="'°' + config.temp_unit"
             label="Temperature sensor adjustment"
             min="-10"
             max="10"
@@ -136,7 +136,7 @@
             max="100"
             step=".01"
             width="6"
-            :unit="config.temp_format"
+            :unit="config.temp_unit"
             help="Adjustment value for the temperature sensor"
             :disabled="global.disabled || config.sensor_type < 1 || config.sensor_type > 100"
           >
@@ -154,7 +154,7 @@
             max="100"
             step=".01"
             width="6"
-            :unit="config.temp_format"
+            :unit="config.temp_unit"
             help="Adjustment value for the temperature sensor"
             :disabled="global.disabled || config.sensor1_type < 1 || config.sensor1_type > 100"
           >
