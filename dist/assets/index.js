@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..93db25";
+      return "..03383d";
     }
   },
   actions: {
@@ -7358,7 +7358,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${temp}", status2.temp);
   var c = status2.temp;
   var f = status2.temp;
-  if (config2.temp_format === "C") {
+  if (config2.temp_unit === "C") {
     f = tempToF(status2.temp);
   } else {
     c = tempToC(status2.temp);
@@ -7387,7 +7387,7 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${sleep-interval}", config2.sleep_interval);
   s = s.replaceAll("${token}", config2.token);
   s = s.replaceAll("${token2}", config2.token2);
-  s = s.replaceAll("${temp-unit}", config2.temp_format);
+  s = s.replaceAll("${temp-unit}", config2.temp_unit);
   s = s.replaceAll("${pressure-unit}", config2.pressure_unit);
   try {
     return JSON.stringify(JSON.parse(s), null, 2);
@@ -7456,7 +7456,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       // Device
       id: "",
       mdns: "",
-      temp_format: "",
+      temp_unit: "",
       // Hardware
       ota_url: "",
       voltage_factor: 0,
@@ -7530,21 +7530,21 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
   },
   actions: {
     convertTemp() {
-      if (this.temp_format == this.internal_temp_format) return;
-      if (this.temp_format == "C") this.convertTempToC();
-      if (this.temp_format == "F") this.convertTempToF();
+      if (this.temp_unit == this.internal_temp_unit) return;
+      if (this.temp_unit == "C") this.convertTempToC();
+      if (this.temp_unit == "F") this.convertTempToF();
     },
     convertTempToC() {
-      if (this.internal_temp_format == "C") return;
+      if (this.internal_temp_unit == "C") return;
       this.temp_adjustment_value = roundVal(this.temp_adjustment_value / 1.8, 2);
       this.formula_calibration_temp = roundVal(tempToC(this.formula_calibration_temp), 2);
-      this.internal_temp_format = "C";
+      this.internal_temp_unit = "C";
     },
     convertTempToF() {
-      if (this.internal_temp_format == "F") return;
+      if (this.internal_temp_unit == "F") return;
       this.temp_adjustment_value = roundVal(this.temp_adjustment_value * 1.8, 2);
       this.formula_calibration_temp = roundVal(tempToF(this.formula_calibration_temp), 2);
-      this.internal_temp_format = "F";
+      this.internal_temp_unit = "F";
     },
     toJson() {
       logInfo("configStore.toJSON()");
@@ -7568,7 +7568,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         global$1.disabled = false;
         this.id = json.id;
         this.mdns = json.mdns;
-        this.temp_format = json.temp_format;
+        this.temp_unit = json.temp_unit;
         this.ota_url = json.ota_url;
         this.voltage_factor = json.voltage_factor;
         this.voltage_config = json.voltage_config;
@@ -7618,7 +7618,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.mqtt_int = json.mqtt_int;
         this.ble_format = json.ble_format;
         this.dark_mode = json.dark_mode;
-        this.internal_temp_format = "C";
+        this.internal_temp_unit = "C";
         this.convertTemp();
         callback(true);
       }).catch((err) => {
@@ -10613,7 +10613,7 @@ const _sfc_main$P = {
               createVNode(_component_BsInputNumber, {
                 modelValue: unref(config).temp_adjustment_value,
                 "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).temp_adjustment_value = $event),
-                unit: "°" + unref(config).temp_format,
+                unit: "°" + unref(config).temp_unit,
                 label: "Temperature sensor adjustment",
                 min: "-10",
                 max: "10",
@@ -11856,7 +11856,7 @@ const _sfc_main$J = {
       });
     };
     const influxdb2FormatCallback = (opt) => {
-      config.influxdb2_format = decodeURIComponent(opt);
+      config.influxdb2_format_pressure = decodeURIComponent(opt);
     };
     const renderFormat = () => {
       render.value = applyTemplate(status, config, config.influxdb2_format_pressure);
