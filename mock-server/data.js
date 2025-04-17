@@ -8,7 +8,7 @@ export var configData = {
   // Device configuration
   id: '7376ef',
   mdns: 'pressmon3',
-  temp_format: 'C',
+  temp_unit: 'C',
   // Hardware
   ota_url: 'https://www.gravitymon.com/firmware/',
   voltage_factor: 1.59,
