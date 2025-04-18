@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..3e6a13";
+      return "..216353";
     }
   },
   actions: {
@@ -15179,8 +15179,7 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign({
     const json = useModel(__props, "json");
     const mqtt = useModel(__props, "mqtt");
     const format = (s) => {
-      if (mqtt.value)
-        return s;
+      if (mqtt.value) return s;
       if (isValidJson(model.value)) return JSON.stringify(JSON.parse(s), null, 2);
       if (isValidFormData(model.value)) return s.replaceAll("&", "&\n\r");
       return s;
@@ -15189,7 +15188,8 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign({
       jsonError.value = "";
       if (mqtt.value) {
         if (json.value) {
-          var arr = model.value.replaceAll("\n", "").split("|");
+          var input = model.value;
+          var arr = input.replaceAll("\n", "").split("|");
           arr.forEach((value) => {
             const data = value.substring(value.indexOf(":") + 1);
             if (data.indexOf("{") >= 0 && data.indexOf("}") > 0) {
@@ -15203,8 +15203,7 @@ const _sfc_main$2 = /* @__PURE__ */ Object.assign({
         }
         return true;
       }
-      if (isValidFormData(model.value))
-        return true;
+      if (isValidFormData(model.value)) return true;
       if (isValidJson(model.value)) {
         return true;
       } else if (json.value) {
