@@ -91,6 +91,8 @@
             @click="renderFormat"
             v-model="render"
             :code="true"
+            :json="true"
+            :mqtt="true"
             title="Format preview"
             button="Preview format"
             :disabled="pushDisabled"
