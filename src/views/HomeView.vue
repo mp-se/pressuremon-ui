@@ -114,7 +114,7 @@
         </div>
 
         <div class="col-md-4">
-          <BsCard header="Device" title="Force measurement mode">
+          <BsCard header="Device" title="Force config mode">
             <div class="d-flex justify-content-center">
               <div class="form-check form-switch" style="height: 0.7rem">
                 <input v-model="flag" class="form-check-input" type="checkbox" role="switch" />
