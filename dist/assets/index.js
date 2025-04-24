@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..216353";
+      return "..b51398";
     }
   },
   actions: {
@@ -10213,7 +10213,7 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_27, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Force measurement mode"
+                title: "Force config mode"
               }, {
                 default: withCtx(() => [
                   createBaseVNode("div", _hoisted_28, [
