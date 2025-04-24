@@ -91,6 +91,7 @@ export var statusData = {
   app_ver: '0.5.0',
   app_build: 'gitrev',
   mdns: 'pressmon',
+  board: 'D1 MINI',
   platform: 'esp32',
   wifi_ssid: 'wifi',
   runtime_average: 3.12,

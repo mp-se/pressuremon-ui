@@ -22,6 +22,7 @@ export const useStatusStore = defineStore('status', {
       app_build: '',
       mdns: '',
       platform: '',
+      board: '',
       wifi_ssid: '',
       ip: '',
       runtime_average: 0,
@@ -73,6 +74,7 @@ export const useStatusStore = defineStore('status', {
           this.app_ver = json.app_ver
           this.app_build = json.app_build
           this.mdns = json.mdns
+          this.board = json.board
           this.platform = json.platform
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
