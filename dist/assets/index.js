@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..b51398";
+      return "..b05390";
     }
   },
   actions: {
@@ -7118,6 +7118,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       app_build: "",
       mdns: "",
       platform: "",
+      board: "",
       wifi_ssid: "",
       ip: "",
       runtime_average: 0,
@@ -7164,6 +7165,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.app_ver = json.app_ver;
         this.app_build = json.app_build;
         this.mdns = json.mdns;
+        this.board = json.board;
         this.platform = json.platform;
         this.wifi_ssid = json.wifi_ssid;
         this.ip = json.ip;
@@ -9999,9 +10001,13 @@ const _hoisted_23 = { class: "col-md-4" };
 const _hoisted_24 = { class: "text-center" };
 const _hoisted_25 = { class: "col-md-4" };
 const _hoisted_26 = { class: "text-center" };
-const _hoisted_27 = { class: "col-md-4" };
-const _hoisted_28 = { class: "d-flex justify-content-center" };
-const _hoisted_29 = {
+const _hoisted_27 = { class: "badge bg-secondary" };
+const _hoisted_28 = { class: "badge bg-secondary" };
+const _hoisted_29 = { class: "col-md-4" };
+const _hoisted_30 = { class: "text-center" };
+const _hoisted_31 = { class: "col-md-4" };
+const _hoisted_32 = { class: "d-flex justify-content-center" };
+const _hoisted_33 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
@@ -10032,7 +10038,7 @@ const _sfc_main$R = {
       const _component_BsMessage = resolveComponent("BsMessage");
       const _component_BsCard = resolveComponent("BsCard");
       return openBlock(), createElementBlock("div", _hoisted_1$E, [
-        _cache[5] || (_cache[5] = createBaseVNode("p", null, null, -1)),
+        _cache[7] || (_cache[7] = createBaseVNode("p", null, null, -1)),
         unref(status) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
           !unref(status).self_check.push_targets ? (openBlock(), createBlock(_component_BsMessage, {
             key: 0,
@@ -10205,19 +10211,35 @@ const _sfc_main$R = {
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_26, toDisplayString(unref(status).platform) + ", id: " + toDisplayString(unref(status).id), 1)
+                  createBaseVNode("p", _hoisted_26, [
+                    _cache[5] || (_cache[5] = createTextVNode(" Platform: ")),
+                    createBaseVNode("span", _hoisted_27, toDisplayString(unref(status).platform), 1),
+                    _cache[6] || (_cache[6] = createTextVNode(" Board: ")),
+                    createBaseVNode("span", _hoisted_28, toDisplayString(unref(status).board), 1)
+                  ])
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_27, [
+            createBaseVNode("div", _hoisted_29, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "ID"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_30, toDisplayString(unref(status).id), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_31, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Force config mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_28, [
-                    createBaseVNode("div", _hoisted_29, [
+                  createBaseVNode("div", _hoisted_32, [
+                    createBaseVNode("div", _hoisted_33, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
