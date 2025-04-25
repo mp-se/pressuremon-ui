@@ -69,7 +69,7 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" v-if="config.flash_logging">
           <BsCard header="Measurement" color="info" title="Average runtime">
             <p class="text-center">{{ status.runtime_average }} s</p>
           </BsCard>
@@ -138,7 +138,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { status, global } from '@/modules/pinia'
+import { status, config, global } from '@/modules/pinia'
 
 const polling = ref(null)
 const flag = ref(false)
