@@ -24,6 +24,7 @@ export const useConfigStore = defineStore('config', {
       sensor1_type: 0,
       pressure_adjustment: 0.0,
       pressure1_adjustment: 0.0,
+      flash_logging: true,
       // temp_adjustment: 0.0,
       // temp1_adjustment: 0.0,
       pressure_unit: 'psi',
@@ -139,6 +140,7 @@ export const useConfigStore = defineStore('config', {
           this.sensor1_type = json.sensor1_type
           this.pressure_adjustment = json.pressure_adjustment
           this.pressure1_adjustment = json.pressure1_adjustment
+          this.flash_logging = json.flash_logging
           // this.temp_adjustment = json.temp_adjustment
           // this.temp1_adjustment = json.temp1_adjustment
           this.pressure_unit = json.pressure_unit

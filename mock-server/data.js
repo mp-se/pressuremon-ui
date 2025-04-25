@@ -23,6 +23,7 @@ export var configData = {
   // temp_adjustment: 0.0,
   // temp1_adjustment: 0.0,
   pressure_unit: "PSI",
+  flash_logging: true,
   // Wifi
   wifi_scan_ap: true,
   wifi_portal_timeout: 120,
