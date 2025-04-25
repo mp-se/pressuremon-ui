@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..b05390";
+      return "..d6629c";
     }
   },
   actions: {
@@ -7473,6 +7473,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       sensor1_type: 0,
       pressure_adjustment: 0,
       pressure1_adjustment: 0,
+      flash_logging: true,
       // temp_adjustment: 0.0,
       // temp1_adjustment: 0.0,
       pressure_unit: "psi",
@@ -7579,6 +7580,7 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.sensor1_type = json.sensor1_type;
         this.pressure_adjustment = json.pressure_adjustment;
         this.pressure1_adjustment = json.pressure1_adjustment;
+        this.flash_logging = json.flash_logging;
         this.pressure_unit = json.pressure_unit;
         this.temp_adjustment_value = json.temp_adjustment_value;
         this.tempsensor_resolution = json.tempsensor_resolution;
@@ -9989,7 +9991,10 @@ const _hoisted_14$b = {
   key: 5,
   class: "col-md-4"
 };
-const _hoisted_15$a = { class: "col-md-4" };
+const _hoisted_15$b = {
+  key: 6,
+  class: "col-md-4"
+};
 const _hoisted_16$8 = { class: "text-center" };
 const _hoisted_17$6 = { class: "col-md-4" };
 const _hoisted_18$4 = { class: "text-center" };
@@ -10149,7 +10154,7 @@ const _sfc_main$R = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_15$a, [
+            unref(config).flash_logging ? (openBlock(), createElementBlock("div", _hoisted_15$b, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10160,7 +10165,7 @@ const _sfc_main$R = {
                 ]),
                 _: 1
               })
-            ]),
+            ])) : createCommentVNode("", true),
             createBaseVNode("div", _hoisted_17$6, [
               createVNode(_component_BsCard, {
                 header: "Device",
@@ -10266,14 +10271,15 @@ const _hoisted_3$s = { class: "col-md-12" };
 const _hoisted_4$o = { class: "col-md-6" };
 const _hoisted_5$k = { class: "col-md-6" };
 const _hoisted_6$k = { class: "col-md-6" };
-const _hoisted_7$i = { class: "row gy-2" };
-const _hoisted_8$i = { class: "col-md-12" };
-const _hoisted_9$f = ["disabled"];
-const _hoisted_10$f = ["hidden"];
-const _hoisted_11$b = ["disabled"];
-const _hoisted_12$b = ["hidden"];
-const _hoisted_13$b = ["disabled"];
-const _hoisted_14$a = ["hidden"];
+const _hoisted_7$i = { class: "col-md-6" };
+const _hoisted_8$i = { class: "row gy-2" };
+const _hoisted_9$f = { class: "col-md-12" };
+const _hoisted_10$f = ["disabled"];
+const _hoisted_11$b = ["hidden"];
+const _hoisted_12$b = ["disabled"];
+const _hoisted_13$b = ["hidden"];
+const _hoisted_14$a = ["disabled"];
+const _hoisted_15$a = ["hidden"];
 const _sfc_main$Q = {
   __name: "DeviceSettingsView",
   setup(__props) {
@@ -10321,17 +10327,18 @@ const _sfc_main$Q = {
       const _component_BsMessage = resolveComponent("BsMessage");
       const _component_BsInputText = resolveComponent("BsInputText");
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
+      const _component_BsInputSwitch = resolveComponent("BsInputSwitch");
       return openBlock(), createElementBlock("div", _hoisted_1$D, [
-        _cache[14] || (_cache[14] = createBaseVNode("p", null, null, -1)),
-        _cache[15] || (_cache[15] = createBaseVNode("p", { class: "h2" }, "Device - Settings", -1)),
-        _cache[16] || (_cache[16] = createBaseVNode("hr", null, null, -1)),
+        _cache[15] || (_cache[15] = createBaseVNode("p", null, null, -1)),
+        _cache[16] || (_cache[16] = createBaseVNode("p", { class: "h2" }, "Device - Settings", -1)),
+        _cache[17] || (_cache[17] = createBaseVNode("hr", null, null, -1)),
         unref(config).mdns === "" ? (openBlock(), createBlock(_component_BsMessage, {
           key: 0,
           dismissable: "true",
           message: "",
           alert: "warning"
         }, {
-          default: withCtx(() => _cache[5] || (_cache[5] = [
+          default: withCtx(() => _cache[6] || (_cache[6] = [
             createTextVNode(" You need to define a mdns name for the device ")
           ])),
           _: 1
@@ -10354,7 +10361,7 @@ const _sfc_main$Q = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "badge", "disabled"])
             ]),
-            _cache[6] || (_cache[6] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[7] || (_cache[7] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_4$o, [
@@ -10377,7 +10384,7 @@ const _sfc_main$Q = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _cache[7] || (_cache[7] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[8] || (_cache[8] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_6$k, [
@@ -10389,13 +10396,22 @@ const _sfc_main$Q = {
                 width: "",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
+            ]),
+            createBaseVNode("div", _hoisted_7$i, [
+              createVNode(_component_BsInputSwitch, {
+                modelValue: unref(config).flash_logging,
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(config).flash_logging = $event),
+                label: "Enable flash logging",
+                help: "If disabled the average runtime feature is not available",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])
             ])
           ]),
-          createBaseVNode("div", _hoisted_7$i, [
-            _cache[13] || (_cache[13] = createBaseVNode("div", { class: "col-md-12" }, [
+          createBaseVNode("div", _hoisted_8$i, [
+            _cache[14] || (_cache[14] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
-            createBaseVNode("div", _hoisted_8$i, [
+            createBaseVNode("div", _hoisted_9$f, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10406,12 +10422,12 @@ const _sfc_main$Q = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_10$f),
-                _cache[8] || (_cache[8] = createTextVNode("  Save"))
-              ], 8, _hoisted_9$f),
-              _cache[11] || (_cache[11] = createTextVNode("  ")),
+                }, null, 8, _hoisted_11$b),
+                _cache[9] || (_cache[9] = createTextVNode("  Save"))
+              ], 8, _hoisted_10$f),
+              _cache[12] || (_cache[12] = createTextVNode("  ")),
               createBaseVNode("button", {
-                onClick: _cache[4] || (_cache[4] = ($event) => unref(restart)()),
+                onClick: _cache[5] || (_cache[5] = ($event) => unref(restart)()),
                 type: "button",
                 class: "btn btn-secondary",
                 disabled: unref(global$1).disabled
@@ -10421,10 +10437,10 @@ const _sfc_main$Q = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_12$b),
-                _cache[9] || (_cache[9] = createTextVNode("  Restart device"))
-              ], 8, _hoisted_11$b),
-              _cache[12] || (_cache[12] = createTextVNode("  ")),
+                }, null, 8, _hoisted_13$b),
+                _cache[10] || (_cache[10] = createTextVNode("  Restart device"))
+              ], 8, _hoisted_12$b),
+              _cache[13] || (_cache[13] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: factory,
                 type: "button",
@@ -10436,9 +10452,9 @@ const _sfc_main$Q = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_14$a),
-                _cache[10] || (_cache[10] = createTextVNode("  Restore factory defaults "))
-              ], 8, _hoisted_13$b)
+                }, null, 8, _hoisted_15$a),
+                _cache[11] || (_cache[11] = createTextVNode("  Restore factory defaults "))
+              ], 8, _hoisted_14$a)
             ])
           ])
         ], 32)
