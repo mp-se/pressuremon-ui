@@ -71,6 +71,16 @@
           ></BsInputNumber>
         </div>
 
+        <div class="col-md-6">
+          <BsSelect
+            v-model="config.battery_type"
+            label="Battery type"
+            help="For correct calculation of remaning capacity and battery savings mode"
+            :options="batteryTypeOptions"
+            :disabled="global.disabled"
+          />
+        </div>
+
         <div class="col-md-12">
           <hr />
         </div>
@@ -228,6 +238,11 @@ import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@/modules/logger'
 
 // TODO: Show badge if problems with battery level
+
+const batteryTypeOptions = ref([
+  { label: 'LiPo battery', value: 0 },
+  { label: 'LithiumIon battery (18650)', value: 1 }
+])
 
 const pressureSensorOptions = ref([
   { label: '-- Unused --', value: 0 }, // None selected

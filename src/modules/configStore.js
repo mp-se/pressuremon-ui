@@ -17,6 +17,7 @@ export const useConfigStore = defineStore('config', {
       voltage_config: 0,
       gyro_temp: false,
       battery_saving: false,
+      battery_type: 0,
       tempsensor_resolution: 0,
       temp_adjustment_value: 0, // C or F
       voltage_pin: 0,
@@ -136,11 +137,11 @@ export const useConfigStore = defineStore('config', {
           this.voltage_factor = json.voltage_factor
           this.voltage_config = json.voltage_config
           this.battery_saving = json.battery_saving
+          this.battery_type = json.battery_type
           this.sensor_type = json.sensor_type
           this.sensor1_type = json.sensor1_type
           this.pressure_adjustment = json.pressure_adjustment
           this.pressure1_adjustment = json.pressure1_adjustment
-          this.flash_logging = json.flash_logging
           // this.temp_adjustment = json.temp_adjustment
           // this.temp1_adjustment = json.temp1_adjustment
           this.pressure_unit = json.pressure_unit

@@ -25,7 +25,6 @@ export const useStatusStore = defineStore('status', {
       board: '',
       wifi_ssid: '',
       ip: '',
-      runtime_average: 0,
       total_heap: 0,
       free_heap: 0,
       self_check: {
@@ -75,10 +74,9 @@ export const useStatusStore = defineStore('status', {
           this.app_build = json.app_build
           this.mdns = json.mdns
           this.board = json.board
-          this.platform = json.platform
+          this.platform = json.platform.toUpperCase()
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
-          this.runtime_average = json.runtime_average
 
           this.self_check.sensor_connected = json.self_check.sensor_connected
           this.self_check.sensor_configured = json.self_check.sensor_configured
@@ -104,7 +102,6 @@ export const useStatusStore = defineStore('status', {
           if (this.temp1 !== undefined) this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
 
           this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
-          this.runtime_average = (Math.round(this.runtime_average * 100) / 100).toFixed(2)
 
           logInfo('statusStore.load()', 'Fetching /api/status completed')
           callback(true)

@@ -7166,7 +7166,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.app_build = json.app_build;
         this.mdns = json.mdns;
         this.board = json.board;
-        this.platform = json.platform;
+        this.platform = json.platform.toUpperCase()
         this.wifi_ssid = json.wifi_ssid;
         this.ip = json.ip;
         this.runtime_average = json.runtime_average;
@@ -11005,7 +11005,7 @@ const _sfc_main$N = {
       var pwrActive = 160;
       var pwrSleep = 15;
       var batt = 2200;
-      var rt = status.runtime_average;
+      var rt = 2;
       var ble = config.ble_format === 0 ? false : true;
       var wifi = config.http_post_target.length + config.http_post2_target.length + config.http_get_target.length + config.influxdb2_target.length + config.mqtt_target.length > 0 ? true : false;
       if (!wifi && !ble) {

@@ -134,24 +134,11 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { validateCurrentForm, applyTemplate, mqttFormatOptions } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
-import { storeToRefs } from 'pinia'
 
 const render = ref('')
-
-const { mqtt_format_pressure } = storeToRefs(config)
-
-watch(mqtt_format_pressure, () => {
-  if (status.platform == 'esp8266') {
-    var s = applyTemplate(status, config, config.mqtt_format_pressure)
-    if (s.length > 500)
-      global.messageWarning =
-        'On an ESP8266 a large payload will likley cause a crash due to RAM limitations on device. Reduce your template.'
-    else global.messageWarning = ''
-  }
-})
 
 const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct

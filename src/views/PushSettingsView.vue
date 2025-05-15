@@ -8,16 +8,6 @@
       A sleep-interval of less than 300 will reduce battery life, consider using 900
     </BsMessage>
 
-    <BsMessage
-      v-if="config.gyro_temp && config.sleep_interval < 300"
-      dismissable="true"
-      message=""
-      alert="warning"
-    >
-      When using gyro temperature is used, select a sleep-interval that is greater than 300 for
-      accurate readings
-    </BsMessage>
-
     <form @submit.prevent="save" class="needs-validation" novalidate>
       <div class="row">
         <div class="col-md-6">
@@ -56,7 +46,7 @@
           <BsInputReadonly
             v-model="batteryLife"
             label="Estimated battery life"
-            help="Based on current settings and platform, this is the estimated battery life"
+            help="Estimated based on current platform, 2200mAh battery and 2 seconds runtime"
             :disabled="global.disabled"
           ></BsInputReadonly>
         </div>
@@ -71,14 +61,6 @@
             step="1"
             width="5"
             help="The number of seconds that the device will wait until a remote service accepts the connection"
-            :disabled="global.disabled"
-          />
-        </div>
-        <div v-if="status.platform === 'esp8266'" class="col-md-6">
-          <BsInputSwitch
-            v-model="config.skip_ssl_on_test"
-            label="Skip SSL post in config mode"
-            help="Don't do SSL when running in configuration mode, on ESP8266 this can cause the device to crash due to low memory, only applies to ESP8266"
             :disabled="global.disabled"
           />
         </div>
@@ -187,7 +169,7 @@ const calculateBatteryLife = () => {
   var pwrActive = 160 // mA per hour (120-170 mA)
   var pwrSleep = 15 // mA per day (include all pheripials as well)
   var batt = 2200 // mA
-  var rt = status.runtime_average
+  var rt = 2 // Assume 2 seconds
   var ble = config.ble_format === 0 ? false : true
   var wifi =
     config.http_post_target.length +
@@ -209,23 +191,14 @@ const calculateBatteryLife = () => {
 
   if (wifi) {
     switch (status.platform) {
-      case 'esp8266':
-        pwrActive = 160
-        break
-      case 'esp32':
-        pwrActive = 320 // mA per hour (260-379 mA)
-        break
-      case 'esp32c3':
+      case 'ESP32C3':
         pwrActive = 320 // mA per hour (290-350 mA)
         break
-      case 'esp32s2':
+      case 'ESP32S2':
         pwrActive = 280 // mA per hour (260-300 mA)
         break
-      case 'esp32s3':
+      case 'ESP32S3':
         pwrActive = 300 // mA per hour (285-355 mA)
-        break
-      case 'esp32lite':
-        pwrActive = 330 // mA per hour (260-379 mA)
         break
       default:
         logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', status.platform)
@@ -233,14 +206,9 @@ const calculateBatteryLife = () => {
     }
   } else {
     switch (status.platform) {
-      case 'esp8266':
-      case 'esp32':
-      case 'esp32c3':
-      case 'esp32s2':
-      case 'esp32lite':
-        pwrActive = 160
-        break
-      case 'esp32s3':
+      case 'ESP32C3':
+      case 'ESP32S2':
+      case 'ESP32S3':
         pwrActive = 180
         break
       default:

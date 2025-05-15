@@ -14,6 +14,7 @@ export var configData = {
   voltage_factor: 1.59,
   voltage_config: 4.15,
   battery_saving: true,
+  battery_type: 0,
   sensor_type: 0,
   sensor1_type: 0,
   pressure_adjustment: 0.0,
@@ -23,7 +24,6 @@ export var configData = {
   // temp_adjustment: 0.0,
   // temp1_adjustment: 0.0,
   pressure_unit: "PSI",
-  flash_logging: true,
   // Wifi
   wifi_scan_ap: true,
   wifi_portal_timeout: 120,
@@ -95,7 +95,6 @@ export var statusData = {
   board: 'D1 MINI',
   platform: 'esp32',
   wifi_ssid: 'wifi',
-  runtime_average: 3.12,
   total_heap: 1000,
   free_heap: 500,
   ip: '192.0.0.1',
