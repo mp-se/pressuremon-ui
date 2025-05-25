@@ -201,7 +201,7 @@
             max="1000"
             step=".001"
             width="6"
-            unit="PSI"
+            unit="kPa"
             :disabled="global.disabled"
             v-if="config.sensor_type == 1000"
           >
@@ -215,7 +215,7 @@
             max="1000"
             step=".001"
             width="6"
-            unit="PSI"
+            unit="kPa"
             :disabled="global.disabled"
             v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
           >
@@ -230,7 +230,7 @@
             max="1000"
             step=".001"
             width="6"
-            unit="PSI"
+            unit="kPa"
             :disabled="global.disabled"
             v-if="config.sensor_type == 1000"
           >
@@ -244,7 +244,7 @@
             max="1000"
             step=".001"
             width="6"
-            unit="PSI"
+            unit="kPa"
             :disabled="global.disabled"
             v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
           >
