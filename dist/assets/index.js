@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..f71672";
+      return "..849d2c";
     }
   },
   actions: {
@@ -10797,7 +10797,7 @@ const _sfc_main$P = {
                 max: "1000",
                 step: ".001",
                 width: "6",
-                unit: "PSI",
+                unit: "kPa",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ]),
@@ -10811,7 +10811,7 @@ const _sfc_main$P = {
                 max: "1000",
                 step: ".001",
                 width: "6",
-                unit: "PSI",
+                unit: "kPa",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ]),
@@ -10825,7 +10825,7 @@ const _sfc_main$P = {
                 max: "1000",
                 step: ".001",
                 width: "6",
-                unit: "PSI",
+                unit: "kPa",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ]),
@@ -10839,7 +10839,7 @@ const _sfc_main$P = {
                 max: "1000",
                 step: ".001",
                 width: "6",
-                unit: "PSI",
+                unit: "kPa",
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ])
