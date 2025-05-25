@@ -35,6 +35,7 @@ export const useStatusStore = defineStore('status', {
         push_targets: true
       },
       wifi_setup: false,
+      max_sensors: 1,
       connected: true
     }
   },
@@ -87,6 +88,7 @@ export const useStatusStore = defineStore('status', {
           this.total_heap = json.total_heap
           this.free_heap = json.free_heap
           this.wifi_setup = json.wifi_setup
+          this.max_sensors = json.max_sensors
 
           this.total_heap = Math.round(this.total_heap / 1024).toFixed(0)
           this.free_heap = Math.round(this.free_heap / 1024).toFixed(0)

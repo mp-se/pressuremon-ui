@@ -105,6 +105,7 @@ export var statusData = {
     battery_level: true,
     push_targets: true
   },
+  max_sensors: 1,
   wifi_setup: false
 }
 

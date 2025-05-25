@@ -94,16 +94,15 @@
           />
         </div>
 
-        <div class="col-md-6"></div>
-        <!--
         <div class="col-md-6">
           <BsSelect
             v-model="config.sensor1_type"
             label="Pressure Sensor 2"
             :options="pressureSensorOptions"
             :disabled="global.disabled"
+            v-if="status.max_sensors > 1"
           />
-        </div>-->
+        </div>
 
         <div class="col-md-6">
           <BsInputNumber
@@ -120,56 +119,21 @@
           </BsInputNumber>
         </div>
 
-        <div class="col-md-6"></div>
-        <!--
         <div class="col-md-6">
           <BsInputNumber
             v-model="config.pressure1_adjustment"
             label="Pressure adjustment 2"
-            min="0"
+            min="-1000"
             max="1000"
-            step=".0000001"
+            step=".0001"
             width="6"
             :unit="config.pressure_unit"
             help="Adjustment value for the pressure sensor"
             :disabled="global.disabled || config.sensor1_type < 1"
-          >
-          </BsInputNumber>
-        </div>-->
-
-        <!--
-        <div class="col-md-6">
-          <BsInputNumber
-            v-model="config.temp_adjustment"
-            label="Temperature adjustment"
-            min="0"
-            max="100"
-            step=".01"
-            width="6"
-            :unit="config.temp_unit"
-            help="Adjustment value for the temperature sensor"
-            :disabled="global.disabled || config.sensor_type < 1 || config.sensor_type > 100"
+            v-if="status.max_sensors > 1"
           >
           </BsInputNumber>
         </div>
-
-        <div class="col-md-6">
-        </div>
-
-        <div class="col-md-6">
-          <BsInputNumber
-            v-model="config.temp1_adjustment"
-            label="Temperature adjustment 2"
-            min="0"
-            max="100"
-            step=".01"
-            width="6"
-            :unit="config.temp_unit"
-            help="Adjustment value for the temperature sensor"
-            :disabled="global.disabled || config.sensor1_type < 1 || config.sensor1_type > 100"
-          >
-          </BsInputNumber>
-        </div> -->
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
