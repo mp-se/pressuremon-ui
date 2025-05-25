@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.5.0";
     },
     uiBuild() {
-      return "..27c31b";
+      return "..f71672";
     }
   },
   actions: {
@@ -7132,6 +7132,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
       },
       wifi_setup: false,
       max_sensors: 1,
+      adc_found: false,
       connected: true
     };
   },
@@ -7178,6 +7179,7 @@ const useStatusStore = /* @__PURE__ */ defineStore("status", {
         this.free_heap = json.free_heap;
         this.wifi_setup = json.wifi_setup;
         this.max_sensors = json.max_sensors;
+        this.adc_found = json.adc_found;
         this.total_heap = Math.round(this.total_heap / 1024).toFixed(0);
         this.free_heap = Math.round(this.free_heap / 1024).toFixed(0);
         if (this.pressure !== void 0)
@@ -7473,7 +7475,14 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       sensor1_type: 0,
       pressure_adjustment: 0,
       pressure1_adjustment: 0,
-      flash_logging: true,
+      custom_min_voltage: 0,
+      custom_max_voltage: 0,
+      custom_min_pressure: 0,
+      custom_max_pressure: 0,
+      custom1_min_voltage: 0,
+      custom1_max_voltage: 0,
+      custom1_min_pressure: 0,
+      custom1_max_pressure: 0,
       // temp_adjustment: 0.0,
       // temp1_adjustment: 0.0,
       pressure_unit: "psi",
@@ -7581,6 +7590,14 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
         this.sensor1_type = json.sensor1_type;
         this.pressure_adjustment = json.pressure_adjustment;
         this.pressure1_adjustment = json.pressure1_adjustment;
+        this.custom_min_voltage = json.custom_min_voltage;
+        this.custom_max_voltage = json.custom_max_voltage;
+        this.custom_min_pressure = json.custom_min_pressure;
+        this.custom_max_pressure = json.custom_max_pressure;
+        this.custom1_min_voltage = json.custom1_min_voltage;
+        this.custom1_max_voltage = json.custom1_max_voltage;
+        this.custom1_min_pressure = json.custom1_min_pressure;
+        this.custom1_max_pressure = json.custom1_max_pressure;
         this.pressure_unit = json.pressure_unit;
         this.temp_adjustment_value = json.temp_adjustment_value;
         this.tempsensor_resolution = json.tempsensor_resolution;
@@ -9997,14 +10014,14 @@ const _hoisted_17$6 = { class: "col-md-4" };
 const _hoisted_18$5 = { class: "text-center" };
 const _hoisted_19$3 = { class: "col-md-4" };
 const _hoisted_20$2 = { class: "text-center" };
-const _hoisted_21$1 = { class: "col-md-4" };
-const _hoisted_22 = { class: "text-center" };
-const _hoisted_23 = { class: "col-md-4" };
-const _hoisted_24 = { class: "text-center" };
-const _hoisted_25 = { class: "badge bg-secondary" };
-const _hoisted_26 = { class: "badge bg-secondary" };
-const _hoisted_27 = { class: "col-md-4" };
-const _hoisted_28 = { class: "text-center" };
+const _hoisted_21$2 = { class: "col-md-4" };
+const _hoisted_22$1 = { class: "text-center" };
+const _hoisted_23$1 = { class: "col-md-4" };
+const _hoisted_24$1 = { class: "text-center" };
+const _hoisted_25$1 = { class: "badge bg-secondary" };
+const _hoisted_26$1 = { class: "badge bg-secondary" };
+const _hoisted_27$1 = { class: "col-md-4" };
+const _hoisted_28$1 = { class: "text-center" };
 const _hoisted_29 = { class: "col-md-4" };
 const _hoisted_30 = { class: "d-flex justify-content-center" };
 const _hoisted_31 = {
@@ -10182,40 +10199,40 @@ const _sfc_main$R = {
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_21$1, [
+            createBaseVNode("div", _hoisted_21$2, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Software version"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_22, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                  createBaseVNode("p", _hoisted_22$1, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_23, [
+            createBaseVNode("div", _hoisted_23$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_24, [
+                  createBaseVNode("p", _hoisted_24$1, [
                     _cache[5] || (_cache[5] = createTextVNode(" Platform: ")),
-                    createBaseVNode("span", _hoisted_25, toDisplayString(unref(status).platform), 1),
+                    createBaseVNode("span", _hoisted_25$1, toDisplayString(unref(status).platform), 1),
                     _cache[6] || (_cache[6] = createTextVNode(" Board: ")),
-                    createBaseVNode("span", _hoisted_26, toDisplayString(unref(status).board), 1)
+                    createBaseVNode("span", _hoisted_26$1, toDisplayString(unref(status).board), 1)
                   ])
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_27, [
+            createBaseVNode("div", _hoisted_27$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "ID"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_28, toDisplayString(unref(status).id), 1)
+                  createBaseVNode("p", _hoisted_28$1, toDisplayString(unref(status).id), 1)
                 ]),
                 _: 1
               })
@@ -10446,14 +10463,22 @@ const _hoisted_9$e = { class: "col-md-6" };
 const _hoisted_10$e = { class: "col-md-6" };
 const _hoisted_11$a = { class: "col-md-6" };
 const _hoisted_12$a = { class: "col-md-6" };
-const _hoisted_13$a = { class: "row gy-2" };
-const _hoisted_14$9 = { class: "col-md-12" };
-const _hoisted_15$8 = ["disabled"];
-const _hoisted_16$7 = ["hidden"];
-const _hoisted_17$5 = ["disabled"];
-const _hoisted_18$4 = ["hidden"];
-const _hoisted_19$2 = ["disabled"];
-const _hoisted_20$1 = ["hidden"];
+const _hoisted_13$a = { class: "col-md-6" };
+const _hoisted_14$9 = { class: "col-md-6" };
+const _hoisted_15$8 = { class: "col-md-6" };
+const _hoisted_16$7 = { class: "col-md-6" };
+const _hoisted_17$5 = { class: "col-md-6" };
+const _hoisted_18$4 = { class: "col-md-6" };
+const _hoisted_19$2 = { class: "col-md-6" };
+const _hoisted_20$1 = { class: "col-md-6" };
+const _hoisted_21$1 = { class: "row gy-2" };
+const _hoisted_22 = { class: "col-md-12" };
+const _hoisted_23 = ["disabled"];
+const _hoisted_24 = ["hidden"];
+const _hoisted_25 = ["disabled"];
+const _hoisted_26 = ["hidden"];
+const _hoisted_27 = ["disabled"];
+const _hoisted_28 = ["hidden"];
 const _sfc_main$P = {
   __name: "DeviceHardwareView",
   setup(__props) {
@@ -10515,6 +10540,11 @@ const _sfc_main$P = {
       { label: "0.125°C (375 ms)", value: 11 },
       { label: "0.0625°C (850 ms)", value: 12 }
     ]);
+    onMounted(() => {
+      if (status.adc_found) {
+        pressureSensorOptions.value.push({ label: "Custom Analog Sensor", value: 1e3 });
+      }
+    });
     const voltage = computed(() => {
       return status.battery + " V";
     });
@@ -10567,9 +10597,9 @@ const _sfc_main$P = {
       const _component_BsInputRadio = resolveComponent("BsInputRadio");
       const _component_BsSelect = resolveComponent("BsSelect");
       return openBlock(), createElementBlock("div", _hoisted_1$C, [
-        _cache[20] || (_cache[20] = createBaseVNode("p", null, null, -1)),
-        _cache[21] || (_cache[21] = createBaseVNode("p", { class: "h3" }, "Device - Hardware", -1)),
-        _cache[22] || (_cache[22] = createBaseVNode("hr", null, null, -1)),
+        _cache[28] || (_cache[28] = createBaseVNode("p", null, null, -1)),
+        _cache[29] || (_cache[29] = createBaseVNode("p", { class: "h3" }, "Device - Hardware", -1)),
+        _cache[30] || (_cache[30] = createBaseVNode("hr", null, null, -1)),
         createBaseVNode("form", {
           onSubmit: withModifiers(save, ["prevent"]),
           class: "needs-validation",
@@ -10613,7 +10643,7 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "disabled"])
             ]),
-            _cache[11] || (_cache[11] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[19] || (_cache[19] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_6$j, [
@@ -10650,7 +10680,7 @@ const _sfc_main$P = {
                 disabled: unref(global$1).disabled
               }, null, 8, ["modelValue", "options", "disabled"])
             ]),
-            _cache[12] || (_cache[12] = createBaseVNode("div", { class: "col-md-12" }, [
+            _cache[20] || (_cache[20] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
             createBaseVNode("div", _hoisted_9$e, [
@@ -10700,13 +10730,125 @@ const _sfc_main$P = {
                 help: "Adjustment value for the pressure sensor",
                 disabled: unref(global$1).disabled || unref(config).sensor1_type < 1
               }, null, 8, ["modelValue", "unit", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_13$a, [
+              unref(config).sensor_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom_min_voltage,
+                "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => unref(config).custom_min_voltage = $event),
+                label: "Analog - Min Voltage",
+                min: "0",
+                max: "5.000",
+                step: ".001",
+                width: "6",
+                unit: "V",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_14$9, [
+              unref(status).max_sensors > 1 && unref(config).sensor1_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom1_min_voltage,
+                "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => unref(config).custom1_min_voltage = $event),
+                label: "Analog - Min Voltage 2",
+                min: "0",
+                max: "5.000",
+                step: ".001",
+                width: "6",
+                unit: "V",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_15$8, [
+              unref(config).sensor_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom_max_voltage,
+                "onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => unref(config).custom_max_voltage = $event),
+                label: "Analog - Max Voltage",
+                min: "0",
+                max: "5.000",
+                step: ".001",
+                width: "6",
+                unit: "V",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_16$7, [
+              unref(status).max_sensors > 1 && unref(config).sensor1_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom1_max_voltage,
+                "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => unref(config).custom1_max_voltage = $event),
+                label: "Custom - Max Voltage 2",
+                min: "0",
+                max: "5.000",
+                step: ".001",
+                width: "6",
+                unit: "V",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_17$5, [
+              unref(config).sensor_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom_min_pressure,
+                "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => unref(config).custom_min_pressure = $event),
+                label: "Analog - Min Pressure",
+                min: "0",
+                max: "1000",
+                step: ".001",
+                width: "6",
+                unit: "PSI",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_18$4, [
+              unref(status).max_sensors > 1 && unref(config).sensor1_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom1_min_pressure,
+                "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => unref(config).custom1_min_pressure = $event),
+                label: "Analog - Min Pressure 2",
+                min: "0",
+                max: "1000",
+                step: ".001",
+                width: "6",
+                unit: "PSI",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_19$2, [
+              unref(config).sensor_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom_max_pressure,
+                "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(config).custom_max_pressure = $event),
+                label: "Analog - Max Pressure",
+                min: "0",
+                max: "1000",
+                step: ".001",
+                width: "6",
+                unit: "PSI",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
+            ]),
+            createBaseVNode("div", _hoisted_20$1, [
+              unref(status).max_sensors > 1 && unref(config).sensor1_type == 1e3 ? (openBlock(), createBlock(_component_BsInputNumber, {
+                key: 0,
+                modelValue: unref(config).custom1_max_pressure,
+                "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => unref(config).custom1_max_pressure = $event),
+                label: "Analog - Max Pressure 2",
+                min: "0",
+                max: "1000",
+                step: ".001",
+                width: "6",
+                unit: "PSI",
+                disabled: unref(global$1).disabled
+              }, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true)
             ])
           ]),
-          createBaseVNode("div", _hoisted_13$a, [
-            _cache[19] || (_cache[19] = createBaseVNode("div", { class: "col-md-12" }, [
+          createBaseVNode("div", _hoisted_21$1, [
+            _cache[27] || (_cache[27] = createBaseVNode("div", { class: "col-md-12" }, [
               createBaseVNode("hr")
             ], -1)),
-            createBaseVNode("div", _hoisted_14$9, [
+            createBaseVNode("div", _hoisted_22, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "btn btn-primary w-2",
@@ -10717,12 +10859,12 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_16$7),
-                _cache[13] || (_cache[13] = createTextVNode("  Save"))
-              ], 8, _hoisted_15$8),
-              _cache[16] || (_cache[16] = createTextVNode("  ")),
+                }, null, 8, _hoisted_24),
+                _cache[21] || (_cache[21] = createTextVNode("  Save"))
+              ], 8, _hoisted_23),
+              _cache[24] || (_cache[24] = createTextVNode("  ")),
               createBaseVNode("button", {
-                onClick: _cache[10] || (_cache[10] = ($event) => unref(restart)()),
+                onClick: _cache[18] || (_cache[18] = ($event) => unref(restart)()),
                 type: "button",
                 class: "btn btn-secondary",
                 disabled: unref(global$1).disabled
@@ -10732,10 +10874,10 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_18$4),
-                _cache[14] || (_cache[14] = createTextVNode("  Restart device"))
-              ], 8, _hoisted_17$5),
-              _cache[17] || (_cache[17] = createTextVNode("  ")),
+                }, null, 8, _hoisted_26),
+                _cache[22] || (_cache[22] = createTextVNode("  Restart device"))
+              ], 8, _hoisted_25),
+              _cache[25] || (_cache[25] = createTextVNode("  ")),
               createBaseVNode("button", {
                 onClick: calibrate,
                 type: "button",
@@ -10747,11 +10889,11 @@ const _sfc_main$P = {
                   role: "status",
                   "aria-hidden": "true",
                   hidden: !unref(global$1).disabled
-                }, null, 8, _hoisted_20$1),
-                _cache[15] || (_cache[15] = createTextVNode("  Calibrate pressure ")),
+                }, null, 8, _hoisted_28),
+                _cache[23] || (_cache[23] = createTextVNode("  Calibrate pressure ")),
                 createCommentVNode("", true)
-              ], 8, _hoisted_19$2),
-              _cache[18] || (_cache[18] = createTextVNode("  "))
+              ], 8, _hoisted_27),
+              _cache[26] || (_cache[26] = createTextVNode("  "))
             ])
           ])
         ], 32)
