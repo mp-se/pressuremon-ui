@@ -134,6 +134,123 @@
           >
           </BsInputNumber>
         </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom_min_voltage"
+            label="Analog - Min Voltage"
+            min="0"
+            max="5.000"
+            step=".001"
+            width="6"
+            unit="V"
+            :disabled="global.disabled"
+            v-if="config.sensor_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom1_min_voltage"
+            label="Analog - Min Voltage 2"
+            min="0"
+            max="5.000"
+            step=".001"
+            width="6"
+            unit="V"
+            :disabled="global.disabled"
+            v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom_max_voltage"
+            label="Analog - Max Voltage"
+            min="0"
+            max="5.000"
+            step=".001"
+            width="6"
+            unit="V"
+            :disabled="global.disabled"
+            v-if="config.sensor_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom1_max_voltage"
+            label="Custom - Max Voltage 2"
+            min="0"
+            max="5.000"
+            step=".001"
+            width="6"
+            unit="V"
+            :disabled="global.disabled"
+            v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom_min_pressure"
+            label="Analog - Min Pressure"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            unit="PSI"
+            :disabled="global.disabled"
+            v-if="config.sensor_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom1_min_pressure"
+            label="Analog - Min Pressure 2"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            unit="PSI"
+            :disabled="global.disabled"
+            v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom_max_pressure"
+            label="Analog - Max Pressure"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            unit="PSI"
+            :disabled="global.disabled"
+            v-if="config.sensor_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+        <div class="col-md-6">
+          <BsInputNumber
+            v-model="config.custom1_max_pressure"
+            label="Analog - Max Pressure 2"
+            min="0"
+            max="1000"
+            step=".001"
+            width="6"
+            unit="PSI"
+            :disabled="global.disabled"
+            v-if="status.max_sensors > 1 && config.sensor1_type == 1000"
+          >
+          </BsInputNumber>
+        </div>
+
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
@@ -194,7 +311,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 // REMOVE import { isGyroCalibrated, validateCurrentForm, restart } from '@/modules/utils'
 import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config, status } from '@/modules/pinia'
@@ -250,6 +367,14 @@ const tempsensorResolutionOptions = ref([
   { label: '0.125°C (375 ms)', value: 11 },
   { label: '0.0625°C (850 ms)', value: 12 }
 ])
+
+onMounted(() => {
+  logDebug('DeviceHardwareView.onMounted()')
+
+  if(status.adc_found) {
+    pressureSensorOptions.value.push({ label: 'Custom Analog Sensor', value: 1000 })     
+  }
+})  
 
 const voltage = computed(() => {
   return status.battery + ' V'

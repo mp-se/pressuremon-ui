@@ -21,6 +21,14 @@ export var configData = {
   pressure1_adjustment: 0.0,
   temp_adjustment_value: 0.00,
   tempsensor_resolution: 9,
+  custom_min_voltage: 1,
+  custom_max_voltage: 3,
+  custom_min_pressure: 10,
+  custom_max_pressure: 20,
+  custom1_min_voltage: 2,
+  custom1_max_voltage: 4,
+  custom1_min_pressure: 100,
+  custom1_max_pressure: 200,
   // temp_adjustment: 0.0,
   // temp1_adjustment: 0.0,
   pressure_unit: "PSI",
@@ -105,7 +113,8 @@ export var statusData = {
     battery_level: true,
     push_targets: true
   },
-  max_sensors: 1,
+  max_sensors: 2,
+  adc_found: true,
   wifi_setup: false
 }
 

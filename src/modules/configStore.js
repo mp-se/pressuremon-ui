@@ -25,7 +25,14 @@ export const useConfigStore = defineStore('config', {
       sensor1_type: 0,
       pressure_adjustment: 0.0,
       pressure1_adjustment: 0.0,
-      flash_logging: true,
+      custom_min_voltage: 0,
+      custom_max_voltage: 0,
+      custom_min_pressure: 0,
+      custom_max_pressure: 0,
+      custom1_min_voltage: 0,
+      custom1_max_voltage: 0,
+      custom1_min_pressure: 0,
+      custom1_max_pressure: 0,
       // temp_adjustment: 0.0,
       // temp1_adjustment: 0.0,
       pressure_unit: 'psi',
@@ -142,6 +149,14 @@ export const useConfigStore = defineStore('config', {
           this.sensor1_type = json.sensor1_type
           this.pressure_adjustment = json.pressure_adjustment
           this.pressure1_adjustment = json.pressure1_adjustment
+          this.custom_min_voltage = json.custom_min_voltage 
+          this.custom_max_voltage = json.custom_max_voltage
+          this.custom_min_pressure = json.custom_min_pressure
+          this.custom_max_pressure = json.custom_max_pressure
+          this.custom1_min_voltage = json.custom1_min_voltage
+          this.custom1_max_voltage = json.custom1_max_voltage
+          this.custom1_min_pressure = json.custom1_min_pressure
+          this.custom1_max_pressure = json.custom1_max_pressure
           // this.temp_adjustment = json.temp_adjustment
           // this.temp1_adjustment = json.temp1_adjustment
           this.pressure_unit = json.pressure_unit
