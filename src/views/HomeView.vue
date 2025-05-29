@@ -46,15 +46,9 @@
           </BsCard>
         </div>
 
-        <div class="col-md-4" v-if="status.temp">
+        <div class="col-md-4" v-if="status.temp && status.temp >= -270">
           <BsCard header="Measurement" color="info" title="Temperature">
             <p class="text-center">{{ status.temp }} {{ status.temp_unit }}</p>
-          </BsCard>
-        </div>
-
-        <div class="col-md-4" v-if="status.temp1">
-          <BsCard header="Measurement" color="info" title="Temperature (2)">
-            <p class="text-center">{{ status.temp1 }} {{ status.temp_unit }}</p>
           </BsCard>
         </div>
 
