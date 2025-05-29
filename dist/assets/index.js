@@ -7085,10 +7085,10 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return this.url;
     },
     uiVersion() {
-      return "0.5.0";
+      return "0.6.0";
     },
     uiBuild() {
-      return "..849d2c";
+      return "..8cb801";
     }
   },
   actions: {
@@ -10109,7 +10109,7 @@ const _sfc_main$R = {
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
-                title: "Pressure (2)"
+                title: "Pressure 2"
               }, {
                 default: withCtx(() => [
                   createBaseVNode("p", _hoisted_7$j, toDisplayString(unref(status).pressure1) + " " + toDisplayString(unref(status).pressure_unit), 1)
