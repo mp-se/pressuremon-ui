@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.6.0";
     },
     uiBuild() {
-      return "..8cb801";
+      return "..bf24c5";
     }
   },
   actions: {
@@ -10794,7 +10794,7 @@ const _sfc_main$P = {
                 "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => unref(config).custom_min_pressure = $event),
                 label: "Analog - Min Pressure",
                 min: "0",
-                max: "1000",
+                max: "10000",
                 step: ".001",
                 width: "6",
                 unit: "kPa",
@@ -10808,7 +10808,7 @@ const _sfc_main$P = {
                 "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => unref(config).custom1_min_pressure = $event),
                 label: "Analog - Min Pressure 2",
                 min: "0",
-                max: "1000",
+                max: "10000",
                 step: ".001",
                 width: "6",
                 unit: "kPa",
@@ -10822,7 +10822,7 @@ const _sfc_main$P = {
                 "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(config).custom_max_pressure = $event),
                 label: "Analog - Max Pressure",
                 min: "0",
-                max: "1000",
+                max: "10000",
                 step: ".001",
                 width: "6",
                 unit: "kPa",
@@ -10836,7 +10836,7 @@ const _sfc_main$P = {
                 "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => unref(config).custom1_max_pressure = $event),
                 label: "Analog - Max Pressure 2",
                 min: "0",
-                max: "1000",
+                max: "10000",
                 step: ".001",
                 width: "6",
                 unit: "kPa",
