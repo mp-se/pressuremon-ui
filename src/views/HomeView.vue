@@ -41,7 +41,7 @@
         </div>
 
         <div class="col-md-4" v-if="status.pressure1">
-          <BsCard header="Measurement" color="info" title="Pressure (2)">
+          <BsCard header="Measurement" color="info" title="Pressure 2">
             <p class="text-center">{{ status.pressure1 }} {{ status.pressure_unit }}</p>
           </BsCard>
         </div>
