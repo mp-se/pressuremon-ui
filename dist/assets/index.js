@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.6.0";
     },
     uiBuild() {
-      return "..d7cd1c";
+      return "..85be13";
     }
   },
   actions: {
@@ -7291,8 +7291,12 @@ const httpPostFormatOptions = ref([
     value: ""
   },
   {
-    label: "PressureMon",
+    label: "Pressuremon (Single)",
     value: "%7B%22name%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22id%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%3A%20%22%24%7Btoken%7D%22%2C%20%22interval%22%3A%20%24%7Bsleep%2Dinterval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temperature%2Dunit%22%3A%20%22%24%7Btemp%2Dunit%7D%22%2C%20%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure%2Dunit%22%3A%20%22%24%7Bpressure%2Dunit%7D%22%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22run%2Dtime%22%3A%20%24%7Brun%2Dtime%7D%20%7D"
+  },
+  {
+    label: "Pressuremon (Dual)",
+    value: "%7B%22name%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22id%22%3A%20%22%24%7Bid%7D%22%2C%20%22token%22%3A%20%22%24%7Btoken%7D%22%2C%20%22interval%22%3A%20%24%7Bsleep-interval%7D%2C%20%22temperature%22%3A%20%24%7Btemp%7D%2C%20%22temperature-unit%22%3A%20%22%24%7Btemp-unit%7D%22%2C%20%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure1%22%3A%20%24%7Bpressure1%7D%2C%20%22pressure-unit%22%3A%20%22%24%7Bpressure-unit%7D%22%2C%20%22battery%22%3A%20%24%7Bbattery%7D%2C%20%22rssi%22%3A%20%24%7Brssi%7D%2C%20%22run-time%22%3A%20%24%7Brun-time%7D%20%7D"
   }
 ]);
 const httpGetFormatOptions = ref([
@@ -7301,8 +7305,12 @@ const httpGetFormatOptions = ref([
     value: ""
   },
   {
-    label: "PressureMon",
+    label: "Pressuremon (Single)",
     value: "%3Fname%3D%24%7Bmdns%7D%26id%3D%24%7Bid%7D%26token%3D%24%7Btoken2%7D%26interval%3D%24%7Bsleep%2Dinterval%7D%26temperature%3D%24%7Btemp%7D%26temperature%2Dunit%3D%24%7Btemp%2Dunit%7D%26pressure%3D%24%7Bpressure%7D%26pressure%2Dunit%3D%24%7Bpressure%2Dunit%7D%26battery%3D%24%7Bbattery%7D%26rssi%3D%24%7Brssi%7D%26run%2Dtime%3D%24%7Brun%2Dtime%7D"
+  },
+  {
+    label: "Pressuremon (Dual)",
+    value: "%3Fname%3D%24%7Bmdns%7D%26id%3D%24%7Bid%7D%26token%3D%24%7Btoken2%7D%26interval%3D%24%7Bsleep-interval%7D%26temperature%3D%24%7Btemp%7D%26temperature-unit%3D%24%7Btemp-unit%7D%26pressure%3D%24%7Bpressure%7D%26pressure1%3D%24%7Bpressure1%7D%26pressure-unit%3D%24%7Bpressure-unit%7D%26battery%3D%24%7Bbattery%7D%26rssi%3D%24%7Brssi%7D%26run-time%3D%24%7Brun-time%7D"
   }
 ]);
 const influxdb2FormatOptions = ref([
@@ -7311,8 +7319,12 @@ const influxdb2FormatOptions = ref([
     value: ""
   },
   {
-    label: "PressureMon",
+    label: "Pressuremon (Single)",
     value: "measurement%2Chost%3D%24%7Bmdns%7D%2Cdevice%3D%24%7Bid%7D%2Ctemperature%2Dunit%3D%24%7Btemp%2Dunit%7D%2Cpressure%2Dunit%3D%24%7Bpressure%2Dunit%7D%20pressure%3D%24%7Bpressure%7D%2Ctemp%3D%24%7Btemp%7D%2Cbattery%3D%24%7Bbattery%7D%2Crssi%3D%24%7Brssi%7D%0A"
+  },
+  {
+    label: "Pressuremon (Dual)",
+    value: "measurement%2Chost%3D%24%7Bmdns%7D%2Cdevice%3D%24%7Bid%7D%2Ctemperature-unit%3D%24%7Btemp-unit%7D%2Cpressure-unit%3D%24%7Bpressure-unit%7D%20pressure%3D%24%7Bpressure%7D%2Cpressure1%3D%24%7Bpressure1%7D%2Ctemp%3D%24%7Btemp%7D%2Cbattery%3D%24%7Bbattery%7D%2Crssi%3D%24%7Brssi%7D%0A"
   }
 ]);
 const mqttFormatOptions = ref([
@@ -7321,8 +7333,20 @@ const mqttFormatOptions = ref([
     value: ""
   },
   {
-    label: "PressureMon",
+    label: "Pressuremon (Single)",
     value: "pressuremon%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Ftemperature%2Dunit%3A%24%7Btemp%2Dunit%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fpressure%3A%24%7Bpressure%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fpressure%2Dunit%3A%24%7Bpressure%2Dunit%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep%2Dinterval%7D%7Cpressuremon%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C"
+  },
+  {
+    label: "Pressuremon (Dual)",
+    value: "pressuremon%2F%24%7Bmdns%7D%2Ftemperature%3A%24%7Btemp%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Ftemperature-unit%3A%24%7Btemp-unit%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fbattery%3A%24%7Bbattery%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fpressure%3A%24%7Bpressure%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fpressure1%3A%24%7Bpressure1%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Fpressure-unit%3A%24%7Bpressure-unit%7D%7Cpressuremon%2F%24%7Bmdns%7D%2Finterval%3A%24%7Bsleep-interval%7D%7Cpressuremon%2F%24%7Bmdns%7D%2FRSSI%3A%24%7Brssi%7D%7C"
+  },
+  {
+    label: "Brewblox (Single)",
+    value: "brewcast%2Fhistory%2Fpressuremon%3A%20%7B%22key%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22data%22%3A%20%7B%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure-unit%22%3A%20%22%24%7Bpressure-unit%7D%22%2C%20%22battery%22%3A%24%7Bbattery%7D%2C%20%22interval%22%3A%20%24%7Bsleep-interval%7D%2C%20%22RSSI%22%3A%20%24%7Brssi%7D%7D%7D%7C"
+  },
+  {
+    label: "Brewblox (Dual)",
+    value: "brewcast%2Fhistory%2Fpressuremon%3A%20%7B%22key%22%3A%20%22%24%7Bmdns%7D%22%2C%20%22data%22%3A%20%7B%22pressure%22%3A%20%24%7Bpressure%7D%2C%20%22pressure1%22%3A%20%24%7Bpressure1%7D%2C%20%22pressure-unit%22%3A%20%22%24%7Bpressure-unit%7D%22%2C%20%22battery%22%3A%24%7Bbattery%7D%2C%20%22interval%22%3A%20%24%7Bsleep-interval%7D%2C%20%22RSSI%22%3A%20%24%7Brssi%7D%7D%7D%7C"
   }
 ]);
 const httpGetUrlOptions = ref([{ label: "-blank-", value: "" }]);
@@ -7378,6 +7402,17 @@ function applyTemplate(status2, config2, template) {
   s = s.replaceAll("${pressure-psi}", p2);
   s = s.replaceAll("${pressure-bar}", psiToBar(p2));
   s = s.replaceAll("${pressure-kpa}", psiToKPa(p2));
+  var p1 = status2.pressure1;
+  if (status2.isKPa) {
+    p1 = kpaToPsi(p1);
+  } else if (status2.isBar) {
+    p1 = barToPsi(p1);
+  }
+  s = s.replaceAll("${pressure1}", p1);
+  s = s.replaceAll("${pressure1-psi}", p1);
+  s = s.replaceAll("${pressure1-bar}", psiToBar(p1));
+  s = s.replaceAll("${pressure1-kpa}", psiToKPa(p1));
+  s = s.replaceAll("${run-time}", 1.5);
   s = s.replaceAll("${app-ver}", status2.app_ver);
   s = s.replaceAll("${app-build}", status2.app_build);
   s = s.replaceAll("${battery-percent}", 100);
@@ -7766,10 +7801,10 @@ const useConfigStore = /* @__PURE__ */ defineStore("config", {
       }).then((res) => {
         global$1.disabled = false;
         if (res.status != 200) {
-          logError("configStore.sendOneFormat()", "Sending /api/format2 failed");
+          logError("configStore.sendOneFormat()", "Sending /api/format failed");
           callback(false);
         } else {
-          logInfo("configStore.sendOneFormat()", "Sending /api/format2 completed");
+          logInfo("configStore.sendOneFormat()", "Sending /api/format completed");
           callback(true);
         }
       }).catch((err) => {
@@ -15493,22 +15528,15 @@ const _sfc_main = /* @__PURE__ */ Object.assign({
       { label: "Temperature (C), ${temp-c}", value: "${temp-c}" },
       { label: "Temperature (F), ${temp-f}", value: "${temp-f}" },
       { label: "Temperature Unit, ${temp-unit}", value: "${temp-unit}" },
-      /* TODO
-      { label: 'Temperature, ${temp1}', value: '${temp1}' },
-      { label: 'Temperature (C), ${temp1-c}', value: '${temp1-c}' },
-      { label: 'Temperature (F), ${temp1-f}', value: '${temp1-f}' },
-      */
       { label: "Pressure, ${pressure}", value: "${pressure}" },
       { label: "Pressure (PSI), ${pressure-psi}", value: "${pressure-psi}" },
       { label: "Pressure (kPa), ${pressure-kpa}", value: "${pressure-kpa}" },
       { label: "Pressure (Bar), ${pressure-bar}", value: "${pressure-bar}" },
       { label: "Pressure Unit, ${pressure-unit}", value: "${pressure-unit}" },
-      /*
-      { label: 'Pressure, ${pressure1}', value: '${pressure1}' },
-      { label: 'Pressure (PSI), ${pressure1-cpsi}', value: '${pressure1-psi}' },
-      { label: 'Pressure (kPa), ${pressure1-kpa}', value: '${pressure1-kpa}' },
-      { label: 'Pressure (Bar), ${pressure1-bar}', value: '${pressure1-bar}' },
-       */
+      { label: "Pressure, ${pressure1}", value: "${pressure1}" },
+      { label: "Pressure (PSI), ${pressure1-psi}", value: "${pressure1-psi}" },
+      { label: "Pressure (kPa), ${pressure1-kpa}", value: "${pressure1-kpa}" },
+      { label: "Pressure (Bar), ${pressure1-bar}", value: "${pressure1-bar}" },
       { label: "Application version, ${app-ver}", value: "${app-ver}" },
       { label: "Application build, ${app-build}", value: "${app-build}" },
       { label: "Battery (V), ${battery}", value: "${battery}" },
