@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.6.0";
     },
     uiBuild() {
-      return "..bf24c5";
+      return "..d7cd1c";
     }
   },
   actions: {
@@ -10003,11 +10003,8 @@ const _hoisted_12$c = {
   key: 4,
   class: "col-md-4"
 };
-const _hoisted_13$c = { class: "text-center" };
-const _hoisted_14$b = {
-  key: 5,
-  class: "col-md-4"
-};
+const _hoisted_13$c = { class: "col-md-4" };
+const _hoisted_14$b = { class: "text-center" };
 const _hoisted_15$9 = { class: "col-md-4" };
 const _hoisted_16$8 = { class: "text-center" };
 const _hoisted_17$6 = { class: "col-md-4" };
@@ -10016,15 +10013,13 @@ const _hoisted_19$3 = { class: "col-md-4" };
 const _hoisted_20$2 = { class: "text-center" };
 const _hoisted_21$2 = { class: "col-md-4" };
 const _hoisted_22$1 = { class: "text-center" };
-const _hoisted_23$1 = { class: "col-md-4" };
-const _hoisted_24$1 = { class: "text-center" };
-const _hoisted_25$1 = { class: "badge bg-secondary" };
-const _hoisted_26$1 = { class: "badge bg-secondary" };
+const _hoisted_23$1 = { class: "badge bg-secondary" };
+const _hoisted_24$1 = { class: "badge bg-secondary" };
+const _hoisted_25$1 = { class: "col-md-4" };
+const _hoisted_26$1 = { class: "text-center" };
 const _hoisted_27$1 = { class: "col-md-4" };
-const _hoisted_28$1 = { class: "text-center" };
-const _hoisted_29 = { class: "col-md-4" };
-const _hoisted_30 = { class: "d-flex justify-content-center" };
-const _hoisted_31 = {
+const _hoisted_28$1 = { class: "d-flex justify-content-center" };
+const _hoisted_29 = {
   class: "form-check form-switch",
   style: { "height": "0.7rem" }
 };
@@ -10117,7 +10112,7 @@ const _sfc_main$R = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).temp ? (openBlock(), createElementBlock("div", _hoisted_8$j, [
+            unref(status).temp && unref(status).temp >= -270 ? (openBlock(), createElementBlock("div", _hoisted_8$j, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
@@ -10129,31 +10124,19 @@ const _sfc_main$R = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            unref(status).temp1 ? (openBlock(), createElementBlock("div", _hoisted_10$g, [
-              createVNode(_component_BsCard, {
-                header: "Measurement",
-                color: "info",
-                title: "Temperature (2)"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_11$c, toDisplayString(unref(status).temp1) + " " + toDisplayString(unref(status).temp_unit), 1)
-                ]),
-                _: 1
-              })
-            ])) : createCommentVNode("", true),
-            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_12$c, [
+            unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_10$g, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 color: "info",
                 title: "Battery"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_13$c, toDisplayString(unref(status).battery) + " V", 1)
+                  createBaseVNode("p", _hoisted_11$c, toDisplayString(unref(status).battery) + " V", 1)
                 ]),
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_14$b, [
+            !unref(status).self_check.battery_level ? (openBlock(), createElementBlock("div", _hoisted_12$c, [
               createVNode(_component_BsCard, {
                 header: "Measurement",
                 title: "Error",
@@ -10166,13 +10149,24 @@ const _sfc_main$R = {
                 _: 1
               })
             ])) : createCommentVNode("", true),
-            createBaseVNode("div", _hoisted_15$9, [
+            createBaseVNode("div", _hoisted_13$c, [
               createVNode(_component_BsCard, {
                 header: "Device",
                 title: "WIFI"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_16$8, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
+                  createBaseVNode("p", _hoisted_14$b, toDisplayString(unref(status).rssi) + " dBm - " + toDisplayString(unref(status).wifi_ssid), 1)
+                ]),
+                _: 1
+              })
+            ]),
+            createBaseVNode("div", _hoisted_15$9, [
+              createVNode(_component_BsCard, {
+                header: "Device",
+                title: "IP Address"
+              }, {
+                default: withCtx(() => [
+                  createBaseVNode("p", _hoisted_16$8, toDisplayString(unref(status).ip), 1)
                 ]),
                 _: 1
               })
@@ -10180,10 +10174,10 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_17$6, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "IP Address"
+                title: "Memory"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_18$5, toDisplayString(unref(status).ip), 1)
+                  createBaseVNode("p", _hoisted_18$5, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
                 ]),
                 _: 1
               })
@@ -10191,10 +10185,10 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_19$3, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Memory"
+                title: "Software version"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_20$2, " Free: " + toDisplayString(unref(status).free_heap) + " kb, Total: " + toDisplayString(unref(status).total_heap) + " kb ", 1)
+                  createBaseVNode("p", _hoisted_20$2, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
                 ]),
                 _: 1
               })
@@ -10202,26 +10196,26 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_21$2, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Software version"
+                title: "Platform"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_22$1, " Firmware: " + toDisplayString(unref(status).app_ver) + " (" + toDisplayString(unref(status).app_build) + ") UI: " + toDisplayString(unref(global$1).uiVersion) + " (" + toDisplayString(unref(global$1).uiBuild) + ") ", 1)
+                  createBaseVNode("p", _hoisted_22$1, [
+                    _cache[5] || (_cache[5] = createTextVNode(" Platform: ")),
+                    createBaseVNode("span", _hoisted_23$1, toDisplayString(unref(status).platform), 1),
+                    _cache[6] || (_cache[6] = createTextVNode(" Board: ")),
+                    createBaseVNode("span", _hoisted_24$1, toDisplayString(unref(status).board), 1)
+                  ])
                 ]),
                 _: 1
               })
             ]),
-            createBaseVNode("div", _hoisted_23$1, [
+            createBaseVNode("div", _hoisted_25$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "Platform"
+                title: "ID"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_24$1, [
-                    _cache[5] || (_cache[5] = createTextVNode(" Platform: ")),
-                    createBaseVNode("span", _hoisted_25$1, toDisplayString(unref(status).platform), 1),
-                    _cache[6] || (_cache[6] = createTextVNode(" Board: ")),
-                    createBaseVNode("span", _hoisted_26$1, toDisplayString(unref(status).board), 1)
-                  ])
+                  createBaseVNode("p", _hoisted_26$1, toDisplayString(unref(status).id), 1)
                 ]),
                 _: 1
               })
@@ -10229,22 +10223,11 @@ const _sfc_main$R = {
             createBaseVNode("div", _hoisted_27$1, [
               createVNode(_component_BsCard, {
                 header: "Device",
-                title: "ID"
-              }, {
-                default: withCtx(() => [
-                  createBaseVNode("p", _hoisted_28$1, toDisplayString(unref(status).id), 1)
-                ]),
-                _: 1
-              })
-            ]),
-            createBaseVNode("div", _hoisted_29, [
-              createVNode(_component_BsCard, {
-                header: "Device",
                 title: "Force config mode"
               }, {
                 default: withCtx(() => [
-                  createBaseVNode("div", _hoisted_30, [
-                    createBaseVNode("div", _hoisted_31, [
+                  createBaseVNode("div", _hoisted_28$1, [
+                    createBaseVNode("div", _hoisted_29, [
                       withDirectives(createBaseVNode("input", {
                         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => flag.value = $event),
                         class: "form-check-input",
