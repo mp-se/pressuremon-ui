@@ -174,8 +174,8 @@ app.get('/api/format', (req, res) => {
   res.send(formatData)
 })
 
-app.post('/api/format2', (req, res) => {
-  console.log('POST: /api/format2')
+app.post('/api/format', (req, res) => {
+  console.log('POST: /api/format')
   /* 
    * Description:    Update the format data that is in body
    * Authentication: Required
