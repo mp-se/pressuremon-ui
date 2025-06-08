@@ -379,10 +379,10 @@ export const useConfigStore = defineStore('config', {
         .then((res) => {
           global.disabled = false
           if (res.status != 200) {
-            logError('configStore.sendOneFormat()', 'Sending /api/format2 failed')
+            logError('configStore.sendOneFormat()', 'Sending /api/format failed')
             callback(false)
           } else {
-            logInfo('configStore.sendOneFormat()', 'Sending /api/format2 completed')
+            logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
             callback(true)
           }
         })

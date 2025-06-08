@@ -47,24 +47,16 @@ const contextMenuOptions = ref([
   { label: 'Temperature (F), ${temp-f}', value: '${temp-f}' },
   { label: 'Temperature Unit, ${temp-unit}', value: '${temp-unit}' },
 
-  /* TODO
-  { label: 'Temperature, ${temp1}', value: '${temp1}' },
-  { label: 'Temperature (C), ${temp1-c}', value: '${temp1-c}' },
-  { label: 'Temperature (F), ${temp1-f}', value: '${temp1-f}' },
-  */
-
   { label: 'Pressure, ${pressure}', value: '${pressure}' },
   { label: 'Pressure (PSI), ${pressure-psi}', value: '${pressure-psi}' },
   { label: 'Pressure (kPa), ${pressure-kpa}', value: '${pressure-kpa}' },
   { label: 'Pressure (Bar), ${pressure-bar}', value: '${pressure-bar}' },
   { label: 'Pressure Unit, ${pressure-unit}', value: '${pressure-unit}' },
 
-  /*
   { label: 'Pressure, ${pressure1}', value: '${pressure1}' },
-  { label: 'Pressure (PSI), ${pressure1-cpsi}', value: '${pressure1-psi}' },
+  { label: 'Pressure (PSI), ${pressure1-psi}', value: '${pressure1-psi}' },
   { label: 'Pressure (kPa), ${pressure1-kpa}', value: '${pressure1-kpa}' },
   { label: 'Pressure (Bar), ${pressure1-bar}', value: '${pressure1-bar}' },
-   */
 
   { label: 'Application version, ${app-ver}', value: '${app-ver}' },
   { label: 'Application build, ${app-build}', value: '${app-build}' },
