@@ -7088,7 +7088,7 @@ const useGlobalStore = /* @__PURE__ */ defineStore("global", {
       return "0.6.0";
     },
     uiBuild() {
-      return "..85be13";
+      return "..d5c431";
     }
   },
   actions: {
@@ -11391,7 +11391,7 @@ const _sfc_main$M = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post"
+        push_format: "http_post_format_pressure"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -11603,7 +11603,7 @@ const _sfc_main$L = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_post2"
+        push_format: "http_post2_format_pressure"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -11815,7 +11815,7 @@ const _sfc_main$K = {
     });
     const runTest = () => {
       const data = {
-        push_format: "http_get"
+        push_format: "http_get_format_pressure"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -12023,7 +12023,7 @@ const _sfc_main$J = {
     });
     const runTest = () => {
       const data = {
-        push_format: "influxdb2"
+        push_format: "influxdb2_format_pressure"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
@@ -12204,7 +12204,7 @@ const _sfc_main$I = {
     });
     const runTest = () => {
       const data = {
-        push_format: "mqtt"
+        push_format: "mqtt_format_pressure"
       };
       global$1.clearMessages();
       config.runPushTest(data, () => {
