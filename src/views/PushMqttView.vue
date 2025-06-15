@@ -146,7 +146,7 @@ const pushDisabled = computed(() => {
 
 const runTest = () => {
   const data = {
-    push_format: 'mqtt'
+    push_format: 'mqtt_format_pressure'
   }
 
   global.clearMessages()

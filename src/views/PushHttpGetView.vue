@@ -154,7 +154,7 @@ const pushDisabled = computed(() => {
 
 const runTest = () => {
   const data = {
-    push_format: 'http_get'
+    push_format: 'http_get_format_pressure'
   }
 
   global.clearMessages()

@@ -250,7 +250,6 @@
           >
           </BsInputNumber>
         </div>
-
       </div>
       <div class="row gy-2">
         <div class="col-md-12">
@@ -371,10 +370,10 @@ const tempsensorResolutionOptions = ref([
 onMounted(() => {
   logDebug('DeviceHardwareView.onMounted()')
 
-  if(status.adc_found) {
-    pressureSensorOptions.value.push({ label: 'Custom Analog Sensor', value: 1000 })     
+  if (status.adc_found) {
+    pressureSensorOptions.value.push({ label: 'Custom Analog Sensor', value: 1000 })
   }
-})  
+})
 
 const voltage = computed(() => {
   return status.battery + ' V'
