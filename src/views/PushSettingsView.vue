@@ -190,7 +190,7 @@ const calculateBatteryLife = () => {
   }
 
   if (wifi) {
-    switch (status.platform) {
+    switch (global.platform) {
       case 'ESP32C3':
         pwrActive = 320 // mA per hour (290-350 mA)
         break
@@ -201,18 +201,18 @@ const calculateBatteryLife = () => {
         pwrActive = 300 // mA per hour (285-355 mA)
         break
       default:
-        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', status.platform)
+        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', global.platform)
         break
     }
   } else {
-    switch (status.platform) {
+    switch (global.platform) {
       case 'ESP32C3':
       case 'ESP32S2':
       case 'ESP32S3':
         pwrActive = 180
         break
       default:
-        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', status.platform)
+        logError('PushSettingsView.calculateBatteryLife()', 'Unknown platform', global.platform)
         break
     }
   }
@@ -226,7 +226,7 @@ const calculateBatteryLife = () => {
 
   logDebug(
     'PushSettingsView.calculateBatteryLife()',
-    'Estimated power per hour = ' + pwrActive.toString() + 'mA on platform = ' + status.platform
+    'Estimated power per hour = ' + pwrActive.toString() + 'mA on platform = ' + global.platform
   )
   logDebug('PushSettingsView.calculateBatteryLife()', 'Estimated number of days = ' + days)
 

@@ -18,11 +18,7 @@ export const useStatusStore = defineStore('status', {
       battery: 0,
       sleep_mode: false,
       rssi: 0,
-      app_ver: '',
-      app_build: '',
       mdns: '',
-      platform: '',
-      board: '',
       wifi_ssid: '',
       ip: '',
       total_heap: 0,
@@ -72,11 +68,7 @@ export const useStatusStore = defineStore('status', {
           this.sleep_mode = json.sleep_mode
           this.battery = json.battery
           this.rssi = json.rssi
-          this.app_ver = json.app_ver
-          this.app_build = json.app_build
           this.mdns = json.mdns
-          this.board = json.board
-          this.platform = json.platform.toUpperCase()
           this.wifi_ssid = json.wifi_ssid
           this.ip = json.ip
 

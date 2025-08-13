@@ -212,8 +212,8 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${pressure1-kpa}', psiToKPa(p1))
 
   s = s.replaceAll('${run-time}', 1.5)
-  s = s.replaceAll('${app-ver}', status.app_ver)
-  s = s.replaceAll('${app-build}', status.app_build)
+  s = s.replaceAll('${app-ver}', global.app_ver)
+  s = s.replaceAll('${app-build}', global.app_build)
   s = s.replaceAll('${battery-percent}', 100)
   s = s.replaceAll('${rssi}', status.rssi)
   s = s.replaceAll('${run-time}', status.runtime_average)

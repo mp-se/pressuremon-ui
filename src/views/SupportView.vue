@@ -26,15 +26,6 @@
           >Discuss on homebrewtalk.com</a
         >
       </div>
-      <!-- 
-      <div class="col-md-4">
-        <a
-          class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-          href="https://www.gravitymon.com/"
-          target="_blank"
-          >Read docs on gravitymon.com</a
-        >
-      </div>-->
     </div>
 
     <hr />
@@ -42,12 +33,9 @@
       <div class="col">
         <p>
           Platform:
-          <span class="badge bg-secondary">{{ status.platform }}</span>
+          <span class="badge bg-secondary">{{ global.platform }}</span>
           Firmware:
-          <span class="badge bg-secondary">{{ status.app_ver }} ({{ status.app_build }})</span>
-          <!-- 
-          Hardware:
-          <span class="badge bg-secondary">{{ status.hardware }}</span>-->
+          <span class="badge bg-secondary">{{ global.app_ver }} ({{ global.app_build }})</span>
           User interface:
           <span class="badge bg-secondary">{{ global.uiVersion }} ({{ global.uiBuild }})</span>
         </p>
