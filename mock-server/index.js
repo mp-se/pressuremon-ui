@@ -3,13 +3,10 @@
  *
  * (c) 2023-2024 Magnus Persson
  */
-import { createRequire } from "module";
+import express from 'express'
+import cors from 'cors'
 import { registerEspFwk } from './espfwk.js'
 import { configData, statusData, formatData } from './data.js'
-
-const require = createRequire(import.meta.url);
-const express = require('express')
-var cors = require('cors')
 
 const app = express()
 const port = 3000
@@ -98,7 +95,7 @@ app.post('/api/push', (req, res) => {
        push_format: "http_format|http_format2|http_format3|influxdb2_format|mqtt_format"
      }
    */
-  if(!req.body.hasOwnProperty("push_format")) {
+  if(!Object.prototype.hasOwnProperty.call(req.body, "push_format")) {
     res.sendStatus(422)
     return
   }  

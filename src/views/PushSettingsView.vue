@@ -132,7 +132,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
-import { global, config, status } from '@/modules/pinia'
+import { global, config } from '@/modules/pinia'
 import { storeToRefs } from 'pinia'
 import { logDebug, logError } from '@/modules/logger'
 

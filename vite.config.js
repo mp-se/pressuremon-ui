@@ -3,9 +3,11 @@ import viteCompression from 'vite-plugin-compression'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import autoprefixer from 'autoprefixer'
+import cssnano from 'cssnano'
+import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     vue({
       template: {
@@ -29,10 +31,103 @@ export default defineConfig({
     }
   },
   css: {
+    preprocessorOptions: {
+      scss: {
+        // Suppress Sass deprecation warnings from Bootstrap
+        quietDeps: true,
+        silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
+        logger: {
+          warn: function(message) {
+            // Suppress Bootstrap-related deprecation warnings
+            if (message.includes('bootstrap') || 
+                message.includes('@import') || 
+                message.includes('mix(') ||
+                message.includes('red(') ||
+                message.includes('green(') ||
+                message.includes('blue(') ||
+                message.includes('unit(')) {
+              return;
+            }
+            console.warn(message);
+          }
+        }
+      }
+    },
     postcss: {
       plugins: [
         // Autoprefixer for vendor prefixes
-        autoprefixer()
+        autoprefixer({
+          overrideBrowserslist: [
+            'Chrome >= 60',
+            'Firefox >= 60', 
+            'Safari >= 12',
+            'Edge >= 79'
+          ]
+        }),
+        
+        // PurgeCSS for ESP32 optimization - only in production builds
+        ...(mode === 'production' ? [purgeCSSPlugin({
+          content: [
+            './index.html',
+            './src/**/*.{vue,js,ts}',
+            './dist/**/*.{html,js}'
+          ],
+          safelist: [
+            // Dynamic classes that might not be detected
+            'show', 'hide', 'fade', 'active', 'disabled', 'collapse', 'collapsing',
+            'modal-backdrop', 'modal-open', 'dropdown-toggle', 'dropdown-menu',
+            'btn-close', 'modal-lg', 'modal-sm', 'modal-xl',
+            'is-valid', 'is-invalid', 'valid-feedback', 'invalid-feedback',
+            // Spinner classes for loading states
+            'spinner-border', 'spinner-border-sm',
+            // Navbar classes
+            'navbar', 'navbar-expand-lg', 'navbar-dark', 'navbar-light', 'navbar-toggler',
+            'navbar-toggler-icon', 'navbar-brand', 'navbar-nav', 'navbar-collapse',
+            'nav-item', 'nav-link', 'dropdown-toggle',
+            // Helper classes
+            'vr', 'fw-bold', 'fw-normal', 'fw-light',
+            // Form states
+            'needs-validation', 'was-validated',
+            // Alert states
+            /^alert-/, /^btn-/, /^bg-/, /^text-/, /^badge-/,
+            // Bootstrap utility patterns we might use dynamically
+            /^d-/, /^p-/, /^m-/, /^justify-/, /^align-/,
+            // Width/height utilities
+            /^w-/, /^h-/, /^mw-/, /^mh-/,
+            // Overflow utilities
+            /^overflow-/, /^text-overflow-/,
+            // Link utilities
+            /^link-/, /^opacity-/,
+          ],
+          defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+          variables: true, // Remove unused CSS variables too
+          fontFace: false, // Keep font faces
+          keyframes: true, // Remove unused keyframes
+        })] : []),
+        
+        // CSSnano for Bootstrap CSS optimization  
+        cssnano({
+          preset: ['default', {
+            discardComments: { removeAll: true },
+            normalizeWhitespace: true,
+            colormin: true,
+            minifySelectors: true,
+            minifyFontValues: true,
+            mergeLonghand: true,
+            mergeRules: true,
+            discardDuplicates: true,
+            discardEmpty: true,
+            discardOverridden: true,
+            normalizeString: true,
+            normalizeUrl: true,
+            // Bootstrap-specific optimizations
+            reduceTransforms: true,
+            convertValues: true,
+            normalizeCharset: true,
+            normalizeDisplayValues: true,
+            normalizePositions: true
+          }]
+        })
       ]
     }
   },
@@ -68,4 +163,4 @@ export default defineConfig({
       }
     }
   }
-})
+}))

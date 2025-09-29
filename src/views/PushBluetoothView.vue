@@ -56,7 +56,7 @@
 <script setup>
 import { ref } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
-import { global, config, status } from '@/modules/pinia'
+import { global, config } from '@/modules/pinia'
 
 const bleFormatOptions = ref([
   { label: 'Disabled', value: 0 },

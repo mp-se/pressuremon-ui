@@ -118,4 +118,17 @@ export var statusData = {
   wifi_setup: false
 }
 
+export var featureData = {
+  board: 'D1_MINI',
+  platform: 'esp32c3',
+  app_ver: '2.0.0',
+  app_build: 'gitrev',
+  hardware: 'ispindel',
+  firmware_file: 'firmware.bin',
+
+  // Feature flags
+  ble: true,
+  no_sensors: 1,
+}
+
 // EOF

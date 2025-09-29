@@ -59,7 +59,7 @@ app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 
-import 'bootstrap/dist/css/bootstrap.css'
+import './styles/bootstrap-custom.scss'
 
 app.mount('#app')
 
