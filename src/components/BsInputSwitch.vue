@@ -53,9 +53,11 @@ const disabled = defineModel('disabled')
 const badge = defineModel('badge')
 </script>
 
-<style>
+<style scoped>
 .form-check .form-check-input[type='checkbox'] {
-  width: 50px;
-  height: 25px;
+  width: 50px !important;
+  height: 25px !important;
 }
 </style>
+
+

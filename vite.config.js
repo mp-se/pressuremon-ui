@@ -2,27 +2,23 @@ import { fileURLToPath, URL } from 'node:url'
 import viteCompression from 'vite-plugin-compression'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import autoprefixer from 'autoprefixer'
-import cssnano from 'cssnano'
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          // Remove comments in production
-          comments: false
+          // Remove comments and whitespace in production
+          hoistStatic: true,
+          cacheHandlers: true
         }
       }
-    }), 
-    // Gzip compression - ESP32 friendly
+    }),
     viteCompression({
       algorithm: 'gzip',
-      ext: '.gz',
       threshold: 1024,
-      deleteOriginFile: false // Keep original files for fallback
+      deleteOriginFile: false
     })
   ],
   resolve: {
@@ -30,137 +26,63 @@ export default defineConfig(({ mode }) => ({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  define: {
+    __VUE_OPTIONS_API__: false, // Disable Options API if not used
+    __VUE_PROD_DEVTOOLS__: false
+  },
   css: {
     preprocessorOptions: {
       scss: {
-        // Suppress Sass deprecation warnings from Bootstrap
-        quietDeps: true,
-        silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
-        logger: {
-          warn: function(message) {
-            // Suppress Bootstrap-related deprecation warnings
-            if (message.includes('bootstrap') || 
-                message.includes('@import') || 
-                message.includes('mix(') ||
-                message.includes('red(') ||
-                message.includes('green(') ||
-                message.includes('blue(') ||
-                message.includes('unit(')) {
-              return;
-            }
-            console.warn(message);
-          }
-        }
+        api: 'modern-compiler', // Use modern Sass API
+        silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions'],
+        quietDeps: true // Suppress warnings from dependencies
       }
-    },
-    postcss: {
-      plugins: [
-        // Autoprefixer for vendor prefixes
-        autoprefixer({
-          overrideBrowserslist: [
-            'Chrome >= 60',
-            'Firefox >= 60', 
-            'Safari >= 12',
-            'Edge >= 79'
-          ]
-        }),
-        
-        // PurgeCSS for ESP32 optimization - only in production builds
-        ...(mode === 'production' ? [purgeCSSPlugin({
-          content: [
-            './index.html',
-            './src/**/*.{vue,js,ts}',
-            './dist/**/*.{html,js}'
-          ],
-          safelist: [
-            // Dynamic classes that might not be detected
-            'show', 'hide', 'fade', 'active', 'disabled', 'collapse', 'collapsing',
-            'modal-backdrop', 'modal-open', 'dropdown-toggle', 'dropdown-menu',
-            'btn-close', 'modal-lg', 'modal-sm', 'modal-xl',
-            'is-valid', 'is-invalid', 'valid-feedback', 'invalid-feedback',
-            // Spinner classes for loading states
-            'spinner-border', 'spinner-border-sm',
-            // Navbar classes
-            'navbar', 'navbar-expand-lg', 'navbar-dark', 'navbar-light', 'navbar-toggler',
-            'navbar-toggler-icon', 'navbar-brand', 'navbar-nav', 'navbar-collapse',
-            'nav-item', 'nav-link', 'dropdown-toggle',
-            // Helper classes
-            'vr', 'fw-bold', 'fw-normal', 'fw-light',
-            // Form states
-            'needs-validation', 'was-validated',
-            // Alert states
-            /^alert-/, /^btn-/, /^bg-/, /^text-/, /^badge-/,
-            // Bootstrap utility patterns we might use dynamically
-            /^d-/, /^p-/, /^m-/, /^justify-/, /^align-/,
-            // Width/height utilities
-            /^w-/, /^h-/, /^mw-/, /^mh-/,
-            // Overflow utilities
-            /^overflow-/, /^text-overflow-/,
-            // Link utilities
-            /^link-/, /^opacity-/,
-          ],
-          defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-          variables: true, // Remove unused CSS variables too
-          fontFace: false, // Keep font faces
-          keyframes: true, // Remove unused keyframes
-        })] : []),
-        
-        // CSSnano for Bootstrap CSS optimization  
-        cssnano({
-          preset: ['default', {
-            discardComments: { removeAll: true },
-            normalizeWhitespace: true,
-            colormin: true,
-            minifySelectors: true,
-            minifyFontValues: true,
-            mergeLonghand: true,
-            mergeRules: true,
-            discardDuplicates: true,
-            discardEmpty: true,
-            discardOverridden: true,
-            normalizeString: true,
-            normalizeUrl: true,
-            // Bootstrap-specific optimizations
-            reduceTransforms: true,
-            convertValues: true,
-            normalizeCharset: true,
-            normalizeDisplayValues: true,
-            normalizePositions: true
-          }]
-        })
-      ]
     }
   },
   build: {
-    minify: 'terser', // Enable minification with terser
-    cssCodeSplit: false, // Disable CSS code splitting for single bundle
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true, // Inline all imports into single file
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`
-      }
-    },
-    // Additional build optimizations
-    target: 'es2018', // Updated target for better tree shaking
-    cssTarget: 'chrome80', // Updated CSS target
-    chunkSizeWarningLimit: 1000, // Increase warning limit
+    minify: 'terser',
+    cssCodeSplit: false,
+    sourcemap: false,
+    target: 'es2015',
+    chunkSizeWarningLimit: 1000, // Disable chunk size warning (default is 500kB)
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console.log statements
-        drop_debugger: true, // Remove debugger statements
-        pure_funcs: ['console.log', 'console.info', 'console.debug'], // Remove specific console methods
-        passes: 3, // More passes for ESP32 (smaller files more important)
-        unsafe: true, // More aggressive compression for smaller size
-        unsafe_comps: true,
-        unsafe_math: true,
-        unsafe_proto: true
+        drop_console: false, // Keep console for debugging
+        drop_debugger: true,
+        passes: 2,
+        unsafe: false, // Disable unsafe optimizations that might break code
+        unsafe_comps: false,
+        unsafe_Function: false,
+        unsafe_math: false,
+        unsafe_methods: false,
+        unsafe_proto: false,
+        unsafe_regexp: false,
+        unsafe_undefined: false,
+        side_effects: false
       },
       mangle: {
-        safari10: true, // Fix Safari 10 compatibility
-        toplevel: true // Mangle top-level variable names for smaller size
+        properties: false // Disable property mangling to avoid breaking Vue
+      },
+      format: {
+        comments: false
+      }
+    },
+    rollupOptions: {
+      treeshake: true, // Use default tree-shaking instead of aggressive preset
+      onwarn(warning, warn) {
+        // Suppress eval warnings for formula calculations
+        if (warning.code === 'EVAL' && warning.id?.includes('formula.js')) {
+          return
+        }
+        warn(warning)
+      },
+      output: {
+        inlineDynamicImports: true,
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+        manualChunks: undefined
       }
     }
   }
-}))
+})
