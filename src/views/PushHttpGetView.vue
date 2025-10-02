@@ -152,13 +152,17 @@ const pushDisabled = computed(() => {
   return global.disabled || config.use_wifi_direct
 })
 
-const runTest = () => {
+const runTest = async () => {
   const data = {
     push_format: 'http_get_format_pressure'
   }
 
   global.clearMessages()
-  config.runPushTest(data, () => {})
+  try {
+    await config.runPushTest(data)
+  } catch {
+    // Error already handled by runPushTest method
+  }
 }
 
 const httpUrlCallback = (opt) => {

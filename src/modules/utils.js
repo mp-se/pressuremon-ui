@@ -278,31 +278,34 @@ export function getErrorString(code) {
   return ''
 }
 
-export function restart() {
+export async function restart() {
   global.clearMessages()
   global.disabled = true
-  fetch(global.baseURL + 'api/restart', {
-    headers: { Authorization: global.token },
-    signal: AbortSignal.timeout(global.fetchTimout)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      logDebug('utils.restart()', json)
-      if (json.status == true) {
-        global.messageSuccess =
-          json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
-        logInfo('utils.restart()', 'Scheduling refresh of UI')
-        setTimeout(() => {
-          location.href = 'http://' + config.mdns + '.local'
-        }, 8000)
-      } else {
-        global.messageError = json.message
-        global.disabled = false
-      }
+  
+  try {
+    const response = await fetch(global.baseURL + 'api/restart', {
+      headers: { Authorization: global.token },
+      signal: AbortSignal.timeout(global.fetchTimout)
     })
-    .catch((err) => {
-      logError('utils.restart()', err)
-      global.messageError = 'Failed to do restart'
+    
+    const json = await response.json()
+    logDebug('utils.restart()', json)
+    
+    if (json.status == true) {
+      global.messageSuccess =
+        json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
+      logInfo('utils.restart()', 'Scheduling refresh of UI')
+      
+      setTimeout(() => {
+        location.href = 'http://' + config.mdns + '.local'
+      }, 8000)
+    } else {
+      global.messageError = json.message
       global.disabled = false
-    })
+    }
+  } catch (err) {
+    logError('utils.restart()', err)
+    global.messageError = 'Failed to do restart'
+    global.disabled = false
+  }
 }

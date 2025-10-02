@@ -127,9 +127,11 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
 import { status, global } from '@/modules/pinia'
+import { useTimers } from '@/composables/useTimers'
 
 const polling = ref(null)
 const flag = ref(false)
+const { createInterval, clearManagedInterval } = useTimers()
 
 watch(flag, async () => {
   status.setSleepMode(flag.value, () => {})
@@ -145,11 +147,11 @@ onMounted(() => {
 
 onBeforeMount(() => {
   refresh()
-  polling.value = setInterval(refresh, 4000)
+  polling.value = createInterval(refresh, 4000)
 })
 
 onBeforeUnmount(() => {
-  clearInterval(polling.value)
+  clearManagedInterval(polling.value)
 })
 </script>
 

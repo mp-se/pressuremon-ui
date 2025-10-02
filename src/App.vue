@@ -80,8 +80,10 @@ import BsFooter from './components/BsFooter.vue'
 import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
 import { storeToRefs } from 'pinia'
+import { useTimers } from './composables/useTimers'
 
 const polling = ref(null)
+const { createInterval, clearManagedInterval } = useTimers()
 
 const { disabled } = storeToRefs(global)
 
@@ -102,58 +104,69 @@ function ping() {
 }
 
 onBeforeMount(() => {
-  polling.value = setInterval(ping, 7000)
+  polling.value = createInterval(ping, 7000)
 })
 
 onBeforeUnmount(() => {
-  clearInterval(polling.value)
+  clearManagedInterval(polling.value)
 })
 
-onMounted(() => {
+onMounted(async () => {
   if (!global.initialized) {
     showSpinner()
-    status.auth((success, data) => {
-      if (success) {
-        global.id = data.token
-
-        global.load((success) => {
-          if (success) {
-            status.load((success) => {
-              if (success) {
-                config.load((success) => {
-                  if (success) {
-                    config.loadFormat((success) => {
-                      if (success) {
-                        saveConfigState()
-                        global.initialized = true
-                      } else {
-                        global.messageError =
-                          'Failed to load format templates from device, please try to reload page!'
-                      }
-                      hideSpinner()
-                    })
-                  } else {
-                    global.messageError =
-                      'Failed to load configuration data from device, please try to reload page!'
-                    hideSpinner()
-                  }
-                })
-              } else {
-                global.messageError =
-                  'Failed to load status from device, please try to reload page!'
-                hideSpinner()
-              }
-            })
-          } else {
-            global.messageError =
-              'Failed to load feature flags from device, please try to reload page!'
-          }
-        })
-      } else {
-        global.messageError = 'Failed to authenticate with device, please try to reload page!'
-        hideSpinner()
+    
+    try {
+      // Convert callback-based methods to promises for cleaner async/await usage
+      const authResult = await new Promise((resolve) => {
+        status.auth((success, data) => resolve({ success, data }))
+      })
+      
+      if (!authResult.success) {
+        throw new Error('Failed to authenticate with device, please try to reload page!')
       }
-    })
+      
+      global.id = authResult.data.token
+      
+      const globalLoadResult = await new Promise((resolve) => {
+        global.load((success) => resolve(success))
+      })
+      
+      if (!globalLoadResult) {
+        throw new Error('Failed to load feature flags from device, please try to reload page!')
+      }
+      
+      const statusLoadResult = await new Promise((resolve) => {
+        status.load((success) => resolve(success))
+      })
+      
+      if (!statusLoadResult) {
+        throw new Error('Failed to load status from device, please try to reload page!')
+      }
+      
+      const configLoadResult = await new Promise((resolve) => {
+        config.load((success) => resolve(success))
+      })
+      
+      if (!configLoadResult) {
+        throw new Error('Failed to load configuration data from device, please try to reload page!')
+      }
+      
+      const formatLoadResult = await new Promise((resolve) => {
+        config.loadFormat((success) => resolve(success))
+      })
+      
+      if (!formatLoadResult) {
+        throw new Error('Failed to load format templates from device, please try to reload page!')
+      }
+      
+      saveConfigState()
+      global.initialized = true
+      
+    } catch (error) {
+      global.messageError = error.message
+    } finally {
+      hideSpinner()
+    }
   }
 })
 

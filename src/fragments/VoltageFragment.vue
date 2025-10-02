@@ -61,8 +61,10 @@
 import { ref } from 'vue'
 import { global, config, status, saveConfigState } from '@/modules/pinia'
 import { logDebug } from '@/modules/logger'
+import { useTimers } from '@/composables/useTimers'
 
 const measuredVoltage = ref(0)
+const { createTimeout } = useTimers()
 
 const calculateFactor = () => {
   global.disabled = true
@@ -81,13 +83,13 @@ const calculateFactor = () => {
     logDebug('VoltageFragment.calculateFactor()', success)
     saveConfigState()
     global.disabled = true
-    setTimeout(() => {
+    createTimeout(() => {
       status.load((success) => {
         logDebug('VoltageFragment.calculateFactor()', success, status.battery)
         global.messageInfo = 'New factor applied, check if the current battery reading is correct'
         global.disabled = false
-      }, 1000)
-    })
+      })
+    }, 1000)
   })
 }
 </script>

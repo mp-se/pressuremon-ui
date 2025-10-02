@@ -164,30 +164,34 @@ function wifiName(label, rssi, encr) {
   return l
 }
 
-onMounted(() => {
+onMounted(async () => {
   scanning.value = true
-  config.runWifiScan((success, data) => {
-    if (success) {
-      networks.value = [{ label: '-blank-', value: '', rssi: 0, encryption: 0, channel: 0 }]
-      for (var n in data.networks) {
-        var d = data.networks[n]
-        var o = {
-          label: wifiName(d.wifi_ssid, d.rssi, d.encryption),
-          value: d.wifi_ssid,
-          rssi: d.rssi,
-          encryption: data.networks[n].encryption,
-          channel: d.channel
-        }
-
-        var f = networks.value.filter((obj) => {
-          return obj.value === d.wifi_ssid
-        })
-        logDebug('DeviceWifiView.onMounted()', 'result:', f, d.wifi_ssid)
-        if (f.length === 0) networks.value.push(o)
+  
+  try {
+    const data = await config.runWifiScanAsync()
+    networks.value = [{ label: '-blank-', value: '', rssi: 0, encryption: 0, channel: 0 }]
+    
+    for (var n in data.networks) {
+      var d = data.networks[n]
+      var o = {
+        label: wifiName(d.wifi_ssid, d.rssi, d.encryption),
+        value: d.wifi_ssid,
+        rssi: d.rssi,
+        encryption: data.networks[n].encryption,
+        channel: d.channel
       }
-      scanning.value = false
+
+      var f = networks.value.filter((obj) => {
+        return obj.value === d.wifi_ssid
+      })
+      logDebug('DeviceWifiView.onMounted()', 'result:', f, d.wifi_ssid)
+      if (f.length === 0) networks.value.push(o)
     }
-  })
+  } catch {
+    // Error already handled by runWifiScanAsync method
+  } finally {
+    scanning.value = false
+  }
 })
 
 const save = () => {

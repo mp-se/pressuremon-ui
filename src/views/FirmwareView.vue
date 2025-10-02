@@ -25,6 +25,7 @@
             accept=".bin"
             help="Choose the firmware file that will be used to update the device"
             :disabled="global.disabled"
+            @change="onFileChange"
           >
           </BsFileUpload>
         </div>
@@ -37,8 +38,8 @@
             id="upload-btn"
             value="upload"
             data-bs-toggle="tooltip"
-            title="Update the device with the selected firmware"
-            :disabled="global.disabled"
+            :title="uploadButtonTooltip"
+            :disabled="global.disabled || !fileSelected"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -60,11 +61,30 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { global } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
+import { useTimers } from '@/composables/useTimers'
 
 const progress = ref(0)
+const fileSelected = ref(false)
+const { createTimeout } = useTimers()
+
+const uploadButtonTooltip = computed(() => {
+  if (global.disabled) {
+    return 'Upload in progress, please wait...'
+  } else if (!fileSelected.value) {
+    return 'Please select a firmware file first'
+  } else {
+    return 'Update the device with the selected firmware'
+  }
+})
+
+function onFileChange(event) {
+  const files = event.target.files
+  fileSelected.value = files && files.length > 0
+  logDebug('FirmwareView.onFileChange()', 'File selected:', fileSelected.value)
+}
 
 function upload() {
   const fileElement = document.getElementById('upload')
@@ -73,6 +93,15 @@ function upload() {
     logError('FirmwareView.upload()', e.type)
     global.messageFailed = 'File upload failed!'
     global.disabled = false
+    resetFileInput()
+  }
+
+  function resetFileInput() {
+    const fileElement = document.getElementById('upload')
+    if (fileElement) {
+      fileElement.value = ''
+      fileSelected.value = false
+    }
   }
 
   if (fileElement.files.length === 0) {
@@ -103,8 +132,9 @@ function upload() {
         global.messageSuccess =
           'File upload completed, waiting for device to restart before doing refresh!'
         global.messageFailed = ''
+        resetFileInput()
       }
-      setTimeout(() => {
+      createTimeout(() => {
         location.href = location.href.replace('/other/firmware', '')
       }, 10000)
     }

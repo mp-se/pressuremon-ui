@@ -122,6 +122,11 @@ import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@/modules/logger'
+import { useFetch } from '@/composables/useFetch'
+import { useTimers } from '@/composables/useTimers'
+
+const { managedFetch } = useFetch()
+const { createTimeout } = useTimers()
 
 const tempOptions = ref([
   { label: 'Celsius °C', value: 'C' },
@@ -139,31 +144,33 @@ const uiOptions = ref([
   { label: 'Dark mode', value: true }
 ])
 
-const factory = () => {
+const factory = async () => {
   global.clearMessages()
   logInfo('DeviceSettingsView.factory()', 'Sending /api/factory')
   global.disabled = true
-  fetch(global.baseURL + 'api/factory', {
-    headers: { Authorization: global.token },
-    signal: AbortSignal.timeout(global.fetchTimout)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.success == true) {
-        global.messageSuccess = json.message
-        setTimeout(() => {
-          location.reload(true)
-        }, 2000)
-      } else {
-        global.messageFailed = json.message
-        global.disabled = false
-      }
+  
+  try {
+    const response = await managedFetch(global.baseURL + 'api/factory', {
+      headers: { Authorization: global.token },
+      signal: AbortSignal.timeout(global.fetchTimout)
     })
-    .catch((err) => {
-      logError('DeviceSettingsView.factory()', err)
-      global.messageError = 'Failed to do factory restore'
+    
+    const json = await response.json()
+    
+    if (json.success == true) {
+      global.messageSuccess = json.message
+      createTimeout(() => {
+        location.reload(true)
+      }, 2000)
+    } else {
+      global.messageFailed = json.message
       global.disabled = false
-    })
+    }
+  } catch (err) {
+    logError('DeviceSettingsView.factory()', err)
+    global.messageError = 'Failed to do factory restore'
+    global.disabled = false
+  }
 }
 
 const saveSettings = () => {

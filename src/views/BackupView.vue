@@ -39,6 +39,7 @@
             label="Select backup file"
             accept=".txt"
             :disabled="global.disabled"
+            @change="onFileChange"
           >
           </BsFileUpload>
         </div>
@@ -50,8 +51,8 @@
             class="btn btn-primary"
             value="upload"
             data-bs-toggle="tooltip"
-            title="Upload the configuration to the device"
-            :disabled="global.disabled"
+            :title="restoreButtonTooltip"
+            :disabled="global.disabled || !fileSelected"
           >
             <span
               class="spinner-border spinner-border-sm"
@@ -73,11 +74,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { global, config, getConfigChanges } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)
+const fileSelected = ref(false)
+
+const restoreButtonTooltip = computed(() => {
+  if (global.disabled) {
+    return 'Restore in progress, please wait...'
+  } else if (!fileSelected.value) {
+    return 'Please select a backup file first'
+  } else {
+    return 'Upload the configuration to the device'
+  }
+})
+
+function onFileChange(event) {
+  const files = event.target.files
+  fileSelected.value = files && files.length > 0
+  logDebug('BackupView.onFileChange()', 'File selected:', fileSelected.value)
+}
 
 function backup() {
   let backup = {
@@ -107,6 +125,14 @@ function backup() {
   global.messageSuccess = 'Backup file created and downloaded as: ' + name
 }
 
+function resetFileInput() {
+  const fileElement = document.getElementById('upload')
+  if (fileElement) {
+    fileElement.value = ''
+    fileSelected.value = false
+  }
+}
+
 function restore() {
   const fileElement = document.getElementById('upload')
 
@@ -122,12 +148,15 @@ function restore() {
         const data = JSON.parse(text)
         if (data.meta.software === 'PressureMon' && data.meta.version === '0.5.0') {
           doRestore(data.config)
+          resetFileInput()
         } else {
           global.messageFailed = 'Unknown format, unable to process'
+          resetFileInput()
         }
       } catch (error) {
         logError('BackupView.restore()', 'Failed to parse backup file:', error)
         global.messageFailed = 'Unable to parse configuration file for PressureMon.'
+        resetFileInput()
       }
     })
     reader.readAsText(fileElement.files[0])

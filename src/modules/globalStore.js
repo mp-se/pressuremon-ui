@@ -75,30 +75,38 @@ export const useGlobalStore = defineStore('global', {
       this.messageSuccess = ''
       this.messageInfo = ''
     },
-        load(callback) {
+        // Modern async/await method - keeps callback for backward compatibility
+    load(callback) {
+      this.loadAsync()
+        .then(() => callback(true))
+        .catch(() => callback(false))
+    },
+    
+    async loadAsync() {
       logInfo('globalStore.load()', 'Fetching /api/feature')
-      fetch(this.baseURL + 'api/feature', {
-        signal: AbortSignal.timeout(this.fetchTimout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('globalStore.load()', json)
-          this.board = json.board.toUpperCase()
-          this.app_ver = json.app_ver
-          this.app_build = json.app_build
-          this.platform = json.platform.toUpperCase()
-          this.firmware_file = json.firmware_file.toLowerCase()
-
-          this.feature.ble = json.ble
-          this.feature.no_sensors = json.no_sensors
-
-          logInfo('globalStore.load()', 'Fetching /api/feature completed')
-          callback(true)
+      
+      try {
+        const response = await fetch(this.baseURL + 'api/feature', {
+          signal: AbortSignal.timeout(this.fetchTimout)
         })
-        .catch((err) => {
-          logError('globalStore.load()', err)
-          callback(false)
-        })
+        
+        const json = await response.json()
+        logDebug('globalStore.load()', json)
+        
+        this.board = json.board.toUpperCase()
+        this.app_ver = json.app_ver
+        this.app_build = json.app_build
+        this.platform = json.platform.toUpperCase()
+        this.firmware_file = json.firmware_file.toLowerCase()
+
+        this.feature.ble = json.ble
+        this.feature.no_sensors = json.no_sensors
+
+        logInfo('globalStore.load()', 'Fetching /api/feature completed')
+      } catch (err) {
+        logError('globalStore.load()', err)
+        throw err
+      }
     }
   }
 })

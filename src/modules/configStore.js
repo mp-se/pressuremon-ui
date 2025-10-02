@@ -123,133 +123,150 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.toJSON()', dest)
       return JSON.stringify(dest, null, 2)
     },
+    // Modern async/await method - keeps callback for backward compatibility
     load(callback) {
+      this.loadAsync()
+        .then(() => callback(true))
+        .catch(() => callback(false))
+    },
+    
+    async loadAsync() {
       global.disabled = true
       logInfo('configStore.load()', 'Fetching /api/config')
-      fetch(global.baseURL + 'api/config', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.load()', json)
-          global.disabled = false
-          this.id = json.id
-          // Device
-          this.mdns = json.mdns
-          this.temp_unit = json.temp_unit
-          // Hardware
-          this.ota_url = json.ota_url
-          this.voltage_factor = json.voltage_factor
-          this.voltage_config = json.voltage_config
-          this.battery_saving = json.battery_saving
-          this.battery_type = json.battery_type
-          this.sensor_type = json.sensor_type
-          this.sensor1_type = json.sensor1_type
-          this.pressure_adjustment = json.pressure_adjustment
-          this.pressure1_adjustment = json.pressure1_adjustment
-          this.custom_min_voltage = json.custom_min_voltage
-          this.custom_max_voltage = json.custom_max_voltage
-          this.custom_min_pressure = json.custom_min_pressure
-          this.custom_max_pressure = json.custom_max_pressure
-          this.custom1_min_voltage = json.custom1_min_voltage
-          this.custom1_max_voltage = json.custom1_max_voltage
-          this.custom1_min_pressure = json.custom1_min_pressure
-          this.custom1_max_pressure = json.custom1_max_pressure
-          // this.temp_adjustment = json.temp_adjustment
-          // this.temp1_adjustment = json.temp1_adjustment
-          this.pressure_unit = json.pressure_unit
-          this.temp_adjustment_value = json.temp_adjustment_value
-          this.tempsensor_resolution = json.tempsensor_resolution
-          this.wifi_portal_timeout = json.wifi_portal_timeout
-          this.wifi_connect_timeout = json.wifi_connect_timeout
-          this.wifi_ssid = json.wifi_ssid
-          this.wifi_ssid2 = json.wifi_ssid2
-          this.wifi_pass = json.wifi_pass
-          this.wifi_pass2 = json.wifi_pass2
-          this.wifi_direct_ssid = json.wifi_direct_ssid
-          this.wifi_direct_pass = json.wifi_direct_pass
-          this.use_wifi_direct = json.use_wifi_direct
-          this.wifi_scan_ap = json.wifi_scan_ap
-          // Push - Generic
-          this.token = json.token
-          this.token2 = json.token2
-          this.sleep_interval = json.sleep_interval
-          this.push_timeout = json.push_timeout
-          // Push - Http Post 1
-          this.http_post_target = json.http_post_target
-          this.http_post_header1 = json.http_post_header1
-          this.http_post_header2 = json.http_post_header2
-          this.http_post_int = json.http_post_int
-          // this.http_post_format_pressure = json.http_post_format_pressure
-          // Push - Http Post 2
-          this.http_post2_target = json.http_post2_target
-          this.http_post2_header1 = json.http_post2_header1
-          this.http_post2_header2 = json.http_post2_header2
-          this.http_post2_int = json.http_post2_int
-          // this.http_post2_format_pressure = json.http_post2_format_pressure
-          // Push - Http Get
-          this.http_get_target = json.http_get_target
-          this.http_get_header1 = json.http_get_header1
-          this.http_get_header2 = json.http_get_header2
-          this.http_get_int = json.http_get_int
-          // this.http_get_format_pressure = json.http_get_format_pressure
-          // Push - Influx
-          this.influxdb2_target = json.influxdb2_target
-          this.influxdb2_org = json.influxdb2_org
-          this.influxdb2_bucket = json.influxdb2_bucket
-          this.influxdb2_token = json.influxdb2_token
-          this.influxdb2_int = json.influxdb2_int
-          // this.influxdb2_format_pressure = json.influxdb2_format_pressure
-          // Push - MQTT
-          this.mqtt_target = json.mqtt_target
-          this.mqtt_port = json.mqtt_port
-          this.mqtt_user = json.mqtt_user
-          this.mqtt_pass = json.mqtt_pass
-          this.mqtt_int = json.mqtt_int
-          // this.mqtt_format_pressure = json.mqtt_format_pressure
-          // Push BLE
-          this.ble_format = json.ble_format
-          this.dark_mode = json.dark_mode
+      
+      try {
+        const response = await fetch(global.baseURL + 'api/config', {
+          method: 'GET',
+          headers: { Authorization: global.token },
+          signal: AbortSignal.timeout(global.fetchTimout)
+        })
+        
+        const json = await response.json()
+        logDebug('configStore.load()', json)
+        
+        global.disabled = false
+        this.id = json.id
+        // Device
+        this.mdns = json.mdns
+        this.temp_unit = json.temp_unit
+        // Hardware
+        this.ota_url = json.ota_url
+        this.voltage_factor = json.voltage_factor
+        this.voltage_config = json.voltage_config
+        this.battery_saving = json.battery_saving
+        this.battery_type = json.battery_type
+        this.sensor_type = json.sensor_type
+        this.sensor1_type = json.sensor1_type
+        this.pressure_adjustment = json.pressure_adjustment
+        this.pressure1_adjustment = json.pressure1_adjustment
+        this.custom_min_voltage = json.custom_min_voltage
+        this.custom_max_voltage = json.custom_max_voltage
+        this.custom_min_pressure = json.custom_min_pressure
+        this.custom_max_pressure = json.custom_max_pressure
+        this.custom1_min_voltage = json.custom1_min_voltage
+        this.custom1_max_voltage = json.custom1_max_voltage
+        this.custom1_min_pressure = json.custom1_min_pressure
+        this.custom1_max_pressure = json.custom1_max_pressure
+        // this.temp_adjustment = json.temp_adjustment
+        // this.temp1_adjustment = json.temp1_adjustment
+        this.pressure_unit = json.pressure_unit
+        this.temp_adjustment_value = json.temp_adjustment_value
+        this.tempsensor_resolution = json.tempsensor_resolution
+        this.wifi_portal_timeout = json.wifi_portal_timeout
+        this.wifi_connect_timeout = json.wifi_connect_timeout
+        this.wifi_ssid = json.wifi_ssid
+        this.wifi_ssid2 = json.wifi_ssid2
+        this.wifi_pass = json.wifi_pass
+        this.wifi_pass2 = json.wifi_pass2
+        this.wifi_direct_ssid = json.wifi_direct_ssid
+        this.wifi_direct_pass = json.wifi_direct_pass
+        this.use_wifi_direct = json.use_wifi_direct
+        this.wifi_scan_ap = json.wifi_scan_ap
+        // Push - Generic
+        this.token = json.token
+        this.token2 = json.token2
+        this.sleep_interval = json.sleep_interval
+        this.push_timeout = json.push_timeout
+        // Push - Http Post 1
+        this.http_post_target = json.http_post_target
+        this.http_post_header1 = json.http_post_header1
+        this.http_post_header2 = json.http_post_header2
+        this.http_post_int = json.http_post_int
+        // this.http_post_format_pressure = json.http_post_format_pressure
+        // Push - Http Post 2
+        this.http_post2_target = json.http_post2_target
+        this.http_post2_header1 = json.http_post2_header1
+        this.http_post2_header2 = json.http_post2_header2
+        this.http_post2_int = json.http_post2_int
+        // this.http_post2_format_pressure = json.http_post2_format_pressure
+        // Push - Http Get
+        this.http_get_target = json.http_get_target
+        this.http_get_header1 = json.http_get_header1
+        this.http_get_header2 = json.http_get_header2
+        this.http_get_int = json.http_get_int
+        // this.http_get_format_pressure = json.http_get_format_pressure
+        // Push - Influx
+        this.influxdb2_target = json.influxdb2_target
+        this.influxdb2_org = json.influxdb2_org
+        this.influxdb2_bucket = json.influxdb2_bucket
+        this.influxdb2_token = json.influxdb2_token
+        this.influxdb2_int = json.influxdb2_int
+        // this.influxdb2_format_pressure = json.influxdb2_format_pressure
+        // Push - MQTT
+        this.mqtt_target = json.mqtt_target
+        this.mqtt_port = json.mqtt_port
+        this.mqtt_user = json.mqtt_user
+        this.mqtt_pass = json.mqtt_pass
+        this.mqtt_int = json.mqtt_int
+        // this.mqtt_format_pressure = json.mqtt_format_pressure
+        // Push BLE
+        this.ble_format = json.ble_format
+        this.dark_mode = json.dark_mode
 
-          this.internal_temp_unit = 'C'
-          this.convertTemp()
-          callback(true)
-        })
-        .catch((err) => {
-          global.disabled = false
-          logError('configStore.load()', err)
-          callback(false)
-        })
+        this.internal_temp_unit = 'C'
+        this.convertTemp()
+      } catch (err) {
+        global.disabled = false
+        logError('configStore.load()', err)
+        throw err
+      }
     },
+    // Modern async method - keeps callback for backward compatibility
     loadFormat(callback) {
+      this.loadFormatAsync()
+        .then(() => callback(true))
+        .catch(() => callback(false))
+    },
+    
+    async loadFormatAsync() {
       global.disabled = true
       logInfo('configStore.loadFormat()', 'Fetching /api/format')
-      fetch(global.baseURL + 'api/format', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.loadFormat()', json)
-          global.disabled = false
-          this.http_post_format_pressure = decodeURIComponent(json.http_post_format_pressure)
-          this.http_post2_format_pressure = decodeURIComponent(json.http_post2_format_pressure)
-          this.http_get_format_pressure = decodeURIComponent(json.http_get_format_pressure)
-          this.influxdb2_format_pressure = decodeURIComponent(json.influxdb2_format_pressure)
-          this.mqtt_format_pressure = decodeURIComponent(json.mqtt_format_pressure)
+      
+      try {
+        const response = await fetch(global.baseURL + 'api/format', {
+          method: 'GET',
+          headers: { Authorization: global.token },
+          signal: AbortSignal.timeout(global.fetchTimout)
+        })
+        
+        const json = await response.json()
+        logDebug('configStore.loadFormat()', json)
+        
+        this.http_post_format_pressure = decodeURIComponent(json.http_post_format_pressure)
+        this.http_post2_format_pressure = decodeURIComponent(json.http_post2_format_pressure)
+        this.http_get_format_pressure = decodeURIComponent(json.http_get_format_pressure)
+        this.influxdb2_format_pressure = decodeURIComponent(json.influxdb2_format_pressure)
+        this.mqtt_format_pressure = decodeURIComponent(json.mqtt_format_pressure)
 
-          // Add linebreaks so the editor shows the data correctly
-          this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
-          callback(true)
-        })
-        .catch((err) => {
-          global.disabled = false
-          logError('configStore.loadFormat()', err)
-          callback(false)
-        })
+        // Add linebreaks so the editor shows the data correctly
+        this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
+        
+      } catch (err) {
+        logError('configStore.loadFormat()', err)
+        throw err
+      } finally {
+        global.disabled = false
+      }
     },
     sendConfig(callback) {
       global.disabled = true
@@ -301,62 +318,79 @@ export const useConfigStore = defineStore('config', {
           global.disabled = false
         })
     },
+    // Modern async/await method - keeps callback for backward compatibility
     sendFormat(callback) {
+      this.sendFormatAsync()
+        .then(() => callback(true))
+        .catch(() => callback(false))
+    },
+    
+    async sendFormatAsync() {
       global.disabled = true
       logInfo('configStore.sendFormat()', 'Sending /api/format')
 
-      var data2 = getConfigChanges()
-      var data = {}
-      var cnt = 0
+      const data2 = getConfigChanges()
+      logDebug('configStore.sendFormat()', data2)
 
-      logDebug('configStore.sendFormat()', data)
-
-      data =
-        data2.http_post_format_pressure !== undefined
-          ? { http_post_format_pressure: encodeURIComponent(data2.http_post_format_pressure) }
-          : {}
-      this.sendOneFormat(data, (success) => {
-        if (success) cnt += 1
-        data =
-          data2.http_post2_format_pressure !== undefined
-            ? { http_post2_format_pressure: encodeURIComponent(data2.http_post2_format_pressure) }
-            : {}
-        this.sendOneFormat(data, (success) => {
-          if (success) cnt += 1
-          data =
-            data2.http_get_format_pressure !== undefined
+      try {
+        const formats = [
+          {
+            key: 'http_post_format_pressure',
+            data: data2.http_post_format_pressure !== undefined 
+              ? { http_post_format_pressure: encodeURIComponent(data2.http_post_format_pressure) }
+              : {}
+          },
+          {
+            key: 'http_post2_format_pressure',
+            data: data2.http_post2_format_pressure !== undefined 
+              ? { http_post2_format_pressure: encodeURIComponent(data2.http_post2_format_pressure) }
+              : {}
+          },
+          {
+            key: 'http_get_format_pressure',
+            data: data2.http_get_format_pressure !== undefined 
               ? { http_get_format_pressure: encodeURIComponent(data2.http_get_format_pressure) }
               : {}
-          this.sendOneFormat(data, (success) => {
-            if (success) cnt += 1
-            data =
-              data2.influxdb2_format_pressure !== undefined
-                ? {
-                    influxdb2_format_pressure: encodeURIComponent(data2.influxdb2_format_pressure)
-                  }
-                : {}
-            this.sendOneFormat(data, (success) => {
-              if (success) cnt += 1
+          },
+          {
+            key: 'influxdb2_format_pressure',
+            data: data2.influxdb2_format_pressure !== undefined 
+              ? { influxdb2_format_pressure: encodeURIComponent(data2.influxdb2_format_pressure) }
+              : {}
+          },
+          {
+            key: 'mqtt_format_pressure',
+            data: data2.mqtt_format_pressure !== undefined 
+              ? (() => {
+                  let cleaned = data2.mqtt_format_pressure.replaceAll('\n', '').replaceAll('\r', '')
+                  return { mqtt_format_pressure: encodeURIComponent(cleaned) }
+                })()
+              : {}
+          }
+        ]
 
-              if (data2.mqtt_format_pressure !== undefined) {
-                data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\n', '')
-                data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\r', '')
-              }
-
-              data =
-                data2.mqtt_format_pressure !== undefined
-                  ? { mqtt_format_pressure: encodeURIComponent(data2.mqtt_format_pressure) }
-                  : {}
-              this.sendOneFormat(data, (success) => {
-                if (success) cnt += 1
-
-                if (cnt == 5) callback(true)
-                else callback(false)
-              })
-            })
+        let successCount = 0
+        
+        for (const format of formats) {
+          const success = await new Promise((resolve) => {
+            this.sendOneFormat(format.data, (success) => resolve(success))
           })
-        })
-      })
+          
+          if (success) {
+            successCount++
+          }
+        }
+
+        if (successCount !== 5) {
+          throw new Error(`Only ${successCount}/5 formats were saved successfully`)
+        }
+        
+      } catch (err) {
+        logError('configStore.sendFormat()', err)
+        throw err
+      } finally {
+        global.disabled = false
+      }
     },
     sendOneFormat(data, callback) {
       logInfo('configStore.sendOneFormat()', 'Sending /api/format')
@@ -512,24 +546,42 @@ export const useConfigStore = defineStore('config', {
         })
     },
     saveAll() {
+      this.saveAllAsync().catch(() => {
+        // Error already handled in async method
+      })
+    },
+    
+    async saveAllAsync() {
       global.clearMessages()
       global.disabled = true
-      this.sendConfig((success) => {
-        if (!success) {
-          global.disabled = false
-          global.messageError = 'Failed to store configuration to device'
-        } else {
-          this.sendFormat((success) => {
-            global.disabled = false
-            if (!success) {
-              global.messageError = 'Failed to store format to device'
-            } else {
-              global.messageSuccess = 'Configuration has been saved to device'
-              saveConfigState()
-            }
-          })
+      
+      try {
+        // Send configuration first
+        const configSuccess = await new Promise((resolve) => {
+          this.sendConfig((success) => resolve(success))
+        })
+        
+        if (!configSuccess) {
+          throw new Error('Failed to store configuration to device')
         }
-      })
+        
+        // Send format templates
+        const formatSuccess = await new Promise((resolve) => {
+          this.sendFormat((success) => resolve(success))
+        })
+        
+        if (!formatSuccess) {
+          throw new Error('Failed to store format to device')
+        }
+        
+        global.messageSuccess = 'Configuration has been saved to device'
+        saveConfigState()
+        
+      } catch (error) {
+        global.messageError = error.message
+      } finally {
+        global.disabled = false
+      }
     },
     sendFilesystemRequest(data, callback) {
       global.disabled = true
@@ -553,110 +605,209 @@ export const useConfigStore = defineStore('config', {
           callback(false, '')
         })
     },
-    runPushTest(data, callback) {
+    // Modern async method - handles UI feedback internally via global state
+    async runPushTest(data) {
       global.disabled = true
-      this.sendPushTest(data, (success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getPushTestStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else if (!data.success) {
-                  global.disabled = false
-                  global.messageError =
-                    'Test failed with error code (' + data.push_return_code + ')'
-                  callback(true)
-                  clearInterval(check)
-                } else if (data.success) {
-                  global.disabled = false
-                  if (!data.push_enabled) {
-                    global.messageWarning =
-                      'No endpoint is defined for this target. Cannot run test.'
-                  } else if (!data.success && data.push_return_code > 0) {
-                    global.messageError =
-                      'Test failed with error code (' + getErrorString(data.push_return_code) + ')'
-                  } else if (!data.success && data.push_return_code == 0) {
-                    global.messageError =
-                      'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
-                  } else {
-                    global.messageSuccess = 'Test was successful'
-                  }
-
-                  callback(true)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get push test status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
-          global.messageError = 'Failed to start push test'
-          global.disabled = false
-          callback(false)
+      
+      try {
+        // Start the push test
+        const testStarted = await new Promise((resolve) => {
+          this.sendPushTest(data, (success) => resolve(success))
+        })
+        
+        if (!testStarted) {
+          throw new Error('Failed to start push test')
         }
+        
+        // Poll for completion with proper timeout handling
+        const result = await this.pollPushTestStatus()
+        
+        // Handle test results and update global state accordingly
+        if (!result.success) {
+          global.messageError = `Test failed with error code (${result.push_return_code})`
+          return
+        }
+        
+        if (!result.push_enabled) {
+          global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
+        } else if (!result.success && result.push_return_code > 0) {
+          global.messageError = `Test failed with error code (${getErrorString(result.push_return_code)})`
+        } else if (!result.success && result.push_return_code == 0) {
+          global.messageError = 'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
+        } else {
+          global.messageSuccess = 'Test was successful'
+        }
+        
+      } catch (error) {
+        global.messageError = error.message || 'Push test failed'
+        throw error
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    async pollPushTestStatus() {
+      return new Promise((resolve, reject) => {
+        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
+        let attempts = 0
+        
+        const check = setInterval(() => {
+          attempts++
+          
+          if (attempts > maxAttempts) {
+            clearInterval(check)
+            reject(new Error('Push test timeout'))
+            return
+          }
+          
+          this.getPushTestStatus((success, data) => {
+            if (success) {
+              if (data.status) {
+                // test is still running, continue polling
+              } else {
+                clearInterval(check)
+                resolve(data)
+              }
+            } else {
+              clearInterval(check)
+              reject(new Error('Failed to get push test status'))
+            }
+          })
+        }, 2000)
       })
     },
+    // Modern async method - keeps callback for backward compatibility
     runWifiScan(callback) {
+      this.runWifiScanAsync()
+        .then((data) => callback(true, data))
+        .catch(() => callback(false))
+    },
+    
+    async runWifiScanAsync() {
       global.disabled = true
-      this.sendWifiScan((success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getWifiScanStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else {
-                  global.disabled = false
-                  callback(data.success, data)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get wifi scan status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
-          global.disabled = false
-          global.messageError = 'Failed to start wifi scan'
-          callback(false)
+      
+      try {
+        // Start the wifi scan
+        const scanStarted = await new Promise((resolve) => {
+          this.sendWifiScan((success) => resolve(success))
+        })
+        
+        if (!scanStarted) {
+          throw new Error('Failed to start wifi scan')
         }
+        
+        // Poll for completion with proper timeout handling
+        const result = await this.pollWifiScanStatus()
+        
+        if (!result.success) {
+          throw new Error('WiFi scan failed')
+        }
+        
+        return result
+        
+      } catch (error) {
+        global.messageError = error.message || 'WiFi scan failed'
+        throw error
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    async pollWifiScanStatus() {
+      return new Promise((resolve, reject) => {
+        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
+        let attempts = 0
+        
+        const check = setInterval(() => {
+          attempts++
+          
+          if (attempts > maxAttempts) {
+            clearInterval(check)
+            reject(new Error('WiFi scan timeout'))
+            return
+          }
+          
+          this.getWifiScanStatus((success, data) => {
+            if (success) {
+              if (data.status) {
+                // scan is still running, continue polling
+              } else {
+                clearInterval(check)
+                resolve(data)
+              }
+            } else {
+              clearInterval(check)
+              reject(new Error('Failed to get wifi scan status'))
+            }
+          })
+        }, 2000)
       })
     },
+    // Modern async method - keeps callback for backward compatibility
     runHardwareScan(callback) {
+      this.runHardwareScanAsync()
+        .then((data) => callback(true, data))
+        .catch(() => callback(false))
+    },
+    
+    async runHardwareScanAsync() {
       global.disabled = true
-      this.sendHardwareScan((success) => {
-        if (success) {
-          var check = setInterval(() => {
-            this.getHardwareScanStatus((success, data) => {
-              if (success) {
-                if (data.status) {
-                  // test is still running, just wait for next check
-                } else {
-                  global.disabled = false
-                  callback(data.success, data)
-                  clearInterval(check)
-                }
-              } else {
-                global.disabled = false
-                global.messageError = 'Failed to get hardware scan status'
-                callback(false)
-                clearInterval(check)
-              }
-            })
-          }, 2000)
-        } else {
-          global.disabled = false
-          global.messageError = 'Failed to start hardware scan'
-          callback(false)
+      
+      try {
+        // Start the hardware scan
+        const scanStarted = await new Promise((resolve) => {
+          this.sendHardwareScan((success) => resolve(success))
+        })
+        
+        if (!scanStarted) {
+          throw new Error('Failed to start hardware scan')
         }
+        
+        // Poll for completion with proper timeout handling
+        const result = await this.pollHardwareScanStatus()
+        
+        if (!result.success) {
+          throw new Error('Hardware scan failed')
+        }
+        
+        return result
+        
+      } catch (error) {
+        global.messageError = error.message || 'Hardware scan failed'
+        throw error
+      } finally {
+        global.disabled = false
+      }
+    },
+    
+    async pollHardwareScanStatus() {
+      return new Promise((resolve, reject) => {
+        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
+        let attempts = 0
+        
+        const check = setInterval(() => {
+          attempts++
+          
+          if (attempts > maxAttempts) {
+            clearInterval(check)
+            reject(new Error('Hardware scan timeout'))
+            return
+          }
+          
+          this.getHardwareScanStatus((success, data) => {
+            if (success) {
+              if (data.status) {
+                // scan is still running, continue polling
+              } else {
+                clearInterval(check)
+                resolve(data)
+              }
+            } else {
+              clearInterval(check)
+              reject(new Error('Failed to get hardware scan status'))
+            }
+          })
+        }, 2000)
       })
     }
   }
