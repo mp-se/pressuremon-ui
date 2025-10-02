@@ -75,17 +75,15 @@
 <script setup>
 import { ref } from 'vue'
 import { global, config, getConfigChanges } from '@/modules/pinia'
-import { logDebug } from '@/modules/logger'
+import { logDebug, logError } from '@/modules/logger'
 
 const progress = ref(0)
 
 function backup() {
-  var backup = {
-    meta: { version: '0.5.0', software: 'PressureMon', created: '' },
+  let backup = {
+    meta: { version: '0.5.0', software: 'PressureMon', created: new Date().toISOString().slice(0, 10) },
     config: JSON.parse(config.toJson())
   }
-
-  backup.meta.created = new Date().toISOString().slice(0, 10)
 
   logDebug('BackupView.backup()', backup)
 
@@ -103,8 +101,8 @@ function backup() {
   )
   backup.config.mqtt_format_pressure = encodeURIComponent(backup.config.mqtt_format_pressure)
 
-  var s = JSON.stringify(backup, null, 2)
-  var name = config.mdns + '.txt'
+  const s = JSON.stringify(backup, null, 2)
+  const name = config.mdns + '.txt'
   download(s, 'text/plain', name)
   global.messageSuccess = 'Backup file created and downloaded as: ' + name
 }
@@ -128,7 +126,7 @@ function restore() {
           global.messageFailed = 'Unknown format, unable to process'
         }
       } catch (error) {
-        console.error(error)
+        logError('BackupView.restore()', 'Failed to parse backup file:', error)
         global.messageFailed = 'Unable to parse configuration file for PressureMon.'
       }
     })

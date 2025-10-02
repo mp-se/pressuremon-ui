@@ -81,7 +81,7 @@ const routes = [
   },
   {
     path: '/push/mqtt',
-    name: 'push-Mqtt',
+    name: 'push-mqtt',
     component: PushMqttView
   },
   {

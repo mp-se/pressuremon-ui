@@ -109,7 +109,7 @@ export const useStatusStore = defineStore('status', {
     },
     auth(callback) {
       logInfo('statusStore.auth()', 'Fetching /api/auth')
-      var base = btoa('gravitymon:password')
+      const base = btoa('gravitymon:password')
 
       fetch(global.baseURL + 'api/auth', {
         method: 'GET',

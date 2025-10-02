@@ -53,7 +53,13 @@ const help = defineModel('help', {
  */
 const width = defineModel('width', {
   type: [String, Number],
-  default: undefined
+  default: undefined,
+  validator: (value) => {
+    if (value === undefined || value === null) return true
+    if (typeof value === 'number') return value > 0 && value <= 12
+    if (typeof value === 'string') return /^(\d|1[0-2])$|^(sm|md|lg|xl|xxl)-(\d|1[0-2])$/.test(value)
+    return false
+  }
 })
 
 /**
@@ -72,7 +78,7 @@ const options = defineModel('options', {
 })
 
 /**
- * Text on the drop down button (optional).
+ * Text on the drop down button (required).
  */
 const button = defineModel('button', {
   type: String,
@@ -88,7 +94,7 @@ const callback = defineModel('callback', {
 })
 
 /**
- * Ref that steers if this component is enabled or not (optional).
+ * Ref that steers if this component is enabled or not (required).
  */
 const disabled = defineModel('disabled', {
   type: Boolean,

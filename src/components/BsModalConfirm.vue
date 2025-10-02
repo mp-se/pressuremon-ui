@@ -50,34 +50,46 @@ defineOptions({
 })
 
 /**
- * Ref to callback where true/false will be a parameter (optional).
+ * Ref to callback where true/false will be a parameter (required).
  */
 const callback = defineModel('callback', {
   type: Function,
-  default: () => {}
+  default: undefined,
+  validator: (value) => {
+    return value === undefined || typeof value === 'function'
+  }
 })
 
 /**
- * Ref to dialog message (optional).
+ * Ref to dialog message (required).
  */
 const message = defineModel('message', {
   type: String,
-  default: 'Are you sure?'
+  default: 'Are you sure?',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 
 /**
- * Ref to dialog id (optional).
+ * Ref to dialog id (required).
  */
 const id = defineModel('id', {
   type: String,
-  default: 'confirm-modal'
+  default: 'confirm-modal',
+  validator: (value) => {
+    return typeof value === 'string' && /^[a-zA-Z][a-zA-Z0-9-_]*$/.test(value)
+  }
 })
 
 /**
- * Modal title (optional).
+ * Modal title (required).
  */
 const title = defineModel('title', {
   type: String,
-  default: 'Confirm Action'
+  default: 'Confirm Action',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 </script>

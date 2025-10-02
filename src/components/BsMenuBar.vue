@@ -151,7 +151,7 @@ import { items } from '@/modules/router'
  */
 
 /**
- * Ref that steers if this component is enabled or not (optional).
+ * Ref that steers if this component is enabled or not (required).
  */
 const disabled = defineModel('disabled', {
   type: Boolean,
@@ -159,11 +159,14 @@ const disabled = defineModel('disabled', {
 })
 
 /**
- * Ref that contains the brand name (optional).
+ * Ref that contains the brand name.
  */
 const brand = defineModel('brand', {
   type: String,
-  default: 'Brand'
+  default: 'Brand',
+  validator: (value) => {
+    return typeof value === 'string' && value.trim().length > 0
+  }
 })
 
 /**

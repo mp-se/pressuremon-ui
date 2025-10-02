@@ -112,9 +112,9 @@ export const useConfigStore = defineStore('config', {
     },
     toJson() {
       logInfo('configStore.toJSON()')
-      var dest = {}
+      const dest = {}
 
-      for (var key in this.$state) {
+      for (const key in this.$state) {
         if (!key.startsWith('$')) {
           dest[key] = this[key]
         }

@@ -21,7 +21,7 @@ const saveConfigState = () => {
   logInfo('pinia.saveConfigState()', 'Saving state')
 
   configCompare.value = {}
-  for (var key in config) {
+  for (const key in config) {
     if (typeof config[key] !== 'function' && key !== '$id') {
       configCompare.value[key] = config[key]
     }
@@ -32,14 +32,14 @@ const saveConfigState = () => {
 }
 
 const getConfigChanges = () => {
-  var changes = {}
+  const changes = {}
 
   if (configCompare.value === null) {
     logInfo('pinia.getConfigChanges()', 'configState not saved')
     return changes
   }
 
-  for (var key in configCompare.value) {
+  for (const key in configCompare.value) {
     if (configCompare.value[key] != config[key]) {
       changes[key] = config[key]
     }

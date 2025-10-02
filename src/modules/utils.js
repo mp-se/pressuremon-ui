@@ -185,7 +185,8 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${temp-c}', c)
   s = s.replaceAll('${temp-f}', f)
 
-  var p = status.pressure
+  // NOTE: Pressure handling
+  let p = status.pressure
 
   if (status.isKPa) {
     p = kpaToPsi(p)
@@ -198,7 +199,7 @@ export function applyTemplate(status, config, template) {
   s = s.replaceAll('${pressure-bar}', psiToBar(p))
   s = s.replaceAll('${pressure-kpa}', psiToKPa(p))
 
-  var p1 = status.pressure1
+  let p1 = status.pressure1
 
   if (status.isKPa) {
     p1 = kpaToPsi(p1)
