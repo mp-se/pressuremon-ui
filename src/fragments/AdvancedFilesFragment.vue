@@ -10,6 +10,7 @@
           accept=""
           help="Choose a file to upload to the file system"
           :disabled="global.disabled"
+          @change="(event) => fileSelected = event.target.files.length > 0"
         >
         </BsFileUpload>
       </div>
@@ -21,8 +22,8 @@
           id="upload-btn"
           value="upload"
           data-bs-toggle="tooltip"
-          title="Update the device with the selected firmware"
-          :disabled="global.disabled"
+          :title="uploadButtonTooltip"
+          :disabled="global.disabled || !fileSelected"
         >
           <span
             class="spinner-border spinner-border-sm"
@@ -90,12 +91,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { global, config } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
 
 const fileData = ref(null)
 const filesDelete = ref([])
+const fileSelected = ref(false)
+
+const uploadButtonTooltip = computed(() => {
+  if (global.disabled) {
+    return 'Upload in progress, please wait...'
+  } else if (!fileSelected.value) {
+    return 'Please select a file first'
+  } else {
+    return 'Upload the selected file to the device'
+  }
+})
 
 const confirmDeleteMessage = ref(null)
 const confirmDeleteFile = ref(null)
@@ -188,6 +200,9 @@ function upload() {
       if (xhr.status == 200) {
         global.messageSuccess = 'File upload completed!'
         global.messageFailed = ''
+        // Reset file input and selection state
+        fileElement.value = ''
+        fileSelected.value = false
       }
 
       global.disabled = false
