@@ -30,34 +30,55 @@ defineOptions({
 /**
  * This is the v-model field that will be used to bind the component to (required).
  */
-const model = defineModel()
+const model = defineModel({
+  type: Boolean,
+  default: false
+})
+
 /**
  * This text is shown above the form component (optional).
  */
-const label = defineModel('label')
+const label = defineModel('label', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Help text is shown below the field to provide user help with input (optional).
  */
-const help = defineModel('help')
+const help = defineModel('help', {
+  type: String,
+  default: undefined
+})
+
 /**
  * Specify the width to force a specific size (optional).
  */
-const width = defineModel('width')
+const width = defineModel('width', {
+  type: [String, Number],
+  default: undefined
+})
+
 /**
- * Ref that steers if this component is enabled or not (required).
+ * Ref that steers if this component is enabled or not (optional).
  */
-const disabled = defineModel('disabled')
+const disabled = defineModel('disabled', {
+  type: Boolean,
+  default: false
+})
+
 /**
- * Specify if an badge should be shown to guide the user (optional)
+ * Specify if an badge should be shown to guide the user (optional).
  */
-const badge = defineModel('badge')
+const badge = defineModel('badge', {
+  type: Boolean,
+  default: false
+})
 </script>
 
-<style scoped>
+<style>
 .form-check .form-check-input[type='checkbox'] {
-  width: 50px !important;
-  height: 25px !important;
+  width: 50px;
+  height: 25px;
 }
 </style>
-
-

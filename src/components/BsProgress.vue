@@ -15,9 +15,16 @@ import { computed } from 'vue'
  */
 
 /**
- * Ref that contains the value of the progress bar (0-100) (required).
+ * Ref that contains the value of the progress bar (0-100) (optional).
  */
-const progress = defineModel('progress')
+const progress = defineModel('progress', {
+  type: [Number, String],
+  default: 0,
+  validator: (value) => {
+    const num = Number(value)
+    return !isNaN(num) && num >= 0 && num <= 100
+  }
+})
 
 const progressStyle = computed(() => {
   return 'width: ' + progress.value + '%'
