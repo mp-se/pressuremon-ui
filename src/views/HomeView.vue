@@ -127,7 +127,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
 import { status, global } from '@/modules/pinia'
-import { useTimers } from '@/composables/useTimers'
+import { useTimers } from '@mp-se/espframework-ui-components'
 
 const polling = ref(null)
 const flag = ref(false)

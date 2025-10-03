@@ -64,7 +64,7 @@
 import { ref, computed } from 'vue'
 import { global } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
-import { useTimers } from '@/composables/useTimers'
+import { useTimers } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)
 const fileSelected = ref(false)

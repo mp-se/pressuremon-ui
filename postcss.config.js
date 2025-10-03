@@ -6,9 +6,34 @@ export default {
     purgecss.default({
       content: [
         './index.html',
+        './pressuremon.html',
         './src/**/*.{vue,js,ts,jsx,tsx}',
         './src/**/*.html'
       ],
+      
+      // Prevent removal of rules containing Bootstrap theme selectors
+      blocklist: [],
+      
+      // Advanced extractor that preserves Bootstrap theme attributes
+      extractors: [
+        {
+          extractor: content => {
+            // Extract standard classes
+            const classes = content.match(/[\w-/:]+(?<!:)/g) || []
+            
+            // Always preserve these Bootstrap theme-related tokens
+            const themeTokens = [
+              'data-bs-theme', 
+              '[data-bs-theme="dark"]', 
+              '[data-bs-theme="light"]'
+            ]
+            
+            return [...classes, ...themeTokens]
+          },
+          extensions: ['html', 'vue', 'js', 'ts']
+        }
+      ],
+      
       safelist: [
         // Bootstrap Layout
         /^container(-fluid)?$/,
@@ -114,23 +139,52 @@ export default {
         
         // Dynamically generated classes from components
         /^bg-.*-subtle$/,
-        /^text-bg-.*$/
+        /^text-bg-.*$/,
+        
+        // Bootstrap dark mode theme selectors and attributes
+        'data-bs-theme',
+        
+        // CSS custom properties (CSS variables) used by Bootstrap themes
+        /^--bs-.*/,
+        
+        // Bootstrap theme attribute patterns - these are critical for dark mode
+        /^\[data-bs-theme.*?\].*$/,
+        /.*\[data-bs-theme="dark"\].*/,
+        /.*\[data-bs-theme="light"\].*/,
+        
+        // Color scheme media queries for system dark mode detection
+        /@media.*prefers-color-scheme.*/,
+        
+        // Bootstrap color utilities that change with theme
+        /^text-.*$/,
+        /^bg-.*$/,
+        /^border-.*$/,
+        /^btn-.*$/
       ],
       // Standard extraction to catch more classes
       defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-      // Remove unused CSS variables and keyframes
-      variables: true,
-      keyframes: true
+      // Preserve CSS variables and keyframes (critical for Bootstrap themes)
+      variables: false, // Keep CSS variables for Bootstrap themes
+      keyframes: true,
+      
+      // Don't remove CSS rules that contain Bootstrap theme selectors
+      fontFace: false,
+      
+      // Keep rejected selectors for debugging if needed
+      rejected: false
     }),
-    // Additional CSS optimization
+    // Additional CSS optimization (safer for Bootstrap themes)
     cssnano({
       preset: ['default', {
         discardComments: { removeAll: true },
         normalizeWhitespace: true,
         mergeLonghand: true,
-        mergeRules: true,
-        minifySelectors: true,
-        reduceTransforms: true
+        mergeRules: false, // Don't merge rules that might break Bootstrap themes
+        minifySelectors: false, // Don't minify attribute selectors like [data-bs-theme]
+        reduceTransforms: true,
+        // Preserve CSS custom properties used by Bootstrap themes
+        discardUnused: false,
+        mergeIdents: false
       }]
     })
   ]

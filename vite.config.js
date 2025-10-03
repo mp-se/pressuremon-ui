@@ -28,7 +28,18 @@ export default defineConfig({
   },
   define: {
     __VUE_OPTIONS_API__: false, // Disable Options API if not used
-    __VUE_PROD_DEVTOOLS__: false
+    __VUE_PROD_DEVTOOLS__: false,
+    // Ensure Pinia is included in the build
+    'process.env.NODE_ENV': JSON.stringify('production')
+  },
+  optimizeDeps: {
+    include: ['pinia', 'vue'], // Ensure Pinia and Vue are pre-bundled and optimized
+    force: true // Force re-optimization to ensure Pinia is properly included
+  },
+  esbuild: {
+    // Force consistent handling of Pinia modules
+    platform: 'browser',
+    format: 'esm'
   },
   css: {
     preprocessorOptions: {
@@ -39,6 +50,7 @@ export default defineConfig({
       }
     }
   },
+
   build: {
     minify: 'terser',
     cssCodeSplit: false,
@@ -68,16 +80,7 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      treeshake: true, // Use default tree-shaking instead of aggressive preset
-      onwarn(warning, warn) {
-        // Suppress eval warnings for formula calculations
-        if (warning.code === 'EVAL' && warning.id?.includes('formula.js')) {
-          return
-        }
-        warn(warning)
-      },
       output: {
-        inlineDynamicImports: true,
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,
         assetFileNames: `assets/[name].[ext]`,

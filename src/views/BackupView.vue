@@ -77,6 +77,7 @@
 import { ref, computed } from 'vue'
 import { global, config, getConfigChanges } from '@/modules/pinia'
 import { logDebug, logError } from '@/modules/logger'
+import { BsFileUpload, BsProgress } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)
 const fileSelected = ref(false)

@@ -51,10 +51,9 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-import VoltageFragment from '@/fragments/VoltageFragment.vue'
-import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
-import AdvancedFilesFragment from '@/fragments/AdvancedFilesFragment.vue'
-import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
+// NOTE: Framework fragments have import issues - using local enhanced versions
+// Framework fragments import '@/modules/pinia' which doesn't exist in framework context
+import { VoltageFragment, ListFilesFragment, AdvancedFilesFragment, EnableCorsFragment } from '@mp-se/espframework-ui-components'
 
 const hideAdvanced = ref(true)
 

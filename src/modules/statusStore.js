@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
-import { useFetch } from '@/composables/useFetch'
 
 export const useStatusStore = defineStore('status', {
   state: () => {
@@ -60,8 +59,7 @@ export const useStatusStore = defineStore('status', {
       logInfo('statusStore.load()', 'Fetching /api/status')
       
       try {
-        const { managedFetch } = useFetch()
-        const response = await managedFetch(global.baseURL + 'api/status', {
+        const response = await fetch(global.baseURL + 'api/status', {
           signal: AbortSignal.timeout(global.fetchTimout)
         })
         
@@ -130,8 +128,7 @@ export const useStatusStore = defineStore('status', {
       const base = btoa('gravitymon:password')
       
       try {
-        const { managedFetch } = useFetch()
-        const response = await managedFetch(global.baseURL + 'api/auth', {
+        const response = await fetch(global.baseURL + 'api/auth', {
           method: 'GET',
           headers: { Authorization: 'Basic ' + base },
           signal: AbortSignal.timeout(global.fetchTimout)
@@ -148,8 +145,7 @@ export const useStatusStore = defineStore('status', {
     async ping() {
       // logInfo("statusStore.ping()", "Fetching /api/ping")
       try {
-        const { managedFetch } = useFetch()
-        const response = await managedFetch(global.baseURL + 'api/ping', {
+        const response = await fetch(global.baseURL + 'api/ping', {
           method: 'GET',
           signal: AbortSignal.timeout(global.fetchTimout)
         })

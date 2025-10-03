@@ -316,8 +316,7 @@ import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@/modules/logger'
-import { useFetch } from '@/composables/useFetch'
-import { useTimers } from '@/composables/useTimers'
+import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
 
 // TODO: Show badge if problems with battery level
 

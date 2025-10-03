@@ -122,8 +122,7 @@ import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@/modules/logger'
-import { useFetch } from '@/composables/useFetch'
-import { useTimers } from '@/composables/useTimers'
+import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
 
 const { managedFetch } = useFetch()
 const { createTimeout } = useTimers()

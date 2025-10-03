@@ -20,7 +20,15 @@
     ></BsMessage>
   </div>
 
-  <BsMenuBar v-if="global.initialized" :disabled="global.disabled" brand="PressureMon" />
+  <BsMenuBar 
+    v-if="global.initialized" 
+    :disabled="global.disabled" 
+    brand="PressureMon" 
+    :menu-items="menuItems"
+    :mdns="config.mdns"
+    :dark-mode="config.dark_mode"
+    @update:dark-mode="handleDarkModeUpdate"
+  />
 
   <div class="container">
     <div>
@@ -75,17 +83,24 @@
 </template>
 
 <script setup>
-import BsMenuBar from './components/BsMenuBar.vue'
-import BsFooter from './components/BsFooter.vue'
-import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+
+import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref, provide } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
-import { storeToRefs } from 'pinia'
-import { useTimers } from './composables/useTimers'
+import { useTimers, isValidJson, isValidFormData, isValidMqttData } from '@mp-se/espframework-ui-components'
+import { logDebug, logInfo, logError } from './modules/logger'
+import { items as menuItems } from './modules/router'
 
 const polling = ref(null)
 const { createInterval, clearManagedInterval } = useTimers()
 
-const { disabled } = storeToRefs(global)
+// Provide dependencies for framework fragments
+provide('globalStore', global)
+provide('configStore', config)
+provide('statusStore', status)
+provide('logger', { logDebug, logInfo, logError })
+provide('isValidJson', isValidJson)
+provide('isValidFormData', isValidFormData)
+provide('isValidMqttData', isValidMqttData)
 
 const close = (alert) => {
   if (alert == 'danger') global.messageError = ''
@@ -94,7 +109,12 @@ const close = (alert) => {
   else if (alert == 'info') global.messageInfo = ''
 }
 
-watch(disabled, () => {
+// Handle dark mode changes
+const handleDarkModeUpdate = (newValue) => {
+  config.dark_mode = newValue
+}
+
+watch(() => global.disabled, () => {
   if (global.disabled) document.body.style.cursor = 'wait'
   else document.body.style.cursor = 'default'
 })

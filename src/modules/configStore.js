@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
 import { logDebug, logError, logInfo } from '@/modules/logger'
-import { tempToC, tempToF, roundVal } from '@/modules/utils'
+import { tempToC, tempToF, roundVal } from '@mp-se/espframework-ui-components'
 
 export const useConfigStore = defineStore('config', {
   state: () => {

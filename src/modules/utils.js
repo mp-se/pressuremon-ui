@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
 import { logDebug, logError, logInfo } from '@/modules/logger'
+import { tempToF, tempToC } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -140,17 +141,7 @@ export function validateCurrentForm() {
   return valid
 }
 
-export function roundVal(val, decimals) {
-  return parseFloat(Number(val).toFixed(decimals))
-}
-
-export function tempToF(c) {
-  return c * 1.8 + 32.0
-}
-
-export function tempToC(f) {
-  return (f - 32.0) / 1.8
-}
+// roundVal, tempToF, and tempToC functions now imported from @mp-se/espframework-ui-components
 
 export function psiToBar(p) {
   return p * 0.0689475729
@@ -238,28 +229,9 @@ export function applyTemplate(status, config, template) {
   return s
 }
 
-export function isValidJson(s) {
-  try {
-    JSON.stringify(JSON.parse(s))
-    return true
-  } catch (e) {
-    logDebug('utils.isValidJson()', e)
-  }
+// isValidJson function now imported from @mp-se/espframework-ui-components
 
-  return false
-}
-
-export function isValidFormData(s) {
-  if (s.startsWith('?')) return true
-
-  return false
-}
-
-export function isValidMqttData(s) {
-  if (s.indexOf('|') >= 0) return true
-
-  return false
-}
+// isValidFormData and isValidMqttData functions now imported from @mp-se/espframework-ui-components
 
 export function getErrorString(code) {
   switch (code) {
