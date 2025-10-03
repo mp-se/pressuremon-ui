@@ -51,8 +51,6 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-// NOTE: Using local enhanced versions of fragments due to pinia import path issues
-// Framework fragments import '@/modules/pinia' which doesn't exist in framework context
 import VoltageFragment from '@/fragments/VoltageFragment.vue'
 import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
 import AdvancedFileFragment from '@/fragments/AdvancedFileFragment.vue'

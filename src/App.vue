@@ -22,7 +22,8 @@
 
   <BsMenuBar 
     v-if="global.initialized" 
-    :disabled="false" 
+    :disabled="global.disabled" 
+    :config-changed="global.configChanged"
     brand="PressureMon" 
     :menu-items="menuItems"
     :mdns="config.mdns"
