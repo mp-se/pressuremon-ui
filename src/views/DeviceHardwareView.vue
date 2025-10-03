@@ -265,7 +265,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Save</button
           >&nbsp;
@@ -280,7 +280,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Restart device</button
           >&nbsp;
@@ -295,7 +295,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Calibrate pressure&nbsp;<span
               v-if="badge.deviceSensorCalibratedBadge()"
@@ -315,7 +315,7 @@ import { ref, computed, onMounted } from 'vue'
 import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
 
 // TODO: Show badge if problems with battery level
@@ -384,13 +384,14 @@ const voltage = computed(() => {
 })
 
 const calibrate = async () => {
+  global.clearMessages()
   global.disabled = true
   logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
   
   try {
     const response = await managedFetch(global.baseURL + 'api/calibrate', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     if (response.status !== 200) {
@@ -403,7 +404,7 @@ const calibrate = async () => {
     // Check calibration status
     const statusResponse = await managedFetch(global.baseURL + 'api/calibrate/status', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     logDebug('DeviceHardwareView.calibrate()', statusResponse)

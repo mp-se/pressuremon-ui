@@ -30,14 +30,14 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Enable Advanced
         </button>
       </div>
     </div>
 
-    <AdvancedFilesFragment v-if="!hideAdvanced"></AdvancedFilesFragment>
+    <AdvancedFileFragment v-if="!hideAdvanced"></AdvancedFileFragment>
 
     <div class="row gy-4" v-if="!hideAdvanced">
       <p></p>
@@ -51,9 +51,12 @@
 <script setup>
 import { ref } from 'vue'
 import { global } from '@/modules/pinia'
-// NOTE: Framework fragments have import issues - using local enhanced versions
+// NOTE: Using local enhanced versions of fragments due to pinia import path issues
 // Framework fragments import '@/modules/pinia' which doesn't exist in framework context
-import { VoltageFragment, ListFilesFragment, AdvancedFilesFragment, EnableCorsFragment } from '@mp-se/espframework-ui-components'
+import VoltageFragment from '@/fragments/VoltageFragment.vue'
+import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
+import AdvancedFileFragment from '@/fragments/AdvancedFileFragment.vue'
+import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
 
 const hideAdvanced = ref(true)
 

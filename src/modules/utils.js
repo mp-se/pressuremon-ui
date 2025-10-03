@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo } from '@/modules/logger'
-import { tempToF, tempToC } from '@mp-se/espframework-ui-components'
+import { logDebug, logError, logInfo, tempToF, tempToC } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -257,7 +256,7 @@ export async function restart() {
   try {
     const response = await fetch(global.baseURL + 'api/restart', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     const json = await response.json()
@@ -267,6 +266,11 @@ export async function restart() {
       global.messageSuccess =
         json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
       logInfo('utils.restart()', 'Scheduling refresh of UI')
+      
+      // Reset disabled state after a short delay to prevent stuck spinners
+      setTimeout(() => {
+        global.disabled = false
+      }, 500)
       
       setTimeout(() => {
         location.href = 'http://' + config.mdns + '.local'

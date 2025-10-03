@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
 import { getErrorString } from '@/modules/utils'
-import { logDebug, logError, logInfo } from '@/modules/logger'
-import { tempToC, tempToF, roundVal } from '@mp-se/espframework-ui-components'
+import { logDebug, logError, logInfo, tempToC, tempToF, roundVal } from '@mp-se/espframework-ui-components'
 
 export const useConfigStore = defineStore('config', {
   state: () => {
@@ -138,7 +137,7 @@ export const useConfigStore = defineStore('config', {
         const response = await fetch(global.baseURL + 'api/config', {
           method: 'GET',
           headers: { Authorization: global.token },
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         const json = await response.json()
@@ -225,10 +224,12 @@ export const useConfigStore = defineStore('config', {
 
         this.internal_temp_unit = 'C'
         this.convertTemp()
+        return true
       } catch (err) {
-        global.disabled = false
         logError('configStore.load()', err)
-        throw err
+        return false
+      } finally {
+        global.disabled = false
       }
     },
     // Modern async method - keeps callback for backward compatibility
@@ -246,7 +247,7 @@ export const useConfigStore = defineStore('config', {
         const response = await fetch(global.baseURL + 'api/format', {
           method: 'GET',
           headers: { Authorization: global.token },
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         const json = await response.json()
@@ -260,10 +261,11 @@ export const useConfigStore = defineStore('config', {
 
         // Add linebreaks so the editor shows the data correctly
         this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
+        return true
         
       } catch (err) {
         logError('configStore.loadFormat()', err)
-        throw err
+        return false
       } finally {
         global.disabled = false
       }
@@ -297,10 +299,9 @@ export const useConfigStore = defineStore('config', {
           Authorization: global.token
         },
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => {
-          global.disabled = false
           if (res.status != 200) {
             logError('configStore.sendConfig()', 'Sending /api/config failed', res.status)
             this.convertTemp()
@@ -308,6 +309,7 @@ export const useConfigStore = defineStore('config', {
           } else {
             logInfo('configStore.sendConfig()', 'Sending /api/config completed')
             this.convertTemp()
+            saveConfigState()
             callback(true)
           }
         })
@@ -315,6 +317,8 @@ export const useConfigStore = defineStore('config', {
           logError('configStore.sendConfig()', err)
           this.convertTemp()
           callback(false)
+        })
+        .finally(() => {
           global.disabled = false
         })
     },
@@ -408,10 +412,9 @@ export const useConfigStore = defineStore('config', {
           Authorization: global.token
         },
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => {
-          global.disabled = false
           if (res.status != 200) {
             logError('configStore.sendOneFormat()', 'Sending /api/format failed')
             callback(false)
@@ -424,6 +427,9 @@ export const useConfigStore = defineStore('config', {
           logError('configStore.sendOneFormat()', err)
           callback(false)
         })
+        .finally(() => {
+          global.disabled = false
+        })
     },
     sendPushTest(data, callback) {
       global.disabled = true
@@ -435,7 +441,7 @@ export const useConfigStore = defineStore('config', {
           Authorization: global.token
         },
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => {
           if (res.status != 200) {
@@ -450,11 +456,14 @@ export const useConfigStore = defineStore('config', {
           logError('configStore.sendPushTest()', err)
           callback(false)
         })
+        .finally(() => {
+          global.disabled = false
+        })
     },
     getPushTestStatus(callback) {
       logInfo('configStore.getPushTest()', 'Fetching /api/push/status')
       fetch(global.baseURL + 'api/push/status', {
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => res.json())
         .then((json) => {
@@ -472,7 +481,7 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.sendWifiScan()', 'Sending /api/wifi')
       fetch(global.baseURL + 'api/wifi', {
         headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => {
           if (res.status != 200) {
@@ -493,7 +502,7 @@ export const useConfigStore = defineStore('config', {
       fetch(global.baseURL + 'api/wifi/status', {
         method: 'GET',
         headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => res.json())
         .then((json) => {
@@ -511,7 +520,7 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware')
       fetch(global.baseURL + 'api/hardware', {
         headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => {
           if (res.status != 200) {
@@ -532,7 +541,7 @@ export const useConfigStore = defineStore('config', {
       fetch(global.baseURL + 'api/hardware/status', {
         method: 'GET',
         headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => res.json())
         .then((json) => {
@@ -593,7 +602,7 @@ export const useConfigStore = defineStore('config', {
           Authorization: global.token
         },
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimout)
+        signal: AbortSignal.timeout(global.fetchTimeout)
       })
         .then((res) => res.text())
         .then((text) => {

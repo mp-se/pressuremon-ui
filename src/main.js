@@ -83,9 +83,9 @@ app.component('BsModal', BsModal)
 app.component('BsModalConfirm', BsModalConfirm)
 app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
 
-import 'bootstrap/scss/bootstrap.scss'
+// Import Bootstrap CSS and JS first, then library CSS to allow overrides
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
+import '@mp-se/espframework-ui-components/dist/style.css'
 
 app.mount('#app')
-
-//import '@popperjs/core/dist/umd/popper.min.js'
-import 'bootstrap/dist/js/bootstrap.bundle.js'

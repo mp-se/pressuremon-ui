@@ -45,7 +45,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Flash firmware
           </button>
@@ -63,7 +63,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { global } from '@/modules/pinia'
-import { logDebug, logError } from '@/modules/logger'
+import { logDebug, logError } from '@mp-se/espframework-ui-components'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)

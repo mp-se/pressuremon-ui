@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { global } from '@/modules/pinia'
-import { logDebug, logError, logInfo } from '@/modules/logger'
+import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 
 export const useStatusStore = defineStore('status', {
   state: () => {
@@ -60,7 +60,7 @@ export const useStatusStore = defineStore('status', {
       
       try {
         const response = await fetch(global.baseURL + 'api/status', {
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         const json = await response.json()
@@ -111,9 +111,10 @@ export const useStatusStore = defineStore('status', {
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
 
         logInfo('statusStore.load()', 'Fetching /api/status completed')
+        return true
       } catch (err) {
         logError('statusStore.load()', err)
-        throw err
+        return false
       }
     },
     // Modern async/await method - keeps callback for backward compatibility
@@ -131,15 +132,15 @@ export const useStatusStore = defineStore('status', {
         const response = await fetch(global.baseURL + 'api/auth', {
           method: 'GET',
           headers: { Authorization: 'Basic ' + base },
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         const json = await response.json()
         logInfo('statusStore.auth()', 'Fetching /api/auth completed')
-        return json
+        return { success: true, data: json }
       } catch (err) {
         logError('statusStore.auth()', err)
-        throw err
+        return { success: false, error: err }
       }
     },
     async ping() {
@@ -147,7 +148,7 @@ export const useStatusStore = defineStore('status', {
       try {
         const response = await fetch(global.baseURL + 'api/ping', {
           method: 'GET',
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         await response.json()
@@ -176,7 +177,7 @@ export const useStatusStore = defineStore('status', {
             Authorization: global.token
           },
           body: JSON.stringify({ sleep_mode: val }),
-          signal: AbortSignal.timeout(global.fetchTimout)
+          signal: AbortSignal.timeout(global.fetchTimeout)
         })
         
         const json = await response.json()

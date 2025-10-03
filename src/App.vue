@@ -22,7 +22,7 @@
 
   <BsMenuBar 
     v-if="global.initialized" 
-    :disabled="global.disabled" 
+    :disabled="false" 
     brand="PressureMon" 
     :menu-items="menuItems"
     :mdns="config.mdns"
@@ -80,14 +80,14 @@
 
   <router-view v-if="global.initialized" />
   <BsFooter v-if="global.initialized" text="(c) 2024-2025 Magnus Persson" />
+
 </template>
 
 <script setup>
 
 import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref, provide } from 'vue'
 import { global, status, config, saveConfigState } from './modules/pinia'
-import { useTimers, isValidJson, isValidFormData, isValidMqttData } from '@mp-se/espframework-ui-components'
-import { logDebug, logInfo, logError } from './modules/logger'
+import { useTimers, isValidJson, isValidFormData, isValidMqttData, logDebug, logInfo, logError } from '@mp-se/espframework-ui-components'
 import { items as menuItems } from './modules/router'
 
 const polling = ref(null)
@@ -133,62 +133,61 @@ onBeforeUnmount(() => {
 
 onMounted(async () => {
   if (!global.initialized) {
-    showSpinner()
-    
-    try {
-      // Convert callback-based methods to promises for cleaner async/await usage
-      const authResult = await new Promise((resolve) => {
-        status.auth((success, data) => resolve({ success, data }))
-      })
-      
-      if (!authResult.success) {
-        throw new Error('Failed to authenticate with device, please try to reload page!')
-      }
-      
-      global.id = authResult.data.token
-      
-      const globalLoadResult = await new Promise((resolve) => {
-        global.load((success) => resolve(success))
-      })
-      
-      if (!globalLoadResult) {
-        throw new Error('Failed to load feature flags from device, please try to reload page!')
-      }
-      
-      const statusLoadResult = await new Promise((resolve) => {
-        status.load((success) => resolve(success))
-      })
-      
-      if (!statusLoadResult) {
-        throw new Error('Failed to load status from device, please try to reload page!')
-      }
-      
-      const configLoadResult = await new Promise((resolve) => {
-        config.load((success) => resolve(success))
-      })
-      
-      if (!configLoadResult) {
-        throw new Error('Failed to load configuration data from device, please try to reload page!')
-      }
-      
-      const formatLoadResult = await new Promise((resolve) => {
-        config.loadFormat((success) => resolve(success))
-      })
-      
-      if (!formatLoadResult) {
-        throw new Error('Failed to load format templates from device, please try to reload page!')
-      }
-      
-      saveConfigState()
-      global.initialized = true
-      
-    } catch (error) {
-      global.messageError = error.message
-    } finally {
-      hideSpinner()
-    }
+    await initializeApp()
   }
 })
+
+async function initializeApp() {
+  try {
+    showSpinner()
+    
+    // Step 1: Authenticate with device
+    const authResult = await status.authAsync()
+    if (!authResult.success) {
+      global.messageError = 'Failed to authenticate with device, please try to reload page!'
+      return
+    }
+    global.id = authResult.data.token
+
+    // Step 2: Load feature flags
+    const globalSuccess = await global.loadAsync()
+    if (!globalSuccess) {
+      global.messageError = 'Failed to load feature flags from device, please try to reload page!'
+      return
+    }
+
+    // Step 3: Load device status  
+    const statusSuccess = await status.loadAsync()
+    if (!statusSuccess) {
+      global.messageError = 'Failed to load status from device, please try to reload page!'
+      return
+    }
+
+    // Step 4: Load configuration
+    const configSuccess = await config.loadAsync()
+    if (!configSuccess) {
+      global.messageError = 'Failed to load configuration data from device, please try to reload page!'
+      return
+    }
+
+    // Step 5: Load format templates
+    const formatSuccess = await config.loadFormatAsync()
+    if (!formatSuccess) {
+      global.messageError = 'Failed to load format templates from device, please try to reload page!'
+      return
+    }
+
+    // Success! Initialize the app
+    saveConfigState()
+    global.initialized = true
+    
+  } catch (error) {
+    logError('App.initializeApp()', error)
+    global.messageError = `Initialization failed: ${error.message}`
+  } finally {
+    hideSpinner()
+  }
+}
 
 function showSpinner() {
   document.querySelector('#spinner').showModal()

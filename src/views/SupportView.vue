@@ -50,7 +50,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;View device logs</button
         >&nbsp;
@@ -65,7 +65,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Erase device logs</button
         >&nbsp;
@@ -80,7 +80,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Hardware scan</button
         >&nbsp;
@@ -95,7 +95,7 @@
             class="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-            :hidden="!global.disabled"
+            v-show="global.disabled"
           ></span>
           &nbsp;Toggle error help</button
         >&nbsp;
@@ -111,7 +111,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Erase iSpindel config
           </button>
@@ -185,7 +185,7 @@
 <script setup>
 import { ref } from 'vue'
 import { status, config, global } from '@/modules/pinia'
-import { logDebug } from '@/modules/logger'
+import { logDebug } from '@mp-se/espframework-ui-components'
 
 const logData = ref('')
 const showHelp = ref(false)

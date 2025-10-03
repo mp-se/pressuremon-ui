@@ -26,6 +26,15 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
   define: {
     __VUE_OPTIONS_API__: false, // Disable Options API if not used
     __VUE_PROD_DEVTOOLS__: false,

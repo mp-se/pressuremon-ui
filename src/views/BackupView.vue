@@ -58,7 +58,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Restore
           </button>
@@ -76,7 +76,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { global, config, getConfigChanges } from '@/modules/pinia'
-import { logDebug, logError } from '@/modules/logger'
+import { logDebug, logError } from '@mp-se/espframework-ui-components'
 import { BsFileUpload, BsProgress } from '@mp-se/espframework-ui-components'
 
 const progress = ref(0)

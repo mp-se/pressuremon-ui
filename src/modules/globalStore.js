@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { logInfo, logError, logDebug } from '@/modules/logger'
+import { logInfo, logError, logDebug } from '@mp-se/espframework-ui-components'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -26,7 +26,7 @@ export const useGlobalStore = defineStore('global', {
       messageSuccess: '',
       messageInfo: '',
 
-      fetchTimout: 8000,
+      fetchTimeout: 8000,
       url: undefined
     }
   },
@@ -66,7 +66,8 @@ export const useGlobalStore = defineStore('global', {
     uiBuild() {
       logDebug('globalStore.uiBuild()', import.meta.env.VITE_APP_BUILD)
       return import.meta.env.VITE_APP_BUILD
-    }
+    },
+
   },
   actions: {
     clearMessages() {
@@ -87,7 +88,7 @@ export const useGlobalStore = defineStore('global', {
       
       try {
         const response = await fetch(this.baseURL + 'api/feature', {
-          signal: AbortSignal.timeout(this.fetchTimout)
+          signal: AbortSignal.timeout(this.fetchTimeout)
         })
         
         const json = await response.json()
@@ -103,9 +104,10 @@ export const useGlobalStore = defineStore('global', {
         this.feature.no_sensors = json.no_sensors
 
         logInfo('globalStore.load()', 'Fetching /api/feature completed')
+        return true
       } catch (err) {
         logError('globalStore.load()', err)
-        throw err
+        return false
       }
     }
   }

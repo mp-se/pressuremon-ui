@@ -119,7 +119,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Save
           </button>
@@ -134,7 +134,7 @@ import { onMounted, ref, watch } from 'vue'
 import { validateCurrentForm } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import { storeToRefs } from 'pinia'
-import { logDebug, logError } from '@/modules/logger'
+import { logDebug, logError } from '@mp-se/espframework-ui-components'
 
 const { sleep_interval } = storeToRefs(config)
 const batteryLife = ref('')

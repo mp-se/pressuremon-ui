@@ -6,7 +6,6 @@ export default {
     purgecss.default({
       content: [
         './index.html',
-        './pressuremon.html',
         './src/**/*.{vue,js,ts,jsx,tsx}',
         './src/**/*.html'
       ],
@@ -103,6 +102,25 @@ export default {
         'collapsed',
         'collapsing',
         
+        // Dark mode support - Bootstrap 5.3+ data-bs-theme attribute handling
+        // Keep all CSS that responds to [data-bs-theme="dark"]
+        /.*\[data-bs-theme.*\].*/,
+        // Keep dark mode utility classes
+        /.*-dark$/,
+        'table-dark',
+        'navbar-dark',
+        'bg-dark',
+        'text-light',
+        'border-dark',
+        'btn-dark',
+        // Keep light mode utility classes for completeness
+        'table-light', 
+        'navbar-light',
+        'bg-light',
+        'text-dark',
+        'border-light',
+        'btn-light',
+        
         // Form validation
         'needs-validation',
         'was-validated',
@@ -139,52 +157,23 @@ export default {
         
         // Dynamically generated classes from components
         /^bg-.*-subtle$/,
-        /^text-bg-.*$/,
-        
-        // Bootstrap dark mode theme selectors and attributes
-        'data-bs-theme',
-        
-        // CSS custom properties (CSS variables) used by Bootstrap themes
-        /^--bs-.*/,
-        
-        // Bootstrap theme attribute patterns - these are critical for dark mode
-        /^\[data-bs-theme.*?\].*$/,
-        /.*\[data-bs-theme="dark"\].*/,
-        /.*\[data-bs-theme="light"\].*/,
-        
-        // Color scheme media queries for system dark mode detection
-        /@media.*prefers-color-scheme.*/,
-        
-        // Bootstrap color utilities that change with theme
-        /^text-.*$/,
-        /^bg-.*$/,
-        /^border-.*$/,
-        /^btn-.*$/
+        /^text-bg-.*$/
       ],
       // Standard extraction to catch more classes
       defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-      // Preserve CSS variables and keyframes (critical for Bootstrap themes)
-      variables: false, // Keep CSS variables for Bootstrap themes
-      keyframes: true,
-      
-      // Don't remove CSS rules that contain Bootstrap theme selectors
-      fontFace: false,
-      
-      // Keep rejected selectors for debugging if needed
-      rejected: false
+      // Remove unused CSS variables and keyframes
+      variables: true,
+      keyframes: false // Keep keyframes for spinner animations
     }),
-    // Additional CSS optimization (safer for Bootstrap themes)
+    // Additional CSS optimization
     cssnano({
       preset: ['default', {
         discardComments: { removeAll: true },
         normalizeWhitespace: true,
         mergeLonghand: true,
-        mergeRules: false, // Don't merge rules that might break Bootstrap themes
-        minifySelectors: false, // Don't minify attribute selectors like [data-bs-theme]
-        reduceTransforms: true,
-        // Preserve CSS custom properties used by Bootstrap themes
-        discardUnused: false,
-        mergeIdents: false
+        mergeRules: true,
+        minifySelectors: true,
+        reduceTransforms: true
       }]
     })
   ]

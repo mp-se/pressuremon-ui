@@ -76,7 +76,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Save</button
           >&nbsp;
@@ -91,7 +91,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Restart device</button
           >&nbsp;
@@ -106,7 +106,7 @@
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
-              :hidden="!global.disabled"
+              v-show="global.disabled"
             ></span>
             &nbsp;Restore factory defaults
           </button>
@@ -121,7 +121,7 @@ import { ref } from 'vue'
 import { validateCurrentForm, restart } from '@/modules/utils'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
-import { logError, logInfo } from '@/modules/logger'
+import { logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
 
 const { managedFetch } = useFetch()
@@ -151,7 +151,7 @@ const factory = async () => {
   try {
     const response = await managedFetch(global.baseURL + 'api/factory', {
       headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimout)
+      signal: AbortSignal.timeout(global.fetchTimeout)
     })
     
     const json = await response.json()
