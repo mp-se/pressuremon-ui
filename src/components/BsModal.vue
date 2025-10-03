@@ -56,7 +56,7 @@ defineOptions({
 })
 
 /**
- * Ref to fetch data from (optional).
+ * Ref to fetch data from (required).
  */
 const model = defineModel({
   type: [String, Object, Array],
@@ -64,7 +64,7 @@ const model = defineModel({
 })
 
 /**
- * Text on button that activates the modal (optional).
+ * Text on button that activates the modal (required).
  */
 const button = defineModel('button', {
   type: String,
@@ -72,7 +72,7 @@ const button = defineModel('button', {
 })
 
 /**
- * Modal title (optional).
+ * Modal title (required).
  */
 const title = defineModel('title', {
   type: String,

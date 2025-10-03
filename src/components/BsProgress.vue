@@ -15,7 +15,7 @@ import { computed } from 'vue'
  */
 
 /**
- * Ref that contains the value of the progress bar (0-100) (optional).
+ * Ref that contains the value of the progress bar (0-100) (required).
  */
 const progress = defineModel('progress', {
   type: [Number, String],

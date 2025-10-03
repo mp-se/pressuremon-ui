@@ -45,11 +45,14 @@ defineOptions({
   inheritAttrs: false
 })
 /**
- * Text message to show in alert (optional).
+ * Text message to show in alert (required).
  */
 const message = defineModel('message', {
   type: String,
-  default: ''
+  default: 'Message',
+  validator: (value) => {
+    return typeof value === 'string'
+  }
 })
 
 /**
@@ -57,11 +60,16 @@ const message = defineModel('message', {
  */
 const dismissable = defineModel('dismissable', {
   type: [Boolean, String],
-  default: false
+  default: false,
+  validator: (value) => {
+    if (typeof value === 'boolean') return true
+    if (typeof value === 'string') return ['true', 'false'].includes(value.toLowerCase())
+    return false
+  }
 })
 
 /**
- * The type of the alert (Danger|Success|Warning|Info) (optional).
+ * The type of the alert (Danger|Success|Warning|Info) (required).
  */
 const alert = defineModel('alert', {
   type: String,
@@ -74,7 +82,10 @@ const alert = defineModel('alert', {
  */
 const close = defineModel('close', {
   type: Function,
-  default: () => {}
+  default: () => {},
+  validator: (value) => {
+    return typeof value === 'function'
+  }
 })
 
 const classNames = () => {
