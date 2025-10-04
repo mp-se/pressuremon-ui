@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { config, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo, tempToF, tempToC } from '@mp-se/espframework-ui-components'
+import { logDebug, logError, logInfo, tempToF, tempToC, psiToBar, psiToKPa, barToPsi, kpaToPsi } from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -140,23 +140,7 @@ export function validateCurrentForm() {
   return valid
 }
 
-// roundVal, tempToF, and tempToC functions now imported from @mp-se/espframework-ui-components
-
-export function psiToBar(p) {
-  return p * 0.0689475729
-}
-
-export function psiToKPa(p) {
-  return p * 68.947572932 * 1000
-}
-
-export function barToPsi(p) {
-  return p
-}
-
-export function kpaToPsi(p) {
-  return p
-}
+// roundVal, tempToF, tempToC, and pressure conversion functions now imported from @mp-se/espframework-ui-components
 
 export function applyTemplate(status, config, template) {
   var s = template
