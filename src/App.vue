@@ -112,7 +112,16 @@ const close = (alert) => {
 
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
+  // update the store value
   config.dark_mode = newValue
+  // fallback: ensure the attribute is set on the document root so Bootstrap theme rules apply
+  try {
+    const root = document.documentElement
+    if (newValue) root.setAttribute('data-bs-theme', 'dark')
+    else root.setAttribute('data-bs-theme', 'light')
+  } catch (e) {
+    console.error('Failed to set data-bs-theme on documentElement', e)
+  }
 }
 
 watch(() => global.disabled, () => {
