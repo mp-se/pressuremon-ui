@@ -9,8 +9,9 @@ app.use(piniaInstance)
 import router from './modules/router.js'
 app.use(router)
 
+// Import all components from the ESP Framework UI Components library
 import {
-  // UI Components
+  // Bootstrap Components
   BsMessage,
   BsCard,
   BsFileUpload,
@@ -36,56 +37,65 @@ import {
   IconCloudUpArrow,
   IconUpArrow,
   IconCpu,
+  IconWifi,
   IconEye,
   IconEyeSlash,
   IconCheckCircle,
   IconXCircle,
-  IconInfoCircle,
   IconExclamationTriangle,
-  IconWifi
+  IconInfoCircle
 } from '@mp-se/espframework-ui-components'
 
+// Import local fragments
+import AdvancedFilesFragment from '@/fragments/AdvancedFileFragment.vue'
+import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
+import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
+import VoltageFragment from '@/fragments/VoltageFragment.vue'
+
+// Import Bootstrap CSS and JS first, then library CSS to allow overrides
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
+// import '@mp-se/espframework-ui-components/dist/style.css'
+
+// Register Bootstrap components
 app.component('BsMessage', BsMessage)
-app.component('BsDropdown', BsDropdown)
 app.component('BsCard', BsCard)
 app.component('BsFileUpload', BsFileUpload)
 app.component('BsProgress', BsProgress)
-app.component('BsMenuBar', BsMenuBar)
-app.component('BsFooter', BsFooter)
 app.component('BsInputBase', BsInputBase)
 app.component('BsInputText', BsInputText)
 app.component('BsInputReadonly', BsInputReadonly)
 app.component('BsSelect', BsSelect)
 app.component('BsInputTextArea', BsInputTextArea)
 app.component('BsInputNumber', BsInputNumber)
-app.component('BsInputRadio', BsInputRadio)
 app.component('BsInputSwitch', BsInputSwitch)
+app.component('BsInputRadio', BsInputRadio)
+app.component('BsDropdown', BsDropdown)
+app.component('BsModal', BsModal)
+app.component('BsModalConfirm', BsModalConfirm)
+app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
+app.component('BsMenuBar', BsMenuBar)
+app.component('BsFooter', BsFooter)
 
-// Icons imported above in combined import statement
-
+// Register Icon components
 app.component('IconHome', IconHome)
 app.component('IconTools', IconTools)
 app.component('IconGraphUpArrow', IconGraphUpArrow)
 app.component('IconCloudUpArrow', IconCloudUpArrow)
 app.component('IconUpArrow', IconUpArrow)
 app.component('IconCpu', IconCpu)
+app.component('IconWifi', IconWifi)
 app.component('IconEye', IconEye)
 app.component('IconEyeSlash', IconEyeSlash)
 app.component('IconCheckCircle', IconCheckCircle)
 app.component('IconXCircle', IconXCircle)
-app.component('IconInfoCircle', IconInfoCircle)
 app.component('IconExclamationTriangle', IconExclamationTriangle)
-app.component('IconWifi', IconWifi)
+app.component('IconInfoCircle', IconInfoCircle)
 
-// Modal components imported above in combined import statement
-
-app.component('BsModal', BsModal)
-app.component('BsModalConfirm', BsModalConfirm)
-app.component('BsInputTextAreaFormat', BsInputTextAreaFormat)
-
-// Import Bootstrap CSS and JS first, then library CSS to allow overrides
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/js/bootstrap.bundle.js'
-import '@mp-se/espframework-ui-components/dist/style.css'
+// Register Fragment components (ESP Framework specific)
+app.component('AdvancedFilesFragment', AdvancedFilesFragment)
+app.component('EnableCorsFragment', EnableCorsFragment)
+app.component('ListFilesFragment', ListFilesFragment)
+app.component('VoltageFragment', VoltageFragment)
 
 app.mount('#app')
