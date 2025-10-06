@@ -110,6 +110,11 @@ const close = (alert) => {
   else if (alert == 'info') global.messageInfo = ''
 }
 
+// Watch for changes to config.dark_mode and call handleDarkModeUpdate
+watch(() => config.dark_mode, (newValue) => {
+  handleDarkModeUpdate(newValue)
+})
+
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
   // update the store value
