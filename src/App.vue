@@ -14,17 +14,16 @@
   <div v-if="!global.initialized" class="container text-center">
     <BsMessage
       message="Initalizing PressureMon Web interface"
-      class="h2"
       :dismissable="false"
       alert="info"
     ></BsMessage>
   </div>
 
-  <BsMenuBar 
-    v-if="global.initialized" 
-    :disabled="global.disabled" 
+  <BsMenuBar
+    v-if="global.initialized"
+    :disabled="global.disabled"
     :config-changed="global.configChanged"
-    brand="PressureMon" 
+    brand="PressureMon"
     :menu-items="menuItems"
     :mdns="config.mdns"
     :dark-mode="config.dark_mode"
@@ -38,7 +37,6 @@
     <BsMessage
       v-if="!status.connected"
       message="No response from device, has it gone into sleep model? No need to refresh the page, just turn on the device again"
-      class="h2"
       :dismissable="false"
       alert="danger"
     ></BsMessage>
@@ -81,14 +79,21 @@
 
   <router-view v-if="global.initialized" />
   <BsFooter v-if="global.initialized" text="(c) 2024-2025 Magnus Persson" />
-
 </template>
 
 <script setup>
-
 import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref, provide } from 'vue'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { global, status, config, saveConfigState } from './modules/pinia'
-import { useTimers, isValidJson, isValidFormData, isValidMqttData, logDebug, logInfo, logError } from '@mp-se/espframework-ui-components'
+import {
+  useTimers,
+  isValidJson,
+  isValidFormData,
+  isValidMqttData,
+  logDebug,
+  logInfo,
+  logError
+} from '@mp-se/espframework-ui-components'
 import { items as menuItems } from './modules/router'
 
 const polling = ref(null)
@@ -111,9 +116,12 @@ const close = (alert) => {
 }
 
 // Watch for changes to config.dark_mode and call handleDarkModeUpdate
-watch(() => config.dark_mode, (newValue) => {
-  handleDarkModeUpdate(newValue)
-})
+watch(
+  () => config.dark_mode,
+  (newValue) => {
+    handleDarkModeUpdate(newValue)
+  }
+)
 
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
@@ -129,13 +137,19 @@ const handleDarkModeUpdate = (newValue) => {
   }
 }
 
-watch(() => global.disabled, () => {
-  if (global.disabled) document.body.style.cursor = 'wait'
-  else document.body.style.cursor = 'default'
-})
+watch(
+  () => global.disabled,
+  () => {
+    if (global.disabled) document.body.style.cursor = 'wait'
+    else document.body.style.cursor = 'default'
+  }
+)
 
 function ping() {
-  status.ping()
+  ;(async () => {
+    const ok = await http.ping()
+    status.connected = ok
+  })()
 }
 
 onBeforeMount(() => {
@@ -155,47 +169,48 @@ onMounted(async () => {
 async function initializeApp() {
   try {
     showSpinner()
-    
-    // Step 1: Authenticate with device
-    const authResult = await status.authAsync()
-    if (!authResult.success) {
+
+    // Step 1: Authenticate with device (http client owns token)
+    const base = btoa('pressuremon:password')
+    const authOk = await http.auth(base)
+    if (!authOk) {
       global.messageError = 'Failed to authenticate with device, please try to reload page!'
       return
     }
-    global.id = authResult.data.token
 
     // Step 2: Load feature flags
-    const globalSuccess = await global.loadAsync()
+    const globalSuccess = await global.load()
     if (!globalSuccess) {
       global.messageError = 'Failed to load feature flags from device, please try to reload page!'
       return
     }
 
-    // Step 3: Load device status  
-    const statusSuccess = await status.loadAsync()
+    // Step 3: Load device status
+    const statusSuccess = await status.load()
     if (!statusSuccess) {
       global.messageError = 'Failed to load status from device, please try to reload page!'
       return
     }
 
     // Step 4: Load configuration
-    const configSuccess = await config.loadAsync()
+    const configSuccess = await config.load()
     if (!configSuccess) {
-      global.messageError = 'Failed to load configuration data from device, please try to reload page!'
+      global.messageError =
+        'Failed to load configuration data from device, please try to reload page!'
       return
     }
 
     // Step 5: Load format templates
-    const formatSuccess = await config.loadFormatAsync()
+    const formatSuccess = await config.loadFormat()
     if (!formatSuccess) {
-      global.messageError = 'Failed to load format templates from device, please try to reload page!'
+      global.messageError =
+        'Failed to load format templates from device, please try to reload page!'
       return
     }
 
     // Success! Initialize the app
     saveConfigState()
     global.initialized = true
-    
   } catch (error) {
     logError('App.initializeApp()', error)
     global.messageError = `Initialization failed: ${error.message}`

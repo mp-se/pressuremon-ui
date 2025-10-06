@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { logInfo, logError, logDebug } from '@mp-se/espframework-ui-components'
+import {
+  logInfo,
+  logError,
+  logDebug,
+  sharedHttpClient as http
+} from '@mp-se/espframework-ui-components'
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -14,7 +19,7 @@ export const useGlobalStore = defineStore('global', {
 
       feature: {
         ble: false,
-        no_sensors: 0,
+        no_sensors: 0
       },
 
       initialized: false,
@@ -66,8 +71,7 @@ export const useGlobalStore = defineStore('global', {
     uiBuild() {
       logDebug('globalStore.uiBuild()', import.meta.env.VITE_APP_BUILD)
       return import.meta.env.VITE_APP_BUILD
-    },
-
+    }
   },
   actions: {
     clearMessages() {
@@ -76,24 +80,14 @@ export const useGlobalStore = defineStore('global', {
       this.messageSuccess = ''
       this.messageInfo = ''
     },
-        // Modern async/await method - keeps callback for backward compatibility
-    load(callback) {
-      this.loadAsync()
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async loadAsync() {
+    // Modern async/await method
+    async load() {
       logInfo('globalStore.load()', 'Fetching /api/feature')
-      
+
       try {
-        const response = await fetch(this.baseURL + 'api/feature', {
-          signal: AbortSignal.timeout(this.fetchTimeout)
-        })
-        
-        const json = await response.json()
+        const json = await http.getJson('api/feature', { timeout: this.fetchTimeout })
         logDebug('globalStore.load()', json)
-        
+
         this.board = json.board.toUpperCase()
         this.app_ver = json.app_ver
         this.app_build = json.app_build

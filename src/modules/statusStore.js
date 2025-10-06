@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { global } from '@/modules/pinia'
+import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 
 export const useStatusStore = defineStore('status', {
@@ -48,24 +49,32 @@ export const useStatusStore = defineStore('status', {
     }
   },
   actions: {
-    // Modern async/await method - keeps callback for backward compatibility
-    load(callback) {
-      this.loadAsync()
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async loadAsync() {
-      logInfo('statusStore.load()', 'Fetching /api/status')
-      
+    async authAsync() {
+      logInfo('statusStore.authAsync()', 'Authenticating via framework http.auth()')
       try {
-        const response = await fetch(global.baseURL + 'api/status', {
-          signal: AbortSignal.timeout(global.fetchTimeout)
-        })
-        
+        const ok = await http.auth()
+        if (!ok) {
+          logError('statusStore.authAsync()', 'http.auth() returned false')
+          return { success: false, data: null }
+        }
+
+        // Try to expose the token from the shared client or fallback to global.id
+        const token = http.token || global.id || null
+        return { success: true, data: { token } }
+      } catch (err) {
+        logError('statusStore.authAsync()', err)
+        return { success: false, data: null }
+      }
+    },
+    async load() {
+      logInfo('statusStore.load()', 'Fetching /api/status')
+
+      try {
+        const response = await http.request('api/status', { timeout: global.fetchTimeout })
+
         const json = await response.json()
         logDebug('statusStore.load()', json)
-        
+
         this.id = json.id
         this.pressure = json.pressure
         this.pressure1 = json.pressure1
@@ -102,11 +111,9 @@ export const useStatusStore = defineStore('status', {
         if (this.pressure1 !== undefined)
           this.pressure1 = (Math.round(this.pressure1 * 100) / 100).toFixed(2)
 
-        if (this.temp !== undefined) 
-          this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
+        if (this.temp !== undefined) this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
 
-        if (this.temp1 !== undefined) 
-          this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
+        if (this.temp1 !== undefined) this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
 
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
 
@@ -115,77 +122,6 @@ export const useStatusStore = defineStore('status', {
       } catch (err) {
         logError('statusStore.load()', err)
         return false
-      }
-    },
-    // Modern async/await method - keeps callback for backward compatibility
-    auth(callback) {
-      this.authAsync()
-        .then((result) => callback(true, result))
-        .catch(() => callback(false))
-    },
-    
-    async authAsync() {
-      logInfo('statusStore.auth()', 'Fetching /api/auth')
-      const base = btoa('gravitymon:password')
-      
-      try {
-        const response = await fetch(global.baseURL + 'api/auth', {
-          method: 'GET',
-          headers: { Authorization: 'Basic ' + base },
-          signal: AbortSignal.timeout(global.fetchTimeout)
-        })
-        
-        const json = await response.json()
-        logInfo('statusStore.auth()', 'Fetching /api/auth completed')
-        return { success: true, data: json }
-      } catch (err) {
-        logError('statusStore.auth()', err)
-        return { success: false, error: err }
-      }
-    },
-    async ping() {
-      // logInfo("statusStore.ping()", "Fetching /api/ping")
-      try {
-        const response = await fetch(global.baseURL + 'api/ping', {
-          method: 'GET',
-          signal: AbortSignal.timeout(global.fetchTimeout)
-        })
-        
-        await response.json()
-        // logInfo("statusStore.ping()", "Fetching /api/auth completed")
-        this.connected = true
-      } catch (err) {
-        logError('statusStore.ping()', err)
-        this.connected = false
-      }
-    },
-    // Modern async method - keeps callback for backward compatibility
-    setSleepMode(val, callback) {
-      this.setSleepModeAsync(val)
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async setSleepModeAsync(val) {
-      logInfo('statusStore.setSleepMode()', 'Fetching /api/config/sleepmode')
-      
-      try {
-        const response = await fetch(global.baseURL + 'api/sleepmode', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: global.token
-          },
-          body: JSON.stringify({ sleep_mode: val }),
-          signal: AbortSignal.timeout(global.fetchTimeout)
-        })
-        
-        const json = await response.json()
-        logInfo('statusStore.setSleepMode()', 'Fetching /api/sleepmode completed', json)
-        
-      } catch (err) {
-        logError('statusStore.setSleepMode()', err)
-        throw err
       }
     }
   }

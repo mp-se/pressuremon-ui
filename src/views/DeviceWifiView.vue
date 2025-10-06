@@ -125,7 +125,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -145,7 +145,7 @@
 </template>
 
 <script setup>
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { onMounted, ref } from 'vue'
@@ -166,11 +166,11 @@ function wifiName(label, rssi, encr) {
 
 onMounted(async () => {
   scanning.value = true
-  
+
   try {
-    const data = await config.runWifiScanAsync()
+    const data = await config.runWifiScan()
     networks.value = [{ label: '-blank-', value: '', rssi: 0, encryption: 0, channel: 0 }]
-    
+
     for (var n in data.networks) {
       var d = data.networks[n]
       var o = {
@@ -188,16 +188,16 @@ onMounted(async () => {
       if (f.length === 0) networks.value.push(o)
     }
   } catch {
-    // Error already handled by runWifiScanAsync method
+    // Error already handled by runWifiScan method
   } finally {
     scanning.value = false
   }
 })
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
   global.messageInfo =
     'If WIFI settings are changed, restart the device and enter the new URL of the device!'
 }

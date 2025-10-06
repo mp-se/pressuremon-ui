@@ -1,6 +1,14 @@
 import { ref } from 'vue'
-import { config, global } from '@/modules/pinia'
-import { logDebug, logError, logInfo, tempToF, tempToC, psiToBar, psiToKPa, barToPsi, kpaToPsi } from '@mp-se/espframework-ui-components'
+import { global } from '@/modules/pinia'
+import {
+  logError,
+  tempToF,
+  tempToC,
+  psiToBar,
+  psiToKPa,
+  barToPsi,
+  kpaToPsi
+} from '@mp-se/espframework-ui-components'
 
 export const httpHeaderOptions = ref([
   { label: 'JSON data', value: 'Content-Type: application/json' },
@@ -127,21 +135,6 @@ export const mqttFormatOptions = ref([
 
 export const httpGetUrlOptions = ref([{ label: '-blank-', value: '' }])
 
-export function validateCurrentForm() {
-  let valid = true
-  const forms = document.querySelectorAll('.needs-validation')
-
-  Array.from(forms).forEach((form) => {
-    if (!form.checkValidity()) valid = false
-
-    form.classList.add('was-validated')
-  })
-
-  return valid
-}
-
-// roundVal, tempToF, tempToC, and pressure conversion functions now imported from @mp-se/espframework-ui-components
-
 export function applyTemplate(status, config, template) {
   var s = template
 
@@ -210,62 +203,4 @@ export function applyTemplate(status, config, template) {
   }
 
   return s
-}
-
-// isValidJson function now imported from @mp-se/espframework-ui-components
-
-// isValidFormData and isValidMqttData functions now imported from @mp-se/espframework-ui-components
-
-export function getErrorString(code) {
-  switch (code) {
-    case -100:
-      return 'Skipped since SSL is used'
-    case 200:
-      return 'Success (200)'
-    case 401:
-      return 'Access denied (401)'
-    case 404:
-      return 'Endpoint not found (404)'
-    case 422:
-      return 'Paylod cannot be parsed, check format and http headers'
-  }
-
-  return ''
-}
-
-export async function restart() {
-  global.clearMessages()
-  global.disabled = true
-  
-  try {
-    const response = await fetch(global.baseURL + 'api/restart', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
-    
-    const json = await response.json()
-    logDebug('utils.restart()', json)
-    
-    if (json.status == true) {
-      global.messageSuccess =
-        json.message + ' Redirecting to http://' + config.mdns + '.local in 8 seconds.'
-      logInfo('utils.restart()', 'Scheduling refresh of UI')
-      
-      // Reset disabled state after a short delay to prevent stuck spinners
-      setTimeout(() => {
-        global.disabled = false
-      }, 500)
-      
-      setTimeout(() => {
-        location.href = 'http://' + config.mdns + '.local'
-      }, 8000)
-    } else {
-      global.messageError = json.message
-      global.disabled = false
-    }
-  } catch (err) {
-    logError('utils.restart()', err)
-    global.messageError = 'Failed to do restart'
-    global.disabled = false
-  }
 }

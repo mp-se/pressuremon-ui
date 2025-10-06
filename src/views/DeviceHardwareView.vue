@@ -271,7 +271,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -311,14 +311,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-// REMOVE import { isGyroCalibrated, validateCurrentForm, restart } from '@/modules/utils'
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
 import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
-
-// TODO: Show badge if problems with battery level
 
 const { managedFetch } = useFetch()
 const { createTimeout } = useTimers()
@@ -387,43 +384,40 @@ const calibrate = async () => {
   global.clearMessages()
   global.disabled = true
   logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
-  
+
   try {
     const response = await managedFetch(global.baseURL + 'api/calibrate', {
       headers: { Authorization: global.token },
       signal: AbortSignal.timeout(global.fetchTimeout)
     })
-    
+
     if (response.status !== 200) {
       throw new Error('Failed to calibrate device')
     }
-    
+
     // Wait for calibration to complete
-    await new Promise(resolve => createTimeout(resolve, 4000))
-    
+    await new Promise((resolve) => createTimeout(resolve, 4000))
+
     // Check calibration status
     const statusResponse = await managedFetch(global.baseURL + 'api/calibrate/status', {
       headers: { Authorization: global.token },
       signal: AbortSignal.timeout(global.fetchTimeout)
     })
-    
+
     logDebug('DeviceHardwareView.calibrate()', statusResponse)
-    
+
     if (statusResponse.status !== 200 || statusResponse.success === true) {
       throw new Error('Failed to get calibrate status')
     }
-    
+
     // Reload configuration to reflect calibration changes
-    const configSuccess = await new Promise((resolve) => {
-      config.load((success) => resolve(success))
-    })
-    
+    const configSuccess = await config.load()
+
     if (configSuccess) {
       global.messageSuccess = 'Sensor calibrated'
     } else {
       throw new Error('Failed to load configuration')
     }
-    
   } catch (err) {
     const errorMessage = err.message || 'Failed to send calibrate request'
     global.messageError = errorMessage
@@ -433,10 +427,10 @@ const calibrate = async () => {
   }
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
   global.clearMessages()
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

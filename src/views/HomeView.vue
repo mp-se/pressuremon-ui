@@ -114,7 +114,17 @@
           <BsCard header="Device" title="Force config mode">
             <div class="d-flex justify-content-center">
               <div class="form-check form-switch" style="height: 0.7rem">
-                <input v-model="flag" class="form-check-input p-2" type="checkbox" role="switch" style="transform: scale(1.5); transform-origin: left center; display: inline-block;"/>
+                <input
+                  v-model="flag"
+                  class="form-check-input p-2"
+                  type="checkbox"
+                  role="switch"
+                  style="
+                    transform: scale(1.5);
+                    transform-origin: left center;
+                    display: inline-block;
+                  "
+                />
               </div>
             </div>
           </BsCard>
@@ -126,7 +136,7 @@
 
 <script setup>
 import { ref, watch, onMounted, onBeforeMount, onBeforeUnmount } from 'vue'
-import { status, global } from '@/modules/pinia'
+import { status, global, config } from '@/modules/pinia'
 import { useTimers } from '@mp-se/espframework-ui-components'
 
 const polling = ref(null)
@@ -134,11 +144,11 @@ const flag = ref(false)
 const { createInterval, clearManagedInterval } = useTimers()
 
 watch(flag, async () => {
-  status.setSleepMode(flag.value, () => {})
+  config.setSleepMode(flag.value)
 })
 
-function refresh() {
-  status.load(() => {})
+async function refresh() {
+  await status.load()
 }
 
 onMounted(() => {

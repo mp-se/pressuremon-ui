@@ -123,7 +123,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { validateCurrentForm, applyTemplate, influxdb2FormatOptions } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
+import { applyTemplate, influxdb2FormatOptions } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
 
 const render = ref('')
@@ -153,9 +154,9 @@ const renderFormat = () => {
   render.value = applyTemplate(status, config, config.influxdb2_format_pressure)
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

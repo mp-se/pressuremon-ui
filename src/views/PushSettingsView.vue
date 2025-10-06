@@ -131,7 +131,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import { storeToRefs } from 'pinia'
 import { logDebug, logError } from '@mp-se/espframework-ui-components'
@@ -140,10 +140,10 @@ const { sleep_interval } = storeToRefs(config)
 const batteryLife = ref('')
 const sleepLabel = ref('')
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 
 watch(sleep_interval, () => {

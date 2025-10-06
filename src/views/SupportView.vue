@@ -265,10 +265,10 @@ async function hardwareScan() {
   logData.value = ''
 
   try {
-    const data = await config.runHardwareScanAsync()
+    const data = await config.runHardwareScan()
     logData.value = data
   } catch {
-    // Error already handled by runHardwareScanAsync method
+    // Error already handled by runHardwareScan method
   } finally {
     global.disabled = false
   }

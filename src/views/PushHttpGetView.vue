@@ -137,12 +137,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import {
-  validateCurrentForm,
+  applyTemplate,
   httpHeaderOptions,
   httpGetUrlOptions,
-  httpGetFormatOptions,
-  applyTemplate
+  httpGetFormatOptions
 } from '@/modules/utils'
 import { global, status, config } from '@/modules/pinia'
 
@@ -186,9 +186,9 @@ const renderFormat = () => {
   render.value = s.replaceAll('&', '&')
 }
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

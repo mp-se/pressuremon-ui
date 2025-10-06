@@ -82,7 +82,7 @@
           >&nbsp;
 
           <button
-            @click="restart()"
+            @click="config.restart()"
             type="button"
             class="btn btn-secondary"
             :disabled="global.disabled"
@@ -118,7 +118,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm, restart } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logError, logInfo } from '@mp-se/espframework-ui-components'
@@ -147,15 +147,15 @@ const factory = async () => {
   global.clearMessages()
   logInfo('DeviceSettingsView.factory()', 'Sending /api/factory')
   global.disabled = true
-  
+
   try {
     const response = await managedFetch(global.baseURL + 'api/factory', {
       headers: { Authorization: global.token },
       signal: AbortSignal.timeout(global.fetchTimeout)
     })
-    
+
     const json = await response.json()
-    
+
     if (json.success == true) {
       global.messageSuccess = json.message
       createTimeout(() => {
@@ -172,9 +172,9 @@ const factory = async () => {
   }
 }
 
-const saveSettings = () => {
+const saveSettings = async () => {
   if (!validateCurrentForm()) return
 
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

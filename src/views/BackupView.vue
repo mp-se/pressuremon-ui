@@ -100,7 +100,11 @@ function onFileChange(event) {
 
 function backup() {
   let backup = {
-    meta: { version: '0.5.0', software: 'PressureMon', created: new Date().toISOString().slice(0, 10) },
+    meta: {
+      version: '0.5.0',
+      software: 'PressureMon',
+      created: new Date().toISOString().slice(0, 10)
+    },
     config: JSON.parse(config.toJson())
   }
 
@@ -173,7 +177,7 @@ function download(content, mimeType, filename) {
   a.click()
 }
 
-function doRestore(json) {
+async function doRestore(json) {
   for (var k in json) {
     if (k.endsWith('_format_pressure')) {
       config[k] = decodeURIComponent(json[k])
@@ -183,6 +187,9 @@ function doRestore(json) {
   }
 
   getConfigChanges()
-  config.saveAll()
+  const ok = await config.saveAll()
+  if (ok) {
+    global.messageSuccess = 'Configuration has been saved to device'
+  }
 }
 </script>

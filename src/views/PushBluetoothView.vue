@@ -55,7 +55,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { validateCurrentForm } from '@/modules/utils'
+import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config } from '@/modules/pinia'
 
 const bleFormatOptions = ref([
@@ -64,10 +64,10 @@ const bleFormatOptions = ref([
   // { label: 'Pressuremon Eddystone', value: 2 }
 ])
 
-const save = () => {
+const save = async () => {
   if (!validateCurrentForm()) return
 
   global.clearMessages()
-  config.saveAll()
+  await config.saveAll()
 }
 </script>

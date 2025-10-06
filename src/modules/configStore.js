@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia'
 import { global, saveConfigState, getConfigChanges } from '@/modules/pinia'
-import { getErrorString } from '@/modules/utils'
-import { logDebug, logError, logInfo, tempToC, tempToF, roundVal } from '@mp-se/espframework-ui-components'
+import {
+  logDebug,
+  logError,
+  logInfo,
+  tempToC,
+  tempToF,
+  roundVal,
+  sharedHttpClient as http
+} from '@mp-se/espframework-ui-components'
 
 export const useConfigStore = defineStore('config', {
   state: () => {
@@ -122,27 +129,17 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.toJSON()', dest)
       return JSON.stringify(dest, null, 2)
     },
-    // Modern async/await method - keeps callback for backward compatibility
-    load(callback) {
-      this.loadAsync()
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async loadAsync() {
+    async load() {
       global.disabled = true
       logInfo('configStore.load()', 'Fetching /api/config')
-      
+
       try {
-        const response = await fetch(global.baseURL + 'api/config', {
-          method: 'GET',
+        const json = await http.getJson('api/config', {
           headers: { Authorization: global.token },
-          signal: AbortSignal.timeout(global.fetchTimeout)
+          timeout: global.fetchTimeout
         })
-        
-        const json = await response.json()
         logDebug('configStore.load()', json)
-        
+
         global.disabled = false
         this.id = json.id
         // Device
@@ -232,592 +229,387 @@ export const useConfigStore = defineStore('config', {
         global.disabled = false
       }
     },
-    // Modern async method - keeps callback for backward compatibility
-    loadFormat(callback) {
-      this.loadFormatAsync()
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async loadFormatAsync() {
+    async loadFormat() {
       global.disabled = true
       logInfo('configStore.loadFormat()', 'Fetching /api/format')
-      
       try {
-        const response = await fetch(global.baseURL + 'api/format', {
-          method: 'GET',
-          headers: { Authorization: global.token },
-          signal: AbortSignal.timeout(global.fetchTimeout)
-        })
-        
-        const json = await response.json()
+        const json = await http.getJson('api/format')
         logDebug('configStore.loadFormat()', json)
-        
-        this.http_post_format_pressure = decodeURIComponent(json.http_post_format_pressure)
-        this.http_post2_format_pressure = decodeURIComponent(json.http_post2_format_pressure)
-        this.http_get_format_pressure = decodeURIComponent(json.http_get_format_pressure)
-        this.influxdb2_format_pressure = decodeURIComponent(json.influxdb2_format_pressure)
-        this.mqtt_format_pressure = decodeURIComponent(json.mqtt_format_pressure)
+        global.disabled = false
+        this.http_post_format_gravity = decodeURIComponent(json.http_post_format_gravity)
+        this.http_post2_format_gravity = decodeURIComponent(json.http_post2_format_gravity)
+        this.http_get_format_gravity = decodeURIComponent(json.http_get_format_gravity)
+        this.influxdb2_format_gravity = decodeURIComponent(json.influxdb2_format_gravity)
+        this.mqtt_format_gravity = decodeURIComponent(json.mqtt_format_gravity)
 
         // Add linebreaks so the editor shows the data correctly
-        this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
+        this.mqtt_format_gravity = this.mqtt_format_gravity.replaceAll('|', '|\n')
         return true
-        
       } catch (err) {
+        global.disabled = false
         logError('configStore.loadFormat()', err)
         return false
-      } finally {
-        global.disabled = false
       }
     },
-    sendConfig(callback) {
+    async sendConfig() {
       global.disabled = true
       logInfo('configStore.sendConfig()', 'Sending /api/config')
 
       this.convertTempToC() // Device use C internally
 
-      var data = getConfigChanges()
-      delete data.http_post_format_pressure
-      delete data.http_post2_format_pressure
-      delete data.http_get_format_pressure
-      delete data.influxdb2_format_pressure
-      delete data.mqtt_format_pressure
+      const data = getConfigChanges()
+      delete data.http_post_format_gravity
+      delete data.http_post2_format_gravity
+      delete data.http_get_format_gravity
+      delete data.influxdb2_format_gravity
+      delete data.mqtt_format_gravity
       logDebug('configStore.sendConfig()', data)
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendConfig()', 'No config data to store, skipping step')
         global.disabled = false
         this.convertTemp()
-        callback(true)
-        return
+        return true
       }
 
-      fetch(global.baseURL + 'api/config', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendConfig()', 'Sending /api/config failed', res.status)
-            this.convertTemp()
-            callback(false)
-          } else {
-            logInfo('configStore.sendConfig()', 'Sending /api/config completed')
-            this.convertTemp()
-            saveConfigState()
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendConfig()', err)
-          this.convertTemp()
-          callback(false)
-        })
-        .finally(() => {
-          global.disabled = false
-        })
+      try {
+        await http.postJson('api/config', data)
+        global.disabled = false
+        logInfo('configStore.sendConfig()', 'Sending /api/config completed')
+        this.convertTemp()
+        return true
+      } catch (err) {
+        logError('configStore.sendConfig()', err)
+        this.convertTemp()
+        global.disabled = false
+        return false
+      }
     },
-    // Modern async/await method - keeps callback for backward compatibility
-    sendFormat(callback) {
-      this.sendFormatAsync()
-        .then(() => callback(true))
-        .catch(() => callback(false))
-    },
-    
-    async sendFormatAsync() {
+    async sendFormat() {
       global.disabled = true
       logInfo('configStore.sendFormat()', 'Sending /api/format')
 
       const data2 = getConfigChanges()
-      logDebug('configStore.sendFormat()', data2)
+      let data = {}
+      let cnt = 0
 
+      logDebug('configStore.sendFormat()', data)
       try {
-        const formats = [
-          {
-            key: 'http_post_format_pressure',
-            data: data2.http_post_format_pressure !== undefined 
-              ? { http_post_format_pressure: encodeURIComponent(data2.http_post_format_pressure) }
-              : {}
-          },
-          {
-            key: 'http_post2_format_pressure',
-            data: data2.http_post2_format_pressure !== undefined 
-              ? { http_post2_format_pressure: encodeURIComponent(data2.http_post2_format_pressure) }
-              : {}
-          },
-          {
-            key: 'http_get_format_pressure',
-            data: data2.http_get_format_pressure !== undefined 
-              ? { http_get_format_pressure: encodeURIComponent(data2.http_get_format_pressure) }
-              : {}
-          },
-          {
-            key: 'influxdb2_format_pressure',
-            data: data2.influxdb2_format_pressure !== undefined 
-              ? { influxdb2_format_pressure: encodeURIComponent(data2.influxdb2_format_pressure) }
-              : {}
-          },
-          {
-            key: 'mqtt_format_pressure',
-            data: data2.mqtt_format_pressure !== undefined 
-              ? (() => {
-                  let cleaned = data2.mqtt_format_pressure.replaceAll('\n', '').replaceAll('\r', '')
-                  return { mqtt_format_pressure: encodeURIComponent(cleaned) }
-                })()
-              : {}
-          }
-        ]
+        data =
+          data2.http_post_format_gravity !== undefined
+            ? { http_post_format_gravity: encodeURIComponent(data2.http_post_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
 
-        let successCount = 0
-        
-        for (const format of formats) {
-          const success = await new Promise((resolve) => {
-            this.sendOneFormat(format.data, (success) => resolve(success))
-          })
-          
-          if (success) {
-            successCount++
-          }
+        data =
+          data2.http_post2_format_gravity !== undefined
+            ? { http_post2_format_gravity: encodeURIComponent(data2.http_post2_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
+
+        data =
+          data2.http_get_format_gravity !== undefined
+            ? { http_get_format_gravity: encodeURIComponent(data2.http_get_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
+
+        data =
+          data2.influxdb2_format_gravity !== undefined
+            ? { influxdb2_format_gravity: encodeURIComponent(data2.influxdb2_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
+
+        if (data2.mqtt_format_gravity !== undefined) {
+          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\n', '')
+          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\r', '')
         }
 
-        if (successCount !== 5) {
-          throw new Error(`Only ${successCount}/5 formats were saved successfully`)
-        }
-        
-      } catch (err) {
-        logError('configStore.sendFormat()', err)
-        throw err
+        data =
+          data2.mqtt_format_gravity !== undefined
+            ? { mqtt_format_gravity: encodeURIComponent(data2.mqtt_format_gravity) }
+            : {}
+        if (await this.sendOneFormat(data)) cnt += 1
+
+        return cnt == 5
       } finally {
+        // ensure disabled is cleared by callers as appropriate
         global.disabled = false
       }
     },
-    sendOneFormat(data, callback) {
+    async sendOneFormat(data) {
       logInfo('configStore.sendOneFormat()', 'Sending /api/format')
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendOneFormat()', 'No format data to store, skipping step')
-        callback(true)
-        return
+        return true
       }
 
-      fetch(global.baseURL + 'api/format', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendOneFormat()', 'Sending /api/format failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendOneFormat()', err)
-          callback(false)
-        })
-        .finally(() => {
-          global.disabled = false
-        })
+      try {
+        await http.postJson('api/format', data)
+        global.disabled = false
+        logInfo('configStore.sendOneFormat()', 'Sending /api/format completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendOneFormat()', err)
+        return false
+      }
     },
-    sendPushTest(data, callback) {
+    async sendPushTest(data) {
       global.disabled = true
       logInfo('configStore.sendPushTest()', 'Sending /api/push')
-      fetch(global.baseURL + 'api/push', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendPushTest()', 'Sending /api/push failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendPushTest()', 'Sending /api/push completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendPushTest()', err)
-          callback(false)
-        })
-        .finally(() => {
-          global.disabled = false
-        })
+      try {
+        await http.postJson('api/push', data)
+        return true
+      } catch (err) {
+        logError('configStore.sendPushTest()', err)
+        return false
+      }
     },
-    getPushTestStatus(callback) {
-      logInfo('configStore.getPushTest()', 'Fetching /api/push/status')
-      fetch(global.baseURL + 'api/push/status', {
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getPushTest()', json)
-          logInfo('configStore.getPushTest()', 'Fetching /api/push/status completed')
-          callback(true, json)
+
+    async setSleepMode(flag) {
+      try {
+        logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode')
+        const response = await http.request('api/sleepmode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sleep_mode: flag })
         })
-        .catch((err) => {
-          logError('configStore.getPushTest()', err)
-          callback(false, null)
-        })
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        await response.json()
+        logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode completed')
+        return true
+      } catch (err) {
+        logError('configStore.setSleepMode()', err)
+        return false
+      }
     },
-    sendWifiScan(callback) {
-      global.disabled = true
-      logInfo('configStore.sendWifiScan()', 'Sending /api/wifi')
-      fetch(global.baseURL + 'api/wifi', {
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendWifiScan()', 'Sending /api/wifi failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendWifiScan()', 'Sending /api/wifi completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendWifiScan()', err)
-          callback(false)
-        })
-    },
-    getWifiScanStatus(callback) {
-      logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status')
-      fetch(global.baseURL + 'api/wifi/status', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getWifiScanStatus()', json)
-          logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status completed')
-          callback(true, json)
-        })
-        .catch((err) => {
-          logError('configStore.getWifiScanStatus()', err)
-          callback(false, null)
-        })
-    },
-    sendHardwareScan(callback) {
-      global.disabled = true
-      logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware')
-      fetch(global.baseURL + 'api/hardware', {
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => {
-          if (res.status != 200) {
-            logError('configStore.sendHardwareScan()', 'Sending /api/hardware failed')
-            callback(false)
-          } else {
-            logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware completed')
-            callback(true)
-          }
-        })
-        .catch((err) => {
-          logError('configStore.sendHardwareScan()', err)
-          callback(false)
-        })
-    },
-    getHardwareScanStatus(callback) {
-      logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status')
-      fetch(global.baseURL + 'api/hardware/status', {
-        method: 'GET',
-        headers: { Authorization: global.token },
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          logDebug('configStore.getHardwareScanStatus()', json)
-          logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status completed')
-          callback(true, json)
-        })
-        .catch((err) => {
-          logError('configStore.getHardwareScanStatus()', err)
-          callback(false, null)
-        })
-    },
-    saveAll() {
-      this.saveAllAsync().catch(() => {
-        // Error already handled in async method
-      })
-    },
-    
-    async saveAllAsync() {
+    async restart() {
       global.clearMessages()
       global.disabled = true
-      
       try {
-        // Send configuration first
-        const configSuccess = await new Promise((resolve) => {
-          this.sendConfig((success) => resolve(success))
-        })
-        
-        if (!configSuccess) {
-          throw new Error('Failed to store configuration to device')
+        const res = await http.restart(this.mdns, { redirectDelayMs: 8000 })
+        if (res.success && res.json && res.json.status === true) {
+          global.messageSuccess =
+            (res.json.message || '') +
+            ' Redirecting to http://' +
+            this.mdns +
+            '.local in 8 seconds.'
+          logInfo('configStore.restart()', 'Restart requested, redirect scheduled')
+        } else if (res.success && res.json) {
+          global.messageError = res.json.message || 'Failed to restart device'
+        } else {
+          global.messageError = 'Failed to request restart'
         }
-        
-        // Send format templates
-        const formatSuccess = await new Promise((resolve) => {
-          this.sendFormat((success) => resolve(success))
-        })
-        
-        if (!formatSuccess) {
-          throw new Error('Failed to store format to device')
-        }
-        
-        global.messageSuccess = 'Configuration has been saved to device'
-        saveConfigState()
-        
-      } catch (error) {
-        global.messageError = error.message
+      } catch (err) {
+        logError('configStore.restart()', err)
+        global.messageError = 'Failed to do restart'
       } finally {
         global.disabled = false
       }
     },
-    sendFilesystemRequest(data, callback) {
-      global.disabled = true
-      logInfo('configStore.sendFilesystemRequest()', 'Sending /api/filesystem')
-      fetch(global.baseURL + 'api/filesystem', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: global.token
-        },
-        body: JSON.stringify(data),
-        signal: AbortSignal.timeout(global.fetchTimeout)
-      })
-        .then((res) => res.text())
-        .then((text) => {
-          logDebug('configStore.sendFilesystemRequest()', text)
-          callback(true, text)
-        })
-        .catch((err) => {
-          logError('configStore.sendFilesystemRequest()', err)
-          callback(false, '')
-        })
-    },
-    // Modern async method - handles UI feedback internally via global state
-    async runPushTest(data) {
-      global.disabled = true
-      
+    async getPushTestStatus() {
+      logInfo('configStore.getPushTest()', 'Fetching /api/push/status')
       try {
-        // Start the push test
-        const testStarted = await new Promise((resolve) => {
-          this.sendPushTest(data, (success) => resolve(success))
-        })
-        
-        if (!testStarted) {
-          throw new Error('Failed to start push test')
-        }
-        
-        // Poll for completion with proper timeout handling
-        const result = await this.pollPushTestStatus()
-        
-        // Handle test results and update global state accordingly
-        if (!result.success) {
-          global.messageError = `Test failed with error code (${result.push_return_code})`
+        const json = await http.getJson('api/push/status')
+        logDebug('configStore.getPushTest()', json)
+        logInfo('configStore.getPushTest()', 'Fetching /api/push/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getPushTest()', err)
+        return { success: false, data: null }
+      }
+    },
+    async sendWifiScan() {
+      global.disabled = true
+      logInfo('configStore.sendWifiScan()', 'Sending /api/wifi')
+      try {
+        await http.request('api/wifi')
+        logInfo('configStore.sendWifiScan()', 'Sending /api/wifi completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendWifiScan()', err)
+        return false
+      }
+    },
+    async getWifiScanStatus() {
+      logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status')
+      try {
+        const json = await http.getJson('api/wifi/status')
+        logDebug('configStore.getWifiScanStatus()', json)
+        logInfo('configStore.getWifiScanStatus()', 'Fetching /api/wifi/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getWifiScanStatus()', err)
+        return { success: false, data: null }
+      }
+    },
+    async sendHardwareScan() {
+      global.disabled = true
+      logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware')
+      try {
+        await http.request('api/hardware')
+        logInfo('configStore.sendHardwareScan()', 'Sending /api/hardware completed')
+        return true
+      } catch (err) {
+        logError('configStore.sendHardwareScan()', err)
+        return false
+      }
+    },
+    async getHardwareScanStatus() {
+      logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status')
+      try {
+        const json = await http.getJson('api/hardware/status')
+        logDebug('configStore.getHardwareScanStatus()', json)
+        logInfo('configStore.getHardwareScanStatus()', 'Fetching /api/hardware/status completed')
+        return { success: true, data: json }
+      } catch (err) {
+        logError('configStore.getHardwareScanStatus()', err)
+        return { success: false, data: null }
+      }
+    },
+    async saveAll() {
+      global.clearMessages()
+      global.disabled = true
+
+      try {
+        const configSuccess = await this.sendConfig()
+        if (!configSuccess) {
+          global.messageError = 'Failed to store configuration to device'
           return
         }
-        
-        if (!result.push_enabled) {
-          global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
-        } else if (!result.success && result.push_return_code > 0) {
-          global.messageError = `Test failed with error code (${getErrorString(result.push_return_code)})`
-        } else if (!result.success && result.push_return_code == 0) {
-          global.messageError = 'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
-        } else {
-          global.messageSuccess = 'Test was successful'
+
+        const formatSuccess = await this.sendFormat()
+        if (!formatSuccess) {
+          global.messageError = 'Failed to store format to device'
+          return
         }
-        
+
+        global.messageSuccess = 'Configuration has been saved to device'
+        saveConfigState()
       } catch (error) {
-        global.messageError = error.message || 'Push test failed'
-        throw error
+        logError('configStore.saveAll()', error)
+        global.messageError = 'Failed to save configuration'
       } finally {
         global.disabled = false
       }
     },
-    
-    async pollPushTestStatus() {
-      return new Promise((resolve, reject) => {
-        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
-        let attempts = 0
-        
-        const check = setInterval(() => {
-          attempts++
-          
-          if (attempts > maxAttempts) {
-            clearInterval(check)
-            reject(new Error('Push test timeout'))
-            return
-          }
-          
-          this.getPushTestStatus((success, data) => {
-            if (success) {
-              if (data.status) {
-                // test is still running, continue polling
-              } else {
-                clearInterval(check)
-                resolve(data)
-              }
-            } else {
-              clearInterval(check)
-              reject(new Error('Failed to get push test status'))
-            }
-          })
-        }, 2000)
-      })
-    },
-    // Modern async method - keeps callback for backward compatibility
-    runWifiScan(callback) {
-      this.runWifiScanAsync()
-        .then((data) => callback(true, data))
-        .catch(() => callback(false))
-    },
-    
-    async runWifiScanAsync() {
+    async runPushTest(data) {
       global.disabled = true
-      
+      logInfo('configStore.runPushTest()', 'Starting push test')
+
       try {
-        // Start the wifi scan
-        const scanStarted = await new Promise((resolve) => {
-          this.sendWifiScan((success) => resolve(success))
-        })
-        
-        if (!scanStarted) {
-          throw new Error('Failed to start wifi scan')
+        const pushStarted = await this.sendPushTest(data)
+        if (!pushStarted) {
+          global.messageError = 'Failed to start push test'
+          return false
         }
-        
-        // Poll for completion with proper timeout handling
-        const result = await this.pollWifiScanStatus()
-        
-        if (!result.success) {
-          throw new Error('WiFi scan failed')
-        }
-        
+
+        // Poll for test completion
+        const result = await (async () => {
+          while (true) {
+            const statusRes = await this.getPushTestStatus()
+            if (!statusRes.success) {
+              global.messageError = 'Failed to get push test status'
+              return false
+            }
+
+            const d = statusRes.data
+            if (d.status) {
+              // still running
+              await new Promise((r) => setTimeout(r, 2000))
+              continue
+            }
+
+            if (!d.success) {
+              global.messageError = 'Test failed with error code (' + d.push_return_code + ')'
+              return true
+            } else {
+              if (!d.push_enabled) {
+                global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
+              } else if (!d.success && d.push_return_code > 0) {
+                global.messageError =
+                  'Test failed with error code (' + http.getErrorString(d.push_return_code) + ')'
+              } else if (!d.success && d.push_return_code == 0) {
+                global.messageError =
+                  'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
+              } else {
+                global.messageSuccess = 'Test was successful'
+              }
+              return true
+            }
+          }
+        })()
+
         return result
-        
       } catch (error) {
-        global.messageError = error.message || 'WiFi scan failed'
-        throw error
+        logError('configStore.runPushTest()', error)
+        global.messageError = 'Push test failed unexpectedly'
+        return false
       } finally {
         global.disabled = false
       }
     },
-    
-    async pollWifiScanStatus() {
-      return new Promise((resolve, reject) => {
-        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
-        let attempts = 0
-        
-        const check = setInterval(() => {
-          attempts++
-          
-          if (attempts > maxAttempts) {
-            clearInterval(check)
-            reject(new Error('WiFi scan timeout'))
-            return
-          }
-          
-          this.getWifiScanStatus((success, data) => {
-            if (success) {
-              if (data.status) {
-                // scan is still running, continue polling
-              } else {
-                clearInterval(check)
-                resolve(data)
-              }
-            } else {
-              clearInterval(check)
-              reject(new Error('Failed to get wifi scan status'))
-            }
-          })
-        }, 2000)
-      })
-    },
-    // Modern async method - keeps callback for backward compatibility
-    runHardwareScan(callback) {
-      this.runHardwareScanAsync()
-        .then((data) => callback(true, data))
-        .catch(() => callback(false))
-    },
-    
-    async runHardwareScanAsync() {
+
+    async runWifiScan() {
       global.disabled = true
-      
+      logInfo('configStore.runWifiScan()', 'Starting wifi scan')
+
       try {
-        // Start the hardware scan
-        const scanStarted = await new Promise((resolve) => {
-          this.sendHardwareScan((success) => resolve(success))
-        })
-        
-        if (!scanStarted) {
-          throw new Error('Failed to start hardware scan')
+        const started = await this.sendWifiScan()
+        if (!started) {
+          global.messageError = 'Failed to start wifi scan'
+          return { success: false }
         }
-        
-        // Poll for completion with proper timeout handling
-        const result = await this.pollHardwareScanStatus()
-        
-        if (!result.success) {
-          throw new Error('Hardware scan failed')
+
+        while (true) {
+          const statusRes = await this.getWifiScanStatus()
+          if (!statusRes.success) {
+            global.messageError = 'Failed to get wifi scan status'
+            return { success: false }
+          }
+
+          if (statusRes.data.status) {
+            await new Promise((r) => setTimeout(r, 2000))
+            continue
+          }
+
+          global.disabled = false
+          return { success: statusRes.data.success, data: statusRes.data }
         }
-        
-        return result
-        
-      } catch (error) {
-        global.messageError = error.message || 'Hardware scan failed'
-        throw error
       } finally {
         global.disabled = false
       }
     },
-    
-    async pollHardwareScanStatus() {
-      return new Promise((resolve, reject) => {
-        const maxAttempts = 30 // 60 seconds max (30 * 2000ms)
-        let attempts = 0
-        
-        const check = setInterval(() => {
-          attempts++
-          
-          if (attempts > maxAttempts) {
-            clearInterval(check)
-            reject(new Error('Hardware scan timeout'))
-            return
+
+    async runHardwareScan() {
+      global.disabled = true
+      logInfo('configStore.runHardwareScan()', 'Starting hardware scan')
+
+      try {
+        const started = await this.sendHardwareScan()
+        if (!started) {
+          global.messageError = 'Failed to start hardware scan'
+          return { success: false }
+        }
+
+        while (true) {
+          const statusRes = await this.getHardwareScanStatus()
+          if (!statusRes.success) {
+            global.messageError = 'Failed to get hardware scan status'
+            return { success: false }
           }
-          
-          this.getHardwareScanStatus((success, data) => {
-            if (success) {
-              if (data.status) {
-                // scan is still running, continue polling
-              } else {
-                clearInterval(check)
-                resolve(data)
-              }
-            } else {
-              clearInterval(check)
-              reject(new Error('Failed to get hardware scan status'))
-            }
-          })
-        }, 2000)
-      })
+
+          if (statusRes.data.status) {
+            await new Promise((r) => setTimeout(r, 2000))
+            continue
+          }
+
+          global.disabled = false
+          return { success: statusRes.data.success, data: statusRes.data }
+        }
+      } finally {
+        global.disabled = false
+      }
     }
   }
 })
