@@ -374,8 +374,22 @@ export const useConfigStore = defineStore('config', {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sleep_mode: flag })
         })
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-        await response.json()
+        if (!response.ok) {
+          // Avoid throwing exceptions on non-OK responses. Log details and return false.
+          const bodyText = await response.text().catch(() => null)
+          logError(
+            'configStore.setSleepMode()',
+            `HTTP ${response.status}: ${response.statusText}` + (bodyText ? ` - ${bodyText}` : '')
+          )
+          return false
+        }
+
+        // Try to parse JSON if present, but don't throw on parse errors.
+        try {
+          await response.json()
+        } catch (e) {
+          logDebug('configStore.setSleepMode()', 'Response JSON parse failed', e)
+        }
         logInfo('configStore.setSleepMode()', 'Sending /api/sleepmode completed')
         return true
       } catch (err) {
