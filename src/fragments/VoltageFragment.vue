@@ -80,13 +80,14 @@ const calculateFactor = () => {
     const success = await config.sendConfig()
     logDebug('VoltageFragment.calculateFactor()', success)
     saveConfigState()
+    global.disabled = true
 
-    // Re-load status after a short wait to allow the device to update
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    const s2 = await status.load()
-    logDebug('VoltageFragment.calculateFactor()', s2, status.battery)
-    global.messageInfo = 'New factor applied, check if the current battery reading is correct'
-    global.disabled = false
+    setTimeout(async () => {
+      const s2 = await status.load()
+      logDebug('VoltageFragment.calculateFactor()', s2, status.battery)
+      global.messageInfo = 'New factor applied, check if the current battery reading is correct'
+      global.disabled = false
+    }, 1000)
   })()
 }
 </script>

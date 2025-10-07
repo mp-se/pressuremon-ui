@@ -47,7 +47,7 @@ import {
 } from '@mp-se/espframework-ui-components'
 
 // Import local fragments
-import AdvancedFilesFragment from '@/fragments/AdvancedFileFragment.vue'
+import AdvancedFilesFragment from '@/fragments/AdvancedFilesFragment.vue'
 import EnableCorsFragment from '@/fragments/EnableCorsFragment.vue'
 import ListFilesFragment from '@/fragments/ListFilesFragment.vue'
 import VoltageFragment from '@/fragments/VoltageFragment.vue'
