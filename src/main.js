@@ -92,7 +92,6 @@ app.component('IconXCircle', IconXCircle)
 app.component('IconExclamationTriangle', IconExclamationTriangle)
 app.component('IconInfoCircle', IconInfoCircle)
 
-// Register Fragment components (ESP Framework specific)
 app.component('AdvancedFilesFragment', AdvancedFilesFragment)
 app.component('EnableCorsFragment', EnableCorsFragment)
 app.component('ListFilesFragment', ListFilesFragment)
