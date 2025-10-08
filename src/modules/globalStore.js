@@ -35,10 +35,7 @@ export const useGlobalStore = defineStore('global', {
       messageError: '',
       messageWarning: '',
       messageSuccess: '',
-      messageInfo: '',
-
-      fetchTimeout: 8000,
-      url: undefined
+      messageInfo: ''
     }
   },
   getters: {
@@ -53,22 +50,6 @@ export const useGlobalStore = defineStore('global', {
     },
     isInfo() {
       return this.messageInfo != '' ? true : false
-    },
-    token() {
-      return 'Bearer ' + this.id
-    },
-    baseURL() {
-      if (this.url !== undefined) return this.url
-
-      if (import.meta.env.VITE_APP_HOST === undefined) {
-        logInfo('configStore:baseURL()', 'Using base URL from env', window.location.href)
-        this.url = window.location.href
-      } else {
-        logInfo('configStore:baseURL()', 'Using base URL from env', import.meta.env.VITE_APP_HOST)
-        this.url = import.meta.env.VITE_APP_HOST
-      }
-
-      return this.url
     },
     uiVersion() {
       logDebug('globalStore.uiVersion()', import.meta.env.VITE_APP_VERSION)
@@ -86,7 +67,6 @@ export const useGlobalStore = defineStore('global', {
       this.messageSuccess = ''
       this.messageInfo = ''
     },
-    // Modern async/await method
     async load() {
       logInfo('globalStore.load()', 'Fetching /api/feature')
 
