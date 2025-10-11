@@ -20,7 +20,7 @@ export const useGlobalStore = defineStore('global', {
       ui: {
         enableVoltageFragment: true,
         enableManualWifiEntry: false,
-        enableScanForStrongestAp: true,
+        enableScanForStrongestAp: true
       },
 
       feature: {
