@@ -210,6 +210,7 @@ async function initializeApp() {
 
     // Success! Initialize the app
     saveConfigState()
+    handleDarkModeUpdate(config.dark_mode)
     global.initialized = true
   } catch (error) {
     logError('App.initializeApp()', error)

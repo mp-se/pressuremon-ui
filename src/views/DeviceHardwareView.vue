@@ -315,9 +315,8 @@ import { validateCurrentForm } from '@mp-se/espframework-ui-components'
 import { global, config, status } from '@/modules/pinia'
 import * as badge from '@/modules/badge'
 import { logDebug, logError, logInfo } from '@mp-se/espframework-ui-components'
-import { useFetch, useTimers } from '@mp-se/espframework-ui-components'
+import { useTimers, sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 
-const { managedFetch } = useFetch()
 const { createTimeout } = useTimers()
 
 const batteryTypeOptions = ref([
@@ -383,45 +382,59 @@ const voltage = computed(() => {
 const calibrate = async () => {
   global.clearMessages()
   global.disabled = true
-  logInfo('DeviceHardwareView.calibrate()', 'Sending /api/calibrate')
+  logInfo('DeviceHardwareView.calibrate()', 'Starting calibration')
 
   try {
-    const response = await managedFetch(global.baseURL + 'api/calibrate', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
+    // Start calibration using shared http client
+    const startRes = await http.request('api/calibrate', { method: 'POST' })
 
-    if (response.status !== 200) {
-      throw new Error('Failed to calibrate device')
+    if (!startRes || startRes.ok === false) {
+      const body = startRes ? await startRes.text().catch(() => null) : null
+      global.messageError = 'Failed to start calibration'
+      logError(
+        'DeviceHardwareView.calibrate()',
+        'Start calibration failed',
+        startRes
+          ? `HTTP ${startRes.status}: ${startRes.statusText}` + (body ? ` - ${body}` : '')
+          : startRes
+      )
+      return { success: false }
     }
 
-    // Wait for calibration to complete
-    await new Promise((resolve) => createTimeout(resolve, 4000))
+    // Poll for calibration completion
+    while (true) {
+      // Wait a short delay between polls
+      await new Promise((r) => createTimeout(r, 2000))
 
-    // Check calibration status
-    const statusResponse = await managedFetch(global.baseURL + 'api/calibrate/status', {
-      headers: { Authorization: global.token },
-      signal: AbortSignal.timeout(global.fetchTimeout)
-    })
+      try {
+        const statusJson = await http.getJson('api/calibrate/status')
 
-    logDebug('DeviceHardwareView.calibrate()', statusResponse)
+        logDebug('DeviceHardwareView.calibrate()', statusJson)
 
-    if (statusResponse.status !== 200 || statusResponse.success === true) {
-      throw new Error('Failed to get calibrate status')
-    }
+        if (statusJson.status) {
+          // still running
+          continue
+        }
 
-    // Reload configuration to reflect calibration changes
-    const configSuccess = await config.load()
-
-    if (configSuccess) {
-      global.messageSuccess = 'Sensor calibrated'
-    } else {
-      throw new Error('Failed to load configuration')
+        // Completed - reload config
+        const configSuccess = await config.load()
+        if (configSuccess) {
+          global.messageSuccess = 'Sensor calibrated'
+          return { success: true }
+        } else {
+          global.messageError = 'Failed to load configuration after calibration'
+          return { success: false }
+        }
+      } catch (err) {
+        logError('DeviceHardwareView.calibrate()', err)
+        global.messageError = 'Failed to get calibrate status'
+        return { success: false }
+      }
     }
   } catch (err) {
-    const errorMessage = err.message || 'Failed to send calibrate request'
-    global.messageError = errorMessage
     logError('DeviceHardwareView.calibrate()', err)
+    global.messageError = err.message || 'Calibration failed unexpectedly'
+    return { success: false }
   } finally {
     global.disabled = false
   }
