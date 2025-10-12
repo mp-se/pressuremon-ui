@@ -134,10 +134,7 @@ export const useConfigStore = defineStore('config', {
       logInfo('configStore.load()', 'Fetching /api/config')
 
       try {
-        const json = await http.getJson('api/config', {
-          headers: { Authorization: global.token },
-          timeout: global.fetchTimeout
-        })
+        const json = await http.getJson('api/config')
         logDebug('configStore.load()', json)
 
         global.disabled = false
