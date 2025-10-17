@@ -233,14 +233,14 @@ export const useConfigStore = defineStore('config', {
         const json = await http.getJson('api/format')
         logDebug('configStore.loadFormat()', json)
         global.disabled = false
-        this.http_post_format_gravity = decodeURIComponent(json.http_post_format_gravity)
-        this.http_post2_format_gravity = decodeURIComponent(json.http_post2_format_gravity)
-        this.http_get_format_gravity = decodeURIComponent(json.http_get_format_gravity)
-        this.influxdb2_format_gravity = decodeURIComponent(json.influxdb2_format_gravity)
-        this.mqtt_format_gravity = decodeURIComponent(json.mqtt_format_gravity)
+        this.http_post_format_pressure = decodeURIComponent(json.http_post_format_pressure)
+        this.http_post2_format_pressure = decodeURIComponent(json.http_post2_format_pressure)
+        this.http_get_format_pressure = decodeURIComponent(json.http_get_format_pressure)
+        this.influxdb2_format_pressure = decodeURIComponent(json.influxdb2_format_pressure)
+        this.mqtt_format_pressure = decodeURIComponent(json.mqtt_format_pressure)
 
         // Add linebreaks so the editor shows the data correctly
-        this.mqtt_format_gravity = this.mqtt_format_gravity.replaceAll('|', '|\n')
+        this.mqtt_format_pressure = this.mqtt_format_pressure.replaceAll('|', '|\n')
         return true
       } catch (err) {
         global.disabled = false
@@ -255,11 +255,11 @@ export const useConfigStore = defineStore('config', {
       this.convertTempToC() // Device use C internally
 
       const data = getConfigChanges()
-      delete data.http_post_format_gravity
-      delete data.http_post2_format_gravity
-      delete data.http_get_format_gravity
-      delete data.influxdb2_format_gravity
-      delete data.mqtt_format_gravity
+      delete data.http_post_format_pressure
+      delete data.http_post2_format_pressure
+      delete data.http_get_format_pressure
+      delete data.influxdb2_format_pressure
+      delete data.mqtt_format_pressure
       logDebug('configStore.sendConfig()', data)
 
       if (JSON.stringify(data).length == 2) {
@@ -290,40 +290,40 @@ export const useConfigStore = defineStore('config', {
       let data = {}
       let cnt = 0
 
-      logDebug('configStore.sendFormat()', data)
+      logDebug('configStore.sendFormat()', data2)
       try {
         data =
-          data2.http_post_format_gravity !== undefined
-            ? { http_post_format_gravity: encodeURIComponent(data2.http_post_format_gravity) }
+          data2.http_post_format_pressure !== undefined
+            ? { http_post_format_pressure: encodeURIComponent(data2.http_post_format_pressure) }
             : {}
         if (await this.sendOneFormat(data)) cnt += 1
 
         data =
-          data2.http_post2_format_gravity !== undefined
-            ? { http_post2_format_gravity: encodeURIComponent(data2.http_post2_format_gravity) }
+          data2.http_post2_format_pressure !== undefined
+            ? { http_post2_format_pressure: encodeURIComponent(data2.http_post2_format_pressure) }
             : {}
         if (await this.sendOneFormat(data)) cnt += 1
 
         data =
-          data2.http_get_format_gravity !== undefined
-            ? { http_get_format_gravity: encodeURIComponent(data2.http_get_format_gravity) }
+          data2.http_get_format_pressure !== undefined
+            ? { http_get_format_pressure: encodeURIComponent(data2.http_get_format_pressure) }
             : {}
         if (await this.sendOneFormat(data)) cnt += 1
 
         data =
-          data2.influxdb2_format_gravity !== undefined
-            ? { influxdb2_format_gravity: encodeURIComponent(data2.influxdb2_format_gravity) }
+          data2.influxdb2_format_pressure !== undefined
+            ? { influxdb2_format_pressure: encodeURIComponent(data2.influxdb2_format_pressure) }
             : {}
         if (await this.sendOneFormat(data)) cnt += 1
 
-        if (data2.mqtt_format_gravity !== undefined) {
-          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\n', '')
-          data2.mqtt_format_gravity = data2.mqtt_format_gravity.replaceAll('\r', '')
+        if (data2.mqtt_format_pressure !== undefined) {
+          data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\n', '')
+          data2.mqtt_format_pressure = data2.mqtt_format_pressure.replaceAll('\r', '')
         }
 
         data =
-          data2.mqtt_format_gravity !== undefined
-            ? { mqtt_format_gravity: encodeURIComponent(data2.mqtt_format_gravity) }
+          data2.mqtt_format_pressure !== undefined
+            ? { mqtt_format_pressure: encodeURIComponent(data2.mqtt_format_pressure) }
             : {}
         if (await this.sendOneFormat(data)) cnt += 1
 
@@ -334,7 +334,7 @@ export const useConfigStore = defineStore('config', {
       }
     },
     async sendOneFormat(data) {
-      logInfo('configStore.sendOneFormat()', 'Sending /api/format')
+      logInfo('configStore.sendOneFormat()', 'Sending /api/format', data)
 
       if (JSON.stringify(data).length == 2) {
         logInfo('configStore.sendOneFormat()', 'No format data to store, skipping step')

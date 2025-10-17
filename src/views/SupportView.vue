@@ -99,23 +99,6 @@
           ></span>
           &nbsp;Toggle error help</button
         >&nbsp;
-
-        <template v-if="status.ispindel_config">
-          <button
-            @click="removeLegacy"
-            type="button"
-            class="btn btn-secondary"
-            :disabled="global.disabled"
-          >
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              v-show="global.disabled"
-            ></span>
-            &nbsp;Erase iSpindel config
-          </button>
-        </template>
       </div>
     </div>
 
@@ -184,7 +167,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { status, config, global } from '@/modules/pinia'
+import { config, global } from '@/modules/pinia'
 import { logDebug } from '@mp-se/espframework-ui-components'
 
 const logData = ref('')
@@ -241,19 +224,6 @@ function removeLogs() {
   removeLog('/error2.log', () => {
     removeLog('/error.log', () => {
       global.messageSuccess = 'Requested logs to be deleted'
-      global.disabled = false
-    })
-  })
-}
-
-function removeLegacy() {
-  global.clearMessages()
-  global.disabled = true
-  logData.value = ''
-
-  removeLog('/config.json', () => {
-    removeLog('/gravitymon.json', () => {
-      global.messageSuccess = 'Requested old configuration files to be deleted'
       global.disabled = false
     })
   })

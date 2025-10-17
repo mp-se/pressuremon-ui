@@ -82,31 +82,14 @@
 </template>
 
 <script setup>
-import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref, provide } from 'vue'
+import { onMounted, watch, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import { sharedHttpClient as http } from '@mp-se/espframework-ui-components'
 import { global, status, config, saveConfigState } from './modules/pinia'
-import {
-  useTimers,
-  isValidJson,
-  isValidFormData,
-  isValidMqttData,
-  logDebug,
-  logInfo,
-  logError
-} from '@mp-se/espframework-ui-components'
+import { useTimers, logInfo, logError, version } from '@mp-se/espframework-ui-components'
 import { items as menuItems } from './modules/router'
 
 const polling = ref(null)
 const { createInterval, clearManagedInterval } = useTimers()
-
-// Provide dependencies for framework fragments
-provide('globalStore', global)
-provide('configStore', config)
-provide('statusStore', status)
-provide('logger', { logDebug, logInfo, logError })
-provide('isValidJson', isValidJson)
-provide('isValidFormData', isValidFormData)
-provide('isValidMqttData', isValidMqttData)
 
 const close = (alert) => {
   if (alert == 'danger') global.messageError = ''
@@ -161,6 +144,8 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
+  logInfo('App.onMounted()', `Using espframework version ${version}`)
+
   if (!global.initialized) {
     await initializeApp()
   }

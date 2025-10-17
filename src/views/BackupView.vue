@@ -142,7 +142,7 @@ function restore() {
   const fileElement = document.getElementById('upload')
 
   if (fileElement.files.length === 0) {
-    global.messageFailed = 'You need to select one file to restore configuration from'
+    global.messageError = 'You need to select one file to restore configuration from'
   } else {
     global.disabled = true
     logDebug('BackupView.restore()', 'Selected file: ' + fileElement.files[0].name)
@@ -155,12 +155,12 @@ function restore() {
           doRestore(data.config)
           resetFileInput()
         } else {
-          global.messageFailed = 'Unknown format, unable to process'
+          global.messageError = 'Unknown format, unable to process'
           resetFileInput()
         }
       } catch (error) {
         logError('BackupView.restore()', 'Failed to parse backup file:', error)
-        global.messageFailed = 'Unable to parse configuration file for PressureMon.'
+        global.messageError = 'Unable to parse configuration file for PressureMon.'
         resetFileInput()
       }
     })

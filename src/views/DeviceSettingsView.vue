@@ -162,7 +162,7 @@ const factory = async () => {
         location.reload(true)
       }, 2000)
     } else {
-      global.messageFailed = json.message
+      global.messageError = json.message
       global.disabled = false
     }
   } catch (err) {

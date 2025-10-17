@@ -92,7 +92,6 @@ export const useStatusStore = defineStore('status', {
 
         this.self_check.sensor_connected = json.self_check.sensor_connected
         this.self_check.sensor_configured = json.self_check.sensor_configured
-        this.self_check.gyro_calibration = json.self_check.gyro_calibration
         this.self_check.battery_level = json.self_check.battery_level
         this.self_check.push_targets = json.self_check.push_targets
 
