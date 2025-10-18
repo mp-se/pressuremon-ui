@@ -386,7 +386,7 @@ const calibrate = async () => {
 
   try {
     // Start calibration using shared http client
-    const startRes = await http.request('api/calibrate', { method: 'POST' })
+    const startRes = await http.request('api/calibrate', { method: 'GET' })
 
     if (!startRes || startRes.ok === false) {
       const body = startRes ? await startRes.text().catch(() => null) : null
