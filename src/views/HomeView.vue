@@ -144,7 +144,7 @@ const flag = ref(false)
 const { createInterval, clearManagedInterval } = useTimers()
 
 watch(flag, async () => {
-  config.setSleepMode(flag.value)
+  await config.setSleepMode(flag.value)
 })
 
 async function refresh() {
