@@ -39,8 +39,6 @@ export const useConfigStore = defineStore('config', {
       custom1_max_voltage: 0,
       custom1_min_pressure: 0,
       custom1_max_pressure: 0,
-      // temp_adjustment: 0.0,
-      // temp1_adjustment: 0.0,
       pressure_unit: 'psi',
       // Wifi
       wifi_portal_timeout: 0,
@@ -160,8 +158,6 @@ export const useConfigStore = defineStore('config', {
         this.custom1_max_voltage = json.custom1_max_voltage
         this.custom1_min_pressure = json.custom1_min_pressure
         this.custom1_max_pressure = json.custom1_max_pressure
-        // this.temp_adjustment = json.temp_adjustment
-        // this.temp1_adjustment = json.temp1_adjustment
         this.pressure_unit = json.pressure_unit
         this.temp_adjustment_value = json.temp_adjustment_value
         this.tempsensor_resolution = json.tempsensor_resolution

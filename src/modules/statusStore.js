@@ -77,10 +77,9 @@ export const useStatusStore = defineStore('status', {
 
         this.id = json.id
         this.pressure = json.pressure
-        this.pressure1 = json.pressure1
+        this.pressure1 = json.pressure1 // Todo fix NaN values
         this.pressure_unit = json.pressure_unit
         this.temp = json.temp
-        this.temp1 = json.temp1
         this.temp_unit = json.temp_unit
 
         this.sleep_mode = json.sleep_mode
@@ -111,8 +110,6 @@ export const useStatusStore = defineStore('status', {
           this.pressure1 = (Math.round(this.pressure1 * 100) / 100).toFixed(2)
 
         if (this.temp !== undefined) this.temp = (Math.round(this.temp * 100) / 100).toFixed(2)
-
-        if (this.temp1 !== undefined) this.temp1 = (Math.round(this.temp1 * 100) / 100).toFixed(2)
 
         this.battery = (Math.round(this.battery * 100) / 100).toFixed(2)
 
