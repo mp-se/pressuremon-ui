@@ -7,6 +7,7 @@ import { global } from '@/modules/pinia'
 import HomeView from '@/views/HomeView.vue'
 import DeviceSettingsView from '@/views/DeviceSettingsView.vue'
 import DeviceHardwareView from '@/views/DeviceHardwareView.vue'
+import DeviceSensorView from '@/views/DeviceSensorView.vue'
 import DeviceWifiView from '@/views/DeviceWifiView.vue'
 import DeviceWifi2View from '@/views/DeviceWifi2View.vue'
 import PushSettingsView from '@/views/PushSettingsView.vue'
@@ -39,6 +40,11 @@ const routes = [
     path: '/device/hardware',
     name: 'device-hardware',
     component: DeviceHardwareView
+  },
+  {
+    path: '/device/sensor',
+    name: 'device-sensor',
+    component: DeviceSensorView
   },
   {
     path: '/device/wifi',
@@ -160,6 +166,11 @@ const items = ref([
         label: 'Hardware',
         badge: badge.deviceHardwareBadge,
         path: '/device/hardware'
+      },
+      {
+        label: 'Sensor',
+        badge: badge.deviceSensorBadge,
+        path: '/device/sensor'
       },
       {
         label: 'Wifi',

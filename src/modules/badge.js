@@ -18,6 +18,10 @@ export function deviceMdnsBadge() {
 }
 
 export function deviceHardwareBadge() {
+  return 0
+}
+
+export function deviceSensorBadge() {
   return deviceSensorCalibratedBadge()
 }
 
