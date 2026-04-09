@@ -2,6 +2,12 @@
 
 This repository contains the user interface for pressuremon, see: https://github.com/mp-se/pressuremon for more details.
 
+## License
+
+This project is dual-licensed under the **GNU General Public License v3.0 (GPL v3)** for open-source use and a **Commercial License** for proprietary/commercial applications. 
+
+See [LICENSE](LICENSE) and [LICENSE_COMMERCIAL](LICENSE_COMMERCIAL) for full details. Individual hobbyists are protected under a "Safe Harbor" provision (up to 100 units/year).
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).

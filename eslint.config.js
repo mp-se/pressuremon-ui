@@ -1,3 +1,14 @@
+/*
+ * Pressuremon - Dual License
+ *
+ * Open Source Use  ->  GNU General Public License v3.0 (GPL v3)
+ * Commercial Use   ->  Commercial License Agreement
+ *
+ * Copyright (c) 2024-2026 Magnus
+ *
+ * For full license terms and conditions, see LICENSE and LICENSE_COMMERCIAL files.
+ * Source: https://github.com/mp-se/pressuremon and https://github.com/mp-se/pressuremon-ui
+ */
 import js from '@eslint/js'
 import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
