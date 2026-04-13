@@ -17,23 +17,35 @@ import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 export default [
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{js,mjs,jsx,vue}'],
+    files: ['**/*.{js,mjs,jsx,vue}']
   },
 
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
+    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**']
   },
 
   {
     languageOptions: {
       globals: {
+        ...globals.browser
+      }
+    }
+  },
+
+  {
+    name: 'app/test-files',
+    files: ['src/**/*.{test,spec}.js', 'src/tests/**/*.js'],
+    languageOptions: {
+      globals: {
         ...globals.browser,
-      },
-    },
+        ...globals.node,
+        ...globals.vitest
+      }
+    }
   },
 
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
-  skipFormatting,
+  skipFormatting
 ]

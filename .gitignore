@@ -4,3 +4,6 @@ node_modules
 npm-debug.log*
 .vscode
 .DS_store
+coverage/
+coverage-*.json
+.nyc_output/

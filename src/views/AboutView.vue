@@ -23,18 +23,16 @@
 
     <p class="h4">Dual License</p>
 
-    <p class="fw-normal">
-      This software is available under a dual license:
-    </p>
+    <p class="fw-normal">This software is available under a dual license:</p>
 
     <ul>
       <li>
-        <strong>Open Source:</strong> GNU General Public License v3.0 (GPL v3) for
-        personal and non-commercial use.
+        <strong>Open Source:</strong> GNU General Public License v3.0 (GPL v3) for personal and
+        non-commercial use.
       </li>
       <li>
-        <strong>Commercial:</strong> A separate license is required for commercial use
-        or distribution without source disclosure.
+        <strong>Commercial:</strong> A separate license is required for commercial use or
+        distribution without source disclosure.
       </li>
     </ul>
 

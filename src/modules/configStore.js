@@ -367,6 +367,28 @@ export const useConfigStore = defineStore('config', {
       } catch (err) {
         logError('configStore.sendPushTest()', err)
         return false
+      } finally {
+        global.disabled = false
+      }
+    },
+
+    async sendFilesystemRequest(data, callback) {
+      global.disabled = true
+      logInfo('configStore.sendFilesystemRequest()', 'Sending filesystem request', data)
+
+      try {
+        const res = await http.filesystemRequest(data)
+        const success = !!res?.success
+        const text = res?.text ?? ''
+
+        if (callback) callback(success, text)
+        return { success, text }
+      } catch (err) {
+        logError('configStore.sendFilesystemRequest()', err)
+        if (callback) callback(false, '')
+        return { success: false, text: '' }
+      } finally {
+        global.disabled = false
       }
     },
 
@@ -544,12 +566,6 @@ export const useConfigStore = defineStore('config', {
             } else {
               if (!d.push_enabled) {
                 global.messageWarning = 'No endpoint is defined for this target. Cannot run test.'
-              } else if (!d.success && d.push_return_code > 0) {
-                global.messageError =
-                  'Test failed with error code (' + http.getErrorString(d.push_return_code) + ')'
-              } else if (!d.success && d.push_return_code == 0) {
-                global.messageError =
-                  'Test not started. Might be blocked due to skip SSL flag enabled on esp8266'
               } else {
                 global.messageSuccess = 'Test was successful'
               }

@@ -26,7 +26,7 @@ export const httpHeaderOptions = ref([
   { label: 'Form data', value: 'Content-Type: x-www-form-urlencoded' },
   { label: 'Authorization', value: 'Authorization: Basic {enter token here}' },
   { label: 'No Cache', value: 'Pragma: no-cache' },
-  { label: 'User agent', value: 'User-Agent: gravitymon' }
+  { label: 'User agent', value: 'User-Agent: pressuremon' }
 ])
 
 export const httpPostUrlOptions = ref([

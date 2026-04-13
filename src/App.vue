@@ -109,14 +109,6 @@ const close = (alert) => {
   else if (alert == 'info') global.messageInfo = ''
 }
 
-// Watch for changes to config.dark_mode and call handleDarkModeUpdate
-watch(
-  () => config.dark_mode,
-  (newValue) => {
-    handleDarkModeUpdate(newValue)
-  }
-)
-
 // Handle dark mode changes
 const handleDarkModeUpdate = (newValue) => {
   // update the store value
@@ -131,13 +123,15 @@ const handleDarkModeUpdate = (newValue) => {
   }
 }
 
-watch(
-  () => global.disabled,
-  () => {
-    if (global.disabled) document.body.style.cursor = 'wait'
-    else document.body.style.cursor = 'default'
-  }
-)
+// Watch for changes to config.dark_mode and apply the selected theme.
+watch(() => config.dark_mode, handleDarkModeUpdate)
+
+const handleDisabledCursor = () => {
+  if (global.disabled) document.body.style.cursor = 'wait'
+  else document.body.style.cursor = 'default'
+}
+
+watch(() => global.disabled, handleDisabledCursor)
 
 function ping() {
   ;(async () => {
