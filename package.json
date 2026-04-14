@@ -16,7 +16,7 @@
     "mock": "./node_modules/nodemon/bin/nodemon.js mock-server/index.js"
   },
   "dependencies": {
-    "@mp-se/espframework-ui-components": "git+https://github.com/mp-se/espframework-ui-components.git#v1.7.0",
+    "@mp-se/espframework-ui-components": "github:mp-se/espframework-ui-components#v2.2.0",
     "bootstrap": "^5.3.8",
     "json-parse-even-better-errors": "^4.0.0",
     "pinia": "^3.0.3",
@@ -31,7 +31,6 @@
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/test-utils": "^2.4.6",
-    "baseline-browser-mapping": "^2.9.11",
     "cors": "^2.8.5",
     "cssnano": "^7.1.1",
     "eslint": "^9.21.0",
